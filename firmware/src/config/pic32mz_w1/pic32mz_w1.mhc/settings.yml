@@ -1,0 +1,14 @@
+configName: pic32mz_w1
+folderName: pic32mz_w1
+format_version: v1.0
+frameworkPath: ..\..\..\..\Microchip\Harmony3
+processor: PIC32MZ1025W104132
+projectName: azure_iot_demo_wifi_pic32mz_w1
+settings:
+  PackageFilter: crypto;dev_packs;net;core;core_apps_pic32mz_w1;bsp;csp_apps_pic32mz_w1;quick_docs;reference_apps;usb;cryptoauthlib;wireless_wifi;csp;harmony-services;wireless_system_pic32mzw1_wfi32e01;gfx;wireless_apps_pic32mzw1_wfi32e01;aws_cloud;azure_rtos
+  FORCE_OPTIMIZATION: 'false'
+  GENERATE_BACKUP: 'true'
+  TRUSTZONE: 'false'
+  CMSISPath: ./dev_packs/arm/CMSIS/5.8.0
+  MERGE_STRATEGY: USER_ALL
+  DFPPath: ./dev_packs/Microchip/PIC32MZ-W_DFP/1.6.217/atdf/PIC32MZ1025W104132.atdf
