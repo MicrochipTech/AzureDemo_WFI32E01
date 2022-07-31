@@ -12,8 +12,6 @@
 extern "C" {
 #endif
 
-#define IOT_PLUG_AND_PLAY_MODEL_ID
-
 #include "az_led.h"
 #include "azure/core/az_span.h"
 #include "azure/core/az_json.h"
@@ -29,6 +27,9 @@ typedef enum
     SEVERITY_INFO,    // print everything
     SEVERITY_TRACE
 } debug_severity_t;
+
+// Comment this out to run as a non IoT Plug and Play client
+#define IOT_PLUG_AND_PLAY_MODEL_ID "dtmi:com:Microchip:WFI32_IoT_WM;1"
 
 #define ERROR    1
 #define NO_ERROR 0
@@ -161,6 +162,8 @@ typedef struct
 
 extern button_press_data_t button_press_data;
 
+void check_button_status(void);
+
 void init_twin_data(
     twin_properties_t* twin_properties);
 
@@ -180,11 +183,6 @@ az_result append_json_property_string(
     az_json_writer* jw,
     az_span         property_name_span,
     az_span         property_val_span);
-
-
-void check_button_status(void);
-
-az_result send_telemetry_message(void);
 
 az_result send_reported_property(
     twin_properties_t* twin_properties);

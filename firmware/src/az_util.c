@@ -46,6 +46,16 @@ static const az_span iot_hub_property_desired         = AZ_SPAN_LITERAL_FROM_STR
 static const az_span iot_hub_property_desired_version = AZ_SPAN_LITERAL_FROM_STR("$version");
 #endif
 
+// * PnP Values *
+// The model ID is the JSON document (also called the Digital Twins Model Identifier or DTMI)
+// which defines the capability of your device. The functionality of the device should match what
+// is described in the corresponding DTMI. Should you choose to program your own PnP capable device,
+// the functionality would need to match the DTMI and you would need to update the below 'model_id'.
+// Please see the sample README for more information on this DTMI.
+#ifdef IOT_PLUG_AND_PLAY_MODEL_ID
+const az_span device_model_id_span = AZ_SPAN_LITERAL_FROM_STR(IOT_PLUG_AND_PLAY_MODEL_ID);
+#endif
+
 static const az_span telemetry_name_temperature_span = AZ_SPAN_LITERAL_FROM_STR("temperature");
 static const az_span telemetry_name_light_span       = AZ_SPAN_LITERAL_FROM_STR("light");
 

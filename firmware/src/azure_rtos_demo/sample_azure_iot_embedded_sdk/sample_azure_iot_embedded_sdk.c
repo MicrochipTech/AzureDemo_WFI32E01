@@ -23,6 +23,7 @@
 #include "../app_led.h"
 #include "../app_sensors.h"
 #include "../app_switch.h"
+#include "../az_util.h"
 
 /* Define Azure RTOS TLS info.  */
 static NX_SECURE_X509_CERT root_ca_cert;
@@ -39,8 +40,8 @@ volatile uint32_t AZ_systemRebootTimer = 0;
 
 extern APP_CONNECT_STATUS appConnectStatus;
 extern APP_SENSORS_DATA APP_SENSORS_data;
-extern uint16_t APP_SWITCH1_counter;
-extern uint16_t APP_SWITCH2_counter;
+//extern uint16_t APP_SWITCH1_counter;
+//extern uint16_t APP_SWITCH2_counter;
 
 /* Generally, IoTHub Client and DPS Client do not run at the same time, user can use union as below to
    share the memory between IoTHub Client and DPS Client.
@@ -585,7 +586,7 @@ void sample_telemetry_thread_entry(ULONG parameter)
         buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
                 "{\"ID\": %u, \"Temperature\": %u, \"Light\": %u, \"SW1\": %u, \"SW2\": %u}",
                 i++, APP_SENSORS_readTemperature(), APP_SENSORS_readLight(),
-                APP_SWITCH1_counter, APP_SWITCH2_counter);
+                button_press_data.sw1_press_count, button_press_data.sw2_press_count);
         if (nx_azure_iot_hub_client_telemetry_send(&iothub_client, packet_ptr,
                                                    (UCHAR *)buffer, buffer_length, NX_WAIT_FOREVER))
         {

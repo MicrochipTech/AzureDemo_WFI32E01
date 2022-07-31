@@ -9,15 +9,14 @@
 /*                                                                        */
 /**************************************************************************/
 #include "app_switch.h"
-
-uint16_t APP_SWITCH1_counter = 0;
-uint16_t APP_SWITCH2_counter = 0;
+#include "az_util.h"
 
 static void SWITCH1_InterruptHandler(GPIO_PIN pin, uintptr_t context)
 {
     if (SWITCH1_Get() == APP_SWITCH_PRESSED)
     {
-        APP_SWITCH1_counter++;
+        button_press_data.sw1_press_count++;
+        button_press_data.flag.sw1 = 1;
         LED_RED_Toggle();
     }
 }
@@ -26,7 +25,8 @@ static void SWITCH2_InterruptHandler(GPIO_PIN pin, uintptr_t context)
 {
     if (SWITCH2_Get() == APP_SWITCH_PRESSED)
     {
-        APP_SWITCH2_counter++;
+        button_press_data.sw2_press_count++;
+        button_press_data.flag.sw2 = 1;
         LED_RED_Toggle();
     }
 }
@@ -35,6 +35,8 @@ void APP_SWITCH_init(void)
 {
     GPIO_PinInterruptCallbackRegister(SWITCH1_PIN, SWITCH1_InterruptHandler, 0); 
     SWITCH1_InterruptEnable();
+    button_press_data.sw1_press_count = 0;
     GPIO_PinInterruptCallbackRegister(SWITCH2_PIN, SWITCH2_InterruptHandler, 0); 
     SWITCH2_InterruptEnable();
+    button_press_data.sw2_press_count = 0;
 }
