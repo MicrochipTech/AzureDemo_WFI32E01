@@ -21,7 +21,6 @@
 
 #include "../src/config/pic32mz_w1/bsp/bsp.h"
 #include "../app_led.h"
-#include "../app_misc.h"
 #include "../app_sensors.h"
 #include "../app_switch.h"
 

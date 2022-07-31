@@ -879,8 +879,9 @@
       <itemPath>../src/cJSON.h</itemPath>
       <itemPath>../src/app_sensors.h</itemPath>
       <itemPath>../src/app_led.h</itemPath>
-      <itemPath>../src/app_misc.h</itemPath>
       <itemPath>../src/app_switch.h</itemPath>
+      <itemPath>../src/az_util.h</itemPath>
+      <itemPath>../src/az_led.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -2666,8 +2667,9 @@
       <itemPath>../src/app_pic32mz_w1.c</itemPath>
       <itemPath>../src/app_sensors.c</itemPath>
       <itemPath>../src/app_led.c</itemPath>
-      <itemPath>../src/app_misc.c</itemPath>
       <itemPath>../src/app_switch.c</itemPath>
+      <itemPath>../src/az_util.c</itemPath>
+      <itemPath>../src/az_led.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"

@@ -50,11 +50,10 @@ Module.symvers
 Mkfile.old
 dkms.conf
 firmware/WFI32-IoT_Azure.X/build/
+firmware/WFI32-IoT_Azure.X/debug/
+firmware/WFI32-IoT_Azure.X/dist/
 firmware/WFI32-IoT_Azure.X/.generated_files
-firmware/WFI32-IoT_Azure.X/nbproject/configurations.xml
-firmware/WFI32-IoT_Azure.X/nbproject/Makefile-genesis.properties
-firmware/WFI32-IoT_Azure.X/nbproject/private/private.xml
-firmware/WFI32-IoT_Azure.X/nbproject/private/configurations.xml
+
 
 
 

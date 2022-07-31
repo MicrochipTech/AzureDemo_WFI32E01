@@ -59,6 +59,13 @@
 #include "system/reset/sys_reset.h"
 #include "osal/osal.h"
 
+#include "app_led.h"
+
+const char* const cli_version_number      = "1.0";
+const char* const firmware_version_number = "1.0.0";
+
+extern APP_CONNECT_STATUS appConnectStatus;
+
 // *****************************************************************************
 // *****************************************************************************
 // Section: Type Definitions
@@ -189,6 +196,10 @@ static const KEY_SEQ_DCPT keySeqTbl[] =
 static void     CommandReset(SYS_CMD_DEVICE_NODE* pCmdIO, int argc, char** argv);
 static void     CommandQuit(SYS_CMD_DEVICE_NODE* pCmdIO, int argc, char** argv);              // command quit
 static void     CommandHelp(SYS_CMD_DEVICE_NODE* pCmdIO, int argc, char** argv);              // help
+static void     get_cli_version(SYS_CMD_DEVICE_NODE* pCmdIO, int argc, char** argv);
+static void     get_firmware_version(SYS_CMD_DEVICE_NODE* pCmdIO, int argc, char** argv);
+static void     get_wifi_status(SYS_CMD_DEVICE_NODE* pCmdIO, int argc, char** argv);
+static void     get_cloud_status(SYS_CMD_DEVICE_NODE* pCmdIO, int argc, char** argv);
 
 static int      StringToArgs(char *str, char *argv[], size_t argvSize); 
 static void     ParseCmdBuffer(SYS_CMD_IO_DCPT* pCmdIO);      // parse the command buffer
@@ -219,9 +230,13 @@ const SYS_CMD_API sysConsoleApi =
 // built-in command table
 static const SYS_CMD_DESCRIPTOR    _builtinCmdTbl[]=
 {
-    {"reset",   CommandReset,   ": Reset host"},
-    {"q",       CommandQuit,    ": quit command processor"},
-    {"help",    CommandHelp,    ": help"},
+    {"reset", CommandReset, " "},
+    {"quit", CommandQuit, " "},
+    {"help", CommandHelp, " "},
+    {"cli", get_cli_version, " "},
+    {"firmware", get_firmware_version, " "},
+    {"wifi", get_wifi_status, " "},
+    {"cloud", get_cloud_status, " "},
 };
 
 // *****************************************************************************
@@ -821,15 +836,15 @@ static void CommandHelp(SYS_CMD_DEVICE_NODE* pCmdIO, int argc, char** argv)
         }
 
         // display the basic commands
-        (*pCmdIO->pCmdApi->msg)(cmdIoParam, LINE_TERM "---------- Built in commands ----------");
+        (*pCmdIO->pCmdApi->msg)(cmdIoParam, LINE_TERM " --- Available Commands ---");
         for(ix = 0, pDcpt = _builtinCmdTbl; ix < sizeof(_builtinCmdTbl)/sizeof(*_builtinCmdTbl); ix++, pDcpt++)
         {
-            (*pCmdIO->pCmdApi->msg)(cmdIoParam, LINE_TERM " *** ");
+            (*pCmdIO->pCmdApi->msg)(cmdIoParam, LINE_TERM " ");
             (*pCmdIO->pCmdApi->msg)(cmdIoParam, pDcpt->cmdStr);
             (*pCmdIO->pCmdApi->msg)(cmdIoParam, pDcpt->cmdDescr);
-            (*pCmdIO->pCmdApi->msg)(cmdIoParam, " ***");
+            (*pCmdIO->pCmdApi->msg)(cmdIoParam, " ");
         }
-
+        (*pCmdIO->pCmdApi->msg)(cmdIoParam, LINE_TERM " ");
         (*pCmdIO->pCmdApi->msg)(cmdIoParam, LINE_TERM);
     }
     else
@@ -1155,4 +1170,51 @@ static void CmdAdjustPointers(SYS_CMD_IO_DCPT* pCmdIO)
         pCmdIO->cmdEnd = pCmdIO->cmdPnt;
     }
 }
+
+static void get_cli_version(SYS_CMD_DEVICE_NODE* pCmdIO, int argc, char** argv)
+{
+    const void* cmdIoParam = pCmdIO->cmdIoParam;
+    (*pCmdIO->pCmdApi->msg)(cmdIoParam, LINE_TERM "CLI Version\r\n");
+    (*pCmdIO->pCmdApi->print)(cmdIoParam, "%s\r\n", cli_version_number);
+}
+
+static void get_firmware_version(SYS_CMD_DEVICE_NODE* pCmdIO, int argc, char** argv)
+{
+    const void* cmdIoParam = pCmdIO->cmdIoParam;
+    (*pCmdIO->pCmdApi->msg)(cmdIoParam, LINE_TERM "Firmware Version\r\n");
+    (*pCmdIO->pCmdApi->print)(cmdIoParam, "%s\r\n", firmware_version_number);
+}
+
+static void get_wifi_status(SYS_CMD_DEVICE_NODE* pCmdIO, int argc, char** argv)
+{
+    char buffer[50];
+
+    if (appConnectStatus.wifi)
+    {
+        sprintf(buffer, "[TRUE] Connected to WiFi\r\n\4");
+    }
+    else
+    {
+        sprintf(buffer, "[FALSE] NOT connected to Wi-Fi\r\n\4");
+    }
+
+    SYS_CONSOLE_Message(0, buffer);
+}
+
+static void get_cloud_status(SYS_CMD_DEVICE_NODE* pCmdIO, int argc, char** argv)
+{
+    char buffer[50];
+
+    if (appConnectStatus.cloud)
+    {
+        sprintf(buffer, "[TRUE] Connected to the Cloud\r\n\4");
+    }
+    else
+    {
+        sprintf(buffer, "[FALSE] NOT connected to the Cloud\r\n\4");
+    }
+
+    SYS_CONSOLE_Message(0, buffer);
+}
+
 

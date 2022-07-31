@@ -47,20 +47,20 @@ extern "C" {
 /* LED Colors */
 typedef enum 
 {
-    LED_BLUE = 0,
-    LED_GREEN,
-    LED_YELLOW,
-    LED_RED,
-    LED_COLOR_INVALID,
+    APP_LED_BLUE = 0,
+    APP_LED_GREEN,
+    APP_LED_YELLOW,
+    APP_LED_RED,
+    APP_LED_COLOR_INVALID,
 } APP_LED_COLOR;
 
 /* LED Modes */
 typedef enum 
 {
-    LED_OFF = 0,
-    LED_ON,
-    LED_BLINKING,
-    LED_MODE_INVALID,
+    APP_LED_OFF = 0,
+    APP_LED_ON,
+    APP_LED_BLINKING,
+    APP_LED_MODE_INVALID,
 } APP_LED_MODE;
 
 /* LED Controller Structure */
