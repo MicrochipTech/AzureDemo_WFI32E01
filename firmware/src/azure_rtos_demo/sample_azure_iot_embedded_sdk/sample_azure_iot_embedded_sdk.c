@@ -25,6 +25,9 @@
 #include "../app_switch.h"
 #include "../az_util.h"
 
+/* Maximum number of characters in a telemetry message */
+#define TELEMETRY_MSGLEN_MAX 90
+
 /* Define Azure RTOS TLS info.  */
 static NX_SECURE_X509_CERT root_ca_cert;
 static NX_SECURE_X509_CERT root_ca_cert_2;
@@ -416,7 +419,7 @@ UINT loop = NX_TRUE;
 #ifndef DISABLE_APP_CTRL_SAMPLE
 
     /* Create Device twin sample thread.  */
-    if ((status = tx_thread_create(&sample_app_ctrl_thread, "Sample Application LED Thread",
+    if ((status = tx_thread_create(&sample_app_ctrl_thread, "Sample Application Control Thread",
                                    sample_app_ctrl_thread_entry, 0,
                                    (UCHAR *)sample_app_ctrl_thread_stack, SAMPLE_STACK_SIZE,
                                    SAMPLE_THREAD_PRIORITY, SAMPLE_THREAD_PRIORITY,
@@ -538,63 +541,69 @@ UINT status;
 
 #ifndef DISABLE_TELEMETRY_SAMPLE
 
+void send_telemetry_message(ULONG parameter, UCHAR *message, UINT mesg_length)
+{
+    UINT status = 0;
+    NX_PACKET *packet_ptr;
+
+    NX_PARAMETER_NOT_USED(parameter);
+    
+    /* Create a telemetry message packet.  */
+    if ((status = nx_azure_iot_hub_client_telemetry_message_create(&iothub_client, &packet_ptr, NX_WAIT_FOREVER)))
+    {
+        printf("Telemetry message create failed!: error code = 0x%08x\r\n", status);
+        return;
+    }
+
+    /* Add properties to telemetry message.  */
+    for (int index = 0; index < MAX_PROPERTY_COUNT; index++)
+    {
+        if ((status =
+                nx_azure_iot_hub_client_telemetry_property_add(packet_ptr,
+                                                               (UCHAR *)sample_properties[index][0],
+                                                               (USHORT)strlen(sample_properties[index][0]),
+                                                               (UCHAR *)sample_properties[index][1],
+                                                               (USHORT)strlen(sample_properties[index][1]),
+                                                               NX_WAIT_FOREVER)))
+        {
+            printf("Telemetry property add failed!: error code = 0x%08x\r\n", status);
+            return;
+        }
+    }
+
+    if (status)
+    {
+        nx_azure_iot_hub_client_telemetry_message_delete(packet_ptr);
+        return;
+    }
+ 
+    if (nx_azure_iot_hub_client_telemetry_send(&iothub_client, packet_ptr,
+                                               (UCHAR *)message, mesg_length, NX_WAIT_FOREVER))
+    {
+        printf("Telemetry message send failed!: error code = 0x%08x\r\n", status);
+        nx_azure_iot_hub_client_telemetry_message_delete(packet_ptr);
+        return;
+    }
+    printf("%s\r\n", message);   
+}
+
 void sample_telemetry_thread_entry(ULONG parameter)
 {
-    UINT i = 0;
-    UINT status = 0;
-    CHAR buffer[90];
+    CHAR buffer[TELEMETRY_MSGLEN_MAX];
     UINT buffer_length;
     UCHAR loop = NX_TRUE;
-    NX_PACKET *packet_ptr;
 
     NX_PARAMETER_NOT_USED(parameter);
 
     APP_SENSORS_init();
     
-    /* Loop to send telemetry message */
+    /* Loop to send telemetry messages */
     while (loop)
     {               
-        /* Create a telemetry message packet.  */
-        if ((status = nx_azure_iot_hub_client_telemetry_message_create(&iothub_client, &packet_ptr, NX_WAIT_FOREVER)))
-        {
-            printf("Telemetry message create failed!: error code = 0x%08x\r\n", status);
-            break;
-        }
-
-        /* Add properties to telemetry message.  */
-        for (int index = 0; index < MAX_PROPERTY_COUNT; index++)
-        {
-            if ((status =
-                    nx_azure_iot_hub_client_telemetry_property_add(packet_ptr,
-                                                                   (UCHAR *)sample_properties[index][0],
-                                                                   (USHORT)strlen(sample_properties[index][0]),
-                                                                   (UCHAR *)sample_properties[index][1],
-                                                                   (USHORT)strlen(sample_properties[index][1]),
-                                                                   NX_WAIT_FOREVER)))
-            {
-                printf("Telemetry property add failed!: error code = 0x%08x\r\n", status);
-                break;
-            }
-        }
-
-        if (status)
-        {
-            nx_azure_iot_hub_client_telemetry_message_delete(packet_ptr);
-            break;
-        }
-
         buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
-                "{\"ID\": %u, \"Temperature\": %u, \"Light\": %u, \"SW1\": %u, \"SW2\": %u}",
-                i++, APP_SENSORS_readTemperature(), APP_SENSORS_readLight(),
-                button_press_data.sw1_press_count, button_press_data.sw2_press_count);
-        if (nx_azure_iot_hub_client_telemetry_send(&iothub_client, packet_ptr,
-                                                   (UCHAR *)buffer, buffer_length, NX_WAIT_FOREVER))
-        {
-            printf("Telemetry message send failed!: error code = 0x%08x\r\n", status);
-            nx_azure_iot_hub_client_telemetry_message_delete(packet_ptr);
-            break;
-        }
-        printf("Telemetry message sent: %s\r\n", buffer);
+                "{\"temperature\": %u, \"light\": %u}",
+                APP_SENSORS_readTemperature(), APP_SENSORS_readLight() );
+        send_telemetry_message(parameter, (UCHAR *)buffer, buffer_length);
 
         tx_thread_sleep(AZ_telemetryInterval * NX_IP_PERIODIC_RATE);
     }
@@ -748,6 +757,18 @@ void sample_device_twin_thread_entry(ULONG parameter)
 }
 #endif /* DISABLE_DEVICE_TWIN_SAMPLE */
 
+void send_button_event(ULONG parameter, UINT number, UINT count)
+{
+    CHAR buffer[TELEMETRY_MSGLEN_MAX];
+    UINT buffer_length;
+
+    NX_PARAMETER_NOT_USED(parameter);
+       
+    buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
+            "{\"button_event\":\"SW%u\", \"press_count\": %u}", number, count);
+    send_telemetry_message(parameter, (UCHAR *)buffer, buffer_length);
+}
+
 #ifndef DISABLE_APP_CTRL_SAMPLE
 void sample_app_ctrl_thread_entry(ULONG parameter)
 {
@@ -761,6 +782,18 @@ void sample_app_ctrl_thread_entry(ULONG parameter)
     while (loop)
     {
         APP_LED_refresh();
+
+        if (button_press_data.flag.sw1 == true)
+        {
+            send_button_event(parameter, 1, button_press_data.sw1_press_count);
+            button_press_data.flag.sw1 = false;  
+        }
+        if (button_press_data.flag.sw2 == true)
+        {
+            send_button_event(parameter, 2, button_press_data.sw2_press_count);
+            button_press_data.flag.sw2 = false;  
+        }
+        
         tx_thread_sleep(NX_IP_PERIODIC_RATE/2);
     }
 }

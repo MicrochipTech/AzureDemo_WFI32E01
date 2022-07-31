@@ -16,7 +16,7 @@ static void SWITCH1_InterruptHandler(GPIO_PIN pin, uintptr_t context)
     if (SWITCH1_Get() == APP_SWITCH_PRESSED)
     {
         button_press_data.sw1_press_count++;
-        button_press_data.flag.sw1 = 1;
+        button_press_data.flag.sw1 = true;
         LED_RED_Toggle();
     }
 }
@@ -26,7 +26,7 @@ static void SWITCH2_InterruptHandler(GPIO_PIN pin, uintptr_t context)
     if (SWITCH2_Get() == APP_SWITCH_PRESSED)
     {
         button_press_data.sw2_press_count++;
-        button_press_data.flag.sw2 = 1;
+        button_press_data.flag.sw2 = true;
         LED_RED_Toggle();
     }
 }

@@ -36,7 +36,7 @@ extern   "C" {
 #define SAMPLE_THREAD_PRIORITY                 (16)
 #define MAX_PROPERTY_COUNT                     (2)
 
-#define AZ_TELEMETRYINTERVAL_DEFAULT           1
+#define AZ_TELEMETRYINTERVAL_DEFAULT           5
 
 #ifdef __cplusplus
 }

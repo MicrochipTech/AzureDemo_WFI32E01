@@ -469,6 +469,8 @@ void check_button_status(void)
                           //az_span_ptr(button_event_payload_span),
                           //az_span_size(button_event_payload_span),
                           //1);
+        //nx_azure_iot_publish_mqtt_packet(NXD_MQTT_CLIENT *client_ptr, NX_PACKET *packet_ptr,
+                                      //UINT topic_len, UCHAR *packet_id, UINT qos, UINT wait_option);
     }
     return;
 }
@@ -634,6 +636,8 @@ static int send_command_response(
                       //az_span_ptr(response),
                       //az_span_size(response),
                       //1);
+    //nx_azure_iot_publish_mqtt_packet(NXD_MQTT_CLIENT *client_ptr, NX_PACKET *packet_ptr,
+                              //UINT topic_len, UCHAR *packet_id, UINT qos, UINT wait_option);
 
     return rc;
 }
@@ -1775,6 +1779,7 @@ az_result send_reported_property(
                       //az_span_ptr(property_payload_span),
                       //az_span_size(property_payload_span),
                       //1);
-
+    //nx_azure_iot_publish_mqtt_packet(NXD_MQTT_CLIENT *client_ptr, NX_PACKET *packet_ptr,
+                                  //UINT topic_len, UCHAR *packet_id, UINT qos, UINT wait_option);
     return rc;
 }
