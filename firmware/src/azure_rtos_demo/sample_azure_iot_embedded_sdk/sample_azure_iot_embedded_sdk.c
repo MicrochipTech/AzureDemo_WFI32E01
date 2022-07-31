@@ -34,7 +34,7 @@ static ULONG nx_azure_iot_thread_stack[NX_AZURE_IOT_STACK_SIZE / sizeof(ULONG)];
 /* Define the prototypes for AZ IoT.  */
 static NX_AZURE_IOT                                 nx_azure_iot;
 
-static UINT AZ_telemetryInterval = AZ_TELEMETRYINTERVAL_DEFAULT;
+volatile uint32_t AZ_telemetryInterval = AZ_TELEMETRYINTERVAL_DEFAULT;
 
 extern APP_CONNECT_STATUS appConnectStatus;
 extern APP_SENSORS_DATA APP_SENSORS_data;

@@ -11,7 +11,7 @@ extern az_iot_pnp_client pnp_client;
 #else
 extern az_iot_hub_client iothub_client;
 #endif
-extern volatile uint32_t telemetryInterval;
+extern volatile uint32_t AZ_telemetryInterval;
 
 extern char deviceIpAddress;
 
@@ -1165,7 +1165,7 @@ az_result process_device_twin_property(
             RETURN_ERR_IF_FAILED(az_json_reader_next_token(&jr));
             RETURN_ERR_IF_FAILED(az_json_token_get_uint32(&jr.token, &data));
             twin_properties->flag.telemetry_interval_found = 1;
-            telemetryInterval                              = data;
+            AZ_telemetryInterval                           = data;
         }
         else if (az_json_token_is_text_equal(&jr.token, led_yellow_property_name_span))
         {
@@ -1252,7 +1252,7 @@ az_result process_device_twin_property(
                     RETURN_ERR_IF_FAILED(az_json_reader_next_token(&jr));
                     RETURN_ERR_IF_FAILED(az_json_token_get_uint32(&jr.token, &data));
                     twin_properties->flag.telemetry_interval_found = 1;
-                    telemetryInterval                              = data;
+                    AZ_telemetryInterval                           = data;
                 }
                 else if (az_json_token_is_text_equal(&jr.token, led_yellow_property_name_span))
                 {
@@ -1389,7 +1389,7 @@ az_result send_reported_property(
                 rc = append_reported_property_response_int32(
                     &jw,
                     property_telemetry_interval_span,
-                    telemetryInterval,
+                    AZ_telemetryInterval,
                     AZ_IOT_STATUS_OK,
                     twin_properties->version_num,
                     resp_success_span)))
@@ -1397,7 +1397,7 @@ az_result send_reported_property(
                 rc = append_json_property_int32(
                     &jw,
                     property_telemetry_interval_span,
-                    telemetryInterval)))
+                    AZ_telemetryInterval)))
 #endif
         {
             debug_printError("AZURE: Unable to add property for telemetry interval, return code 0x%08x", rc);
@@ -1412,7 +1412,7 @@ az_result send_reported_property(
                 rc = append_reported_property_response_int32(
                     &jw,
                     property_telemetry_interval_span,
-                    telemetryInterval,
+                    AZ_telemetryInterval,
                     AZ_IOT_STATUS_OK,
                     1,
                     resp_success_span)))
@@ -1420,7 +1420,7 @@ az_result send_reported_property(
                 rc = append_json_property_int32(
                     &jw,
                     property_telemetry_interval_span,
-                    telemetryInterval)))
+                    AZ_telemetryInterval)))
 #endif
         {
             debug_printError("AZURE: Unable to add property for telemetry interval, return code 0x%08x", rc);
