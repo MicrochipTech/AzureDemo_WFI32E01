@@ -12,6 +12,7 @@ extern az_iot_pnp_client pnp_client;
 extern az_iot_hub_client iothub_client;
 #endif
 extern volatile uint32_t AZ_telemetryInterval;
+extern volatile uint32_t AZ_systemRebootTimer;
 
 extern char deviceIpAddress;
 
@@ -570,15 +571,15 @@ void update_leds(
     {
         if (twin_properties->desired_led_yellow == LED_TWIN_ON)
         {
-            //LED_SetYellow(LED_STATE_HOLD);
+            LED_SetYellow(LED_STATE_HOLD);
         }
         else if (twin_properties->desired_led_yellow == LED_TWIN_OFF)
         {
-            //LED_SetYellow(LED_STATE_OFF);
+            LED_SetYellow(LED_STATE_OFF);
         }
         else if (twin_properties->desired_led_yellow == LED_TWIN_BLINK)
         {
-            //LED_SetYellow(LED_STATE_BLINK_FAST);
+            LED_SetYellow(LED_STATE_BLINK_FAST);
         }
     }
 
@@ -626,13 +627,13 @@ static int send_command_response(
 
     return rc;
 }
-
+#ifdef _ELIMINATE
 void reboot_task_callback(uintptr_t context)
 {
     printf("AZURE: Rebooting...");
     SYS_RESET_SoftwareReset();
 }
-
+#endif /* _ELIMINATE */
 /**********************************************
 *	Handle reboot command
 **********************************************/
@@ -714,12 +715,9 @@ static az_result process_reboot_command(
                                                                out_response_span));
 
         *out_response_status = AZ_IOT_STATUS_ACCEPTED;
-        
-        SYS_RESET_SoftwareReset();
-        
+        debug_printInfo("AZURE: Scheduling reboot in %d sec", reboot_delay_seconds);        
+        AZ_systemRebootTimer = reboot_delay_seconds;
 #ifdef _ELIMINATE
-        debug_printInfo("AZURE: Scheduling reboot in %d sec", reboot_delay_seconds);
-
         reboot_task_handle = SYS_TIME_CallbackRegisterMS(reboot_task_callback,
                                                          0,
                                                          reboot_delay_seconds * 1000,

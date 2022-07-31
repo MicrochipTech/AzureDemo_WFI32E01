@@ -35,6 +35,7 @@ static ULONG nx_azure_iot_thread_stack[NX_AZURE_IOT_STACK_SIZE / sizeof(ULONG)];
 static NX_AZURE_IOT                                 nx_azure_iot;
 
 volatile uint32_t AZ_telemetryInterval = AZ_TELEMETRYINTERVAL_DEFAULT;
+volatile uint32_t AZ_systemRebootTimer = 0;
 
 extern APP_CONNECT_STATUS appConnectStatus;
 extern APP_SENSORS_DATA APP_SENSORS_data;
@@ -112,11 +113,17 @@ static TX_THREAD sample_app_ctrl_thread;
 static ULONG sample_app_ctrl_thread_stack[SAMPLE_STACK_SIZE / sizeof(ULONG)];
 #endif /* DISABLE_APP_CTRL_SAMPLE */
 
+#ifndef DISABLE_PERIOD_TIMER_SAMPLE
+static TX_THREAD sample_period_timer_thread;
+static ULONG sample_period_timer_thread_stack[SAMPLE_STACK_SIZE / sizeof(ULONG)];
+#endif /* DISABLE_PERIOD_TIMER_SAMPLE */
+
 void sample_entry(NX_IP *ip_ptr, NX_PACKET_POOL *pool_ptr, NX_DNS *dns_ptr, UINT (*unix_time_callback)(ULONG *unix_time));
 #ifdef ENABLE_DPS_SAMPLE
 static UINT sample_dps_entry(UCHAR **iothub_hostname, UINT *iothub_hostname_length,
                              UCHAR **iothub_device_id, UINT *iothub_device_id_length);
 #endif /* ENABLE_DPS_SAMPLE */
+
 #ifndef DISABLE_TELEMETRY_SAMPLE
 static void sample_telemetry_thread_entry(ULONG parameter);
 #endif /* DISABLE_TELEMETRY_SAMPLE */
@@ -136,6 +143,10 @@ static void sample_device_twin_thread_entry(ULONG parameter);
 #ifndef DISABLE_APP_CTRL_SAMPLE
 static void sample_app_ctrl_thread_entry(ULONG parameter);
 #endif /* DISABLE_APP_CTRL_SAMPLE */
+
+#ifndef DISABLE_PERIOD_TIMER_SAMPLE
+static void sample_period_timer_thread_entry(ULONG parameter);
+#endif /* DISABLE_PERIOD_TIMER_SAMPLE */
 
 #if 0
 static VOID printf_packet(NX_PACKET *packet_ptr)
@@ -413,6 +424,19 @@ UINT loop = NX_TRUE;
         printf("Failed to create application LED sample thread!: error code = 0x%08x\r\n", status);
     }
 #endif /* DISABLE_APP_CTRL_SAMPLE */
+
+#ifndef DISABLE_PERIOD_TIMER_SAMPLE
+
+    /* Create Device twin sample thread.  */
+    if ((status = tx_thread_create(&sample_period_timer_thread, "Sample Period Timer Thread",
+                                   sample_period_timer_thread_entry, 0,
+                                   (UCHAR *)sample_period_timer_thread_stack, SAMPLE_STACK_SIZE,
+                                   SAMPLE_THREAD_PRIORITY, SAMPLE_THREAD_PRIORITY,
+                                   1, TX_AUTO_START)))
+    {
+        printf("Failed to create period timer sample thread!: error code = 0x%08x\r\n", status);
+    }
+#endif /* DISABLE_PERIOD_TIMER_SAMPLE */
     
     /* Simply loop in sample.  */
     while (loop)
@@ -740,6 +764,29 @@ void sample_app_ctrl_thread_entry(ULONG parameter)
     }
 }
 #endif /* DISABLE_APP_CTRL_SAMPLE */
+
+#ifndef DISABLE_PERIOD_TIMER_SAMPLE
+void sample_period_timer_thread_entry(ULONG parameter)
+{
+    UCHAR loop = NX_TRUE;
+
+    NX_PARAMETER_NOT_USED(parameter);
+
+    while (loop)
+    {
+        if (AZ_systemRebootTimer)
+        {
+            AZ_systemRebootTimer--;
+            if (AZ_systemRebootTimer == 0)
+            {
+                printf("AZURE: Rebooting...");
+                SYS_RESET_SoftwareReset();
+            }
+        }
+        tx_thread_sleep(NX_IP_PERIODIC_RATE);
+    }
+}
+#endif /* DISABLE_PERIOD_TIMER_SAMPLE */
 
 UINT azureGlue_crypto_hmac_256_calculate(UCHAR *key, UINT key_length, const UCHAR *input, UINT input_length, UCHAR *output)
 {
