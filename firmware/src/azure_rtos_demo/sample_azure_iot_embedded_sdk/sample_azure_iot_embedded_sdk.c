@@ -148,7 +148,6 @@ static void sample_app_ctrl_thread_entry(ULONG parameter);
 static void sample_period_timer_thread_entry(ULONG parameter);
 #endif /* DISABLE_PERIOD_TIMER_SAMPLE */
 
-#if 0
 static VOID printf_packet(NX_PACKET *packet_ptr)
 {
     while (packet_ptr != NX_NULL)
@@ -158,7 +157,6 @@ static VOID printf_packet(NX_PACKET *packet_ptr)
         packet_ptr = packet_ptr -> nx_packet_next;
     }
 }
-#endif
 
 static VOID connection_status_callback(NX_AZURE_IOT_HUB_CLIENT *hub_client_ptr, UINT status)
 {
@@ -649,11 +647,11 @@ void sample_c2d_thread_entry(ULONG parameter)
             printf("Receive property: %s = %.*s\r\n", sample_properties[0][0],
                    (INT)property_buf_size, property_buf);
         }
-#if 0
+
         printf("Receive message: ");
         printf_packet(packet_ptr);
         printf("\r\n");
-#endif
+
         nx_packet_release(packet_ptr);
     }
 }
@@ -683,11 +681,11 @@ void sample_direct_method_thread_entry(ULONG parameter)
             printf("Direct method receive failed!: error code = 0x%08x\r\n", status);
             break;
         }
-#if 0
+
         printf("Receive method call: %.*s, with payload:", (INT)method_name_length, (CHAR *)method_name_ptr);
         printf_packet(packet_ptr);
         printf("\r\n");
-#endif
+
         if ((status = nx_azure_iot_hub_client_direct_method_message_response(&iothub_client, 200 /* method status */,
                                                                              context_ptr, context_length,
                                                                              (UCHAR *)method_response_payload, sizeof(method_response_payload) - 1,
@@ -726,11 +724,11 @@ void sample_device_twin_thread_entry(ULONG parameter)
         printf("device twin document receive failed!: error code = 0x%08x\r\n", status);
         return;
     }
-#if 0
+
     printf("Receive twin properties :");
     printf_packet(packet_ptr);
     printf("\r\n");
-#endif
+
     nx_packet_release(packet_ptr);
 
     /* Loop to receive device twin message.  */
@@ -742,11 +740,11 @@ void sample_device_twin_thread_entry(ULONG parameter)
             printf("Receive desired property receive failed!: error code = 0x%08x\r\n", status);
             break;
         }
-#if 0
+
         printf("Receive desired property call: ");
         printf_packet(packet_ptr);
         printf("\r\n");
-#endif
+
         nx_packet_release(packet_ptr);
 
         if ((status = nx_azure_iot_hub_client_device_twin_reported_properties_send(&iothub_client,
