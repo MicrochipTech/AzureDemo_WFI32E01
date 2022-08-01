@@ -882,6 +882,7 @@
       <itemPath>../src/app_switch.h</itemPath>
       <itemPath>../src/az_util.h</itemPath>
       <itemPath>../src/az_led.h</itemPath>
+      <itemPath>../src/ultralowpress.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -2670,6 +2671,7 @@
       <itemPath>../src/app_switch.c</itemPath>
       <itemPath>../src/az_util.c</itemPath>
       <itemPath>../src/az_led.c</itemPath>
+      <itemPath>../src/ultralowpress.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"

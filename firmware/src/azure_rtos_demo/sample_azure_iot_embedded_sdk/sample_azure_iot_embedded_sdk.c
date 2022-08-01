@@ -19,11 +19,8 @@
 #include "nx_azure_iot_ciphersuites.h"
 #include "sample_config.h"
 
-#include "../src/config/pic32mz_w1/bsp/bsp.h"
-#include "../app_led.h"
-#include "../app_sensors.h"
-#include "../app_switch.h"
-#include "../az_util.h"
+/* Definitions and function prototypes required by the application */
+#include "app.h"
 
 /* Maximum number of characters in a telemetry message */
 #define TELEMETRY_MSGLEN_MAX 90
@@ -41,10 +38,9 @@ static NX_AZURE_IOT                                 nx_azure_iot;
 volatile uint32_t AZ_telemetryInterval = AZ_TELEMETRYINTERVAL_DEFAULT;
 volatile uint32_t AZ_systemRebootTimer = 0;
 
+/* External variables used by the application  */
 extern APP_CONNECT_STATUS appConnectStatus;
 extern APP_SENSORS_DATA APP_SENSORS_data;
-//extern uint16_t APP_SWITCH1_counter;
-//extern uint16_t APP_SWITCH2_counter;
 
 /* Generally, IoTHub Client and DPS Client do not run at the same time, user can use union as below to
    share the memory between IoTHub Client and DPS Client.
@@ -596,14 +592,29 @@ void sample_telemetry_thread_entry(ULONG parameter)
     NX_PARAMETER_NOT_USED(parameter);
 
     APP_SENSORS_init();
+
+#ifdef CLICK_ULTRALOWPRESS
+    printf("[Ultra Low-Press Click] SM8436 Serial Number = %u\r\n", ULTRALOWPRESS_init());
+#endif /* CLICK_ULTRALOWPRESS */
     
     /* Loop to send telemetry messages */
     while (loop)
-    {               
+    {   
         buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
                 "{\"temperature\": %u, \"light\": %u}",
                 APP_SENSORS_readTemperature(), APP_SENSORS_readLight() );
         send_telemetry_message(parameter, (UCHAR *)buffer, buffer_length);
+
+#ifdef CLICK_ULTRALOWPRESS
+        if (ULTRALOWPRESS_isReady())
+        {
+            ULTRALOWPRESS_clearStatus();
+            buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
+                    "{\"SM8436_temperature\": %.2f, \"SM8436_pressure\": %.2f}",
+                    ULTRALOWPRESS_getTemperature(), ULTRALOWPRESS_getPressure() );                
+            send_telemetry_message(parameter, (UCHAR *)buffer, buffer_length);
+        }
+#endif /* CLICK_ULTRALOWPRESS */
 
         tx_thread_sleep(AZ_telemetryInterval * NX_IP_PERIODIC_RATE);
     }
