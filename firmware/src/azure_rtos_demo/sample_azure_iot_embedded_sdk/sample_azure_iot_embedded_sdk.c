@@ -81,6 +81,11 @@ static UCHAR sample_iothub_device_id[SAMPLE_MAX_BUFFER];
 
 /* Define sample threads.  */
 #ifndef DISABLE_TELEMETRY_SAMPLE
+#ifdef CLICK_VAVPRESS
+extern vavpress_sensor_param_data_t VAVPRESS_param_data;
+static float VAVPRESS_pressure;
+static float VAVPRESS_temperature;
+#endif /* CLICK_VAVPRESS */
 static TX_THREAD sample_telemetry_thread;
 static ULONG sample_telemetry_thread_stack[SAMPLE_STACK_SIZE / sizeof(ULONG)];
 #endif /* DISABLE_TELEMETRY_SAMPLE */
@@ -592,10 +597,13 @@ void sample_telemetry_thread_entry(ULONG parameter)
     NX_PARAMETER_NOT_USED(parameter);
 
     APP_SENSORS_init();
-
 #ifdef CLICK_ULTRALOWPRESS
     printf("[Ultra Low-Press Click] SM8436 Serial Number = %u\r\n", ULTRALOWPRESS_init());
 #endif /* CLICK_ULTRALOWPRESS */
+#ifdef CLICK_VAVPRESS
+    VAVPRESS_init();
+    printf("[VAV Press Click] Initializing...\r\n");
+#endif /* CLICK_VAVPRESS */
     
     /* Loop to send telemetry messages */
     while (loop)
@@ -614,7 +622,25 @@ void sample_telemetry_thread_entry(ULONG parameter)
                     ULTRALOWPRESS_getTemperature(), ULTRALOWPRESS_getPressure() );                
             send_telemetry_message(parameter, (UCHAR *)buffer, buffer_length);
         }
+        else
+        {
+            printf("Failed to communicate with Ultra-Low Press click!\r\n");
+        }
 #endif /* CLICK_ULTRALOWPRESS */
+
+#ifdef CLICK_VAVPRESS
+        if (VAVPRESS_getSensorReadings(&VAVPRESS_param_data, &VAVPRESS_pressure, &VAVPRESS_temperature))
+        {
+            buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
+                    "{\"LMIS025B_temperature\": %.2f, \"LMIS025B_pressure\": %.2f}",
+                    VAVPRESS_temperature, VAVPRESS_pressure);                
+            send_telemetry_message(parameter, (UCHAR *)buffer, buffer_length);      
+        }
+        else
+        {
+            printf("Failed to communicate with VAV Press click!\r\n");
+        }
+#endif /* CLICK_VAVPRESS */
 
         tx_thread_sleep(AZ_telemetryInterval * NX_IP_PERIODIC_RATE);
     }

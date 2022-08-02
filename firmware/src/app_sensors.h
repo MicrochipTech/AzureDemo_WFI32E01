@@ -81,7 +81,7 @@ typedef struct
 {
     DRV_HANDLE i2cHandle;
     uint8_t txBuffer[4];
-    uint16_t rxBuffer;
+    uint16_t rxBuffer[128];
 } APP_SENSORS_I2C;
 
 /* MCP9808 Structure */

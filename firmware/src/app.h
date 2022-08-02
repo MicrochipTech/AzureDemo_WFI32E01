@@ -50,6 +50,7 @@
 // *****************************************************************************
 // *****************************************************************************
 #define CLICK_ULTRALOWPRESS
+#define CLICK_VAVPRESS
 
 // *****************************************************************************
 // *****************************************************************************
@@ -72,8 +73,11 @@
 #include "az_util.h"
 
 #ifdef CLICK_ULTRALOWPRESS
-    #include "ultralowpress.h"
+    #include "./clicks/ultralowpress.h"
 #endif /* CLICK_ULTRALOWPRESS */
+#ifdef CLICK_VAVPRESS
+    #include "./clicks/vavpress.h"
+#endif /* CLICK_VAVPRESS */
 
 extern void nx_azure_init(void);
 

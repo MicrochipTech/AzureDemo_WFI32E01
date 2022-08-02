@@ -15,6 +15,10 @@
           <itemPath>../src/azure_rtos_demo/sample_azure_iot_embedded_sdk/sample_config.h</itemPath>
         </logicalFolder>
       </logicalFolder>
+      <logicalFolder name="f4" displayName="clicks" projectFiles="true">
+        <itemPath>../src/clicks/ultralowpress.h</itemPath>
+        <itemPath>../src/clicks/vavpress.h</itemPath>
+      </logicalFolder>
       <logicalFolder name="f1" displayName="config" projectFiles="true">
         <logicalFolder name="f1" displayName="pic32mz_w1" projectFiles="true">
           <logicalFolder name="f6" displayName="bsp" projectFiles="true">
@@ -882,7 +886,6 @@
       <itemPath>../src/app_switch.h</itemPath>
       <itemPath>../src/az_util.h</itemPath>
       <itemPath>../src/az_led.h</itemPath>
-      <itemPath>../src/ultralowpress.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -909,6 +912,10 @@
         </logicalFolder>
         <itemPath>../src/azure_rtos_demo/sample_azure_iot_entry.c</itemPath>
         <itemPath>../src/azure_rtos_demo/sample_netx_duo.c</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f4" displayName="clicks" projectFiles="true">
+        <itemPath>../src/clicks/ultralowpress.c</itemPath>
+        <itemPath>../src/clicks/vavpress.c</itemPath>
       </logicalFolder>
       <logicalFolder name="f1" displayName="config" projectFiles="true">
         <logicalFolder name="f1" displayName="pic32mz_w1" projectFiles="true">
@@ -2671,7 +2678,6 @@
       <itemPath>../src/app_switch.c</itemPath>
       <itemPath>../src/az_util.c</itemPath>
       <itemPath>../src/az_led.c</itemPath>
-      <itemPath>../src/ultralowpress.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"

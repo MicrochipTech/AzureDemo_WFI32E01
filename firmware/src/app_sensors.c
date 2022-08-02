@@ -35,15 +35,15 @@ void APP_SENSORS_read(uint8_t addr, uint16_t reg, uint8_t size)
 
 void APP_SENSORS_process(uint8_t addr, uint8_t reg)
 {       
-    APP_SENSORS_data.i2c.rxBuffer = (APP_SENSORS_data.i2c.rxBuffer << 8) | (APP_SENSORS_data.i2c.rxBuffer >> 8);
+    APP_SENSORS_data.i2c.rxBuffer[0] = (APP_SENSORS_data.i2c.rxBuffer[0] << 8) | (APP_SENSORS_data.i2c.rxBuffer[0] >> 8);
     //APP_CTRL_DBG(SYS_ERROR_DEBUG, "I2C read complete - periph addr %x val %x\r\n", addr, sensorsData.i2c.rxBuffer);
     switch(addr)
     {   
         case MCP9808_I2C_ADDRESS:
             if (reg == MCP9808_REG_TAMBIENT)
             {
-                uint8_t upperByte = (uint8_t)(APP_SENSORS_data.i2c.rxBuffer >> 8);
-                uint8_t lowerByte = ((uint8_t)(APP_SENSORS_data.i2c.rxBuffer & 0x00FF));
+                uint8_t upperByte = (uint8_t)(APP_SENSORS_data.i2c.rxBuffer[0] >> 8);
+                uint8_t lowerByte = ((uint8_t)(APP_SENSORS_data.i2c.rxBuffer[0] & 0x00FF));
                 upperByte = upperByte & 0x1F;
                 if ((upperByte & 0x10) == 0x10)
                 {   // Ta < 0 degC
@@ -58,21 +58,21 @@ void APP_SENSORS_process(uint8_t addr, uint8_t reg)
             }
             else if (reg == MCP9808_REG_DEVICE_ID)
             {
-                APP_SENSORS_data.mcp9808.deviceID = APP_SENSORS_data.i2c.rxBuffer;
+                APP_SENSORS_data.mcp9808.deviceID = APP_SENSORS_data.i2c.rxBuffer[0];
                 //APP_CTRL_DBG(SYS_ERROR_INFO, "MCP9808 Device ID %x\r\n", sensorsData.mcp9808.deviceID);                
             }
             break;
         case OPT3001_I2C_ADDRESS:
             if (reg == OPT3001_REG_RESULT)
             {
-                uint16_t m = APP_SENSORS_data.i2c.rxBuffer & 0x0FFF;
-                uint16_t e = (APP_SENSORS_data.i2c.rxBuffer & 0xF000) >> 12;
+                uint16_t m = APP_SENSORS_data.i2c.rxBuffer[0] & 0x0FFF;
+                uint16_t e = (APP_SENSORS_data.i2c.rxBuffer[0] & 0xF000) >> 12;
                 APP_SENSORS_data.opt3001.light = (m*pow(2,e))/100;
                 //APP_CTRL_DBG(SYS_ERROR_INFO, "OPT3001 Light %d (lux)\r\n", sensorsData.opt3001.light); 
             }
             else if (reg == OPT3001_REG_DEVICE_ID)
             {
-                APP_SENSORS_data.opt3001.deviceID = APP_SENSORS_data.i2c.rxBuffer;
+                APP_SENSORS_data.opt3001.deviceID = APP_SENSORS_data.i2c.rxBuffer[0];
                 //APP_CTRL_DBG(SYS_ERROR_INFO, "OPT3001 Device ID %x\r\n", sensorsData.opt3001.deviceID);                
             }
             break;
