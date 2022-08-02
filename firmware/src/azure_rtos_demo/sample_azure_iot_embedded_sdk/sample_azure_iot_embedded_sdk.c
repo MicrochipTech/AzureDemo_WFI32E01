@@ -103,12 +103,14 @@ static ULONG sample_direct_method_thread_stack[SAMPLE_STACK_SIZE / sizeof(ULONG)
 #endif /* DISABLE_DIRECT_METHOD_SAMPLE */
 
 #ifndef DISABLE_DEVICE_TWIN_SAMPLE
+extern twin_properties_t twin_properties;
 static CHAR fixed_reported_properties[] = "{\"sample_report\": \"OK\"}";
 static TX_THREAD sample_device_twin_thread;
 static ULONG sample_device_twin_thread_stack[SAMPLE_STACK_SIZE / sizeof(ULONG)];
 #endif /* DISABLE_DEVICE_TWIN_SAMPLE */
 
 #ifndef DISABLE_APP_CTRL_SAMPLE
+extern button_press_data_t button_press_data;
 static TX_THREAD sample_app_ctrl_thread;
 static ULONG sample_app_ctrl_thread_stack[SAMPLE_STACK_SIZE / sizeof(ULONG)];
 #endif /* DISABLE_APP_CTRL_SAMPLE */
@@ -279,7 +281,7 @@ UINT iothub_device_id_length = sizeof(DEVICE_ID) - 1;
 #ifndef DISABLE_DEVICE_TWIN_SAMPLE
     else if ((status = nx_azure_iot_hub_client_device_twin_enable(iothub_client_ptr)))
     {
-        printf("device twin enabled failed!: error code = 0x%08x\r\n", status);
+        printf("Device twin enabled failed!: error code = 0x%08x\r\n", status);
     }
 #endif /* DISABLE_DEVICE_TWIN_SAMPLE */
 
@@ -713,6 +715,8 @@ void sample_device_twin_thread_entry(ULONG parameter)
 
     NX_PARAMETER_NOT_USED(parameter);
 
+    init_twin_data(&twin_properties);
+    
     if ((status = nx_azure_iot_hub_client_device_twin_properties_request(&iothub_client, NX_WAIT_FOREVER)))
     {
         printf("device twin document request failed!: error code = 0x%08x\r\n", status);

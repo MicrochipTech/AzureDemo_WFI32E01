@@ -14,17 +14,17 @@ extern az_iot_hub_client iothub_client;
 extern volatile uint32_t AZ_telemetryInterval;
 extern volatile uint32_t AZ_systemRebootTimer;
 
-extern char deviceIpAddress;
+//extern char deviceIpAddress;
 
 // used by "az_led.c" to communicate LED state changes
 extern led_status_t led_status;
 
-extern uint16_t packet_identifier;
+//extern uint16_t packet_identifier;
 
-userdata_status_t userdata_status;
+//userdata_status_t userdata_status;
 
-static char pnp_telemetry_topic_buffer[128];
-static char pnp_telemetry_payload_buffer[128];
+//static char pnp_telemetry_topic_buffer[128];
+//static char pnp_telemetry_payload_buffer[128];
 
 // use another set of buffers in case two telemetry collides
 //static char pnp_uart_telemetry_topic_buffer[128];
@@ -56,8 +56,8 @@ static const az_span iot_hub_property_desired_version = AZ_SPAN_LITERAL_FROM_STR
 const az_span device_model_id_span = AZ_SPAN_LITERAL_FROM_STR(IOT_PLUG_AND_PLAY_MODEL_ID);
 #endif
 
-static const az_span telemetry_name_temperature_span = AZ_SPAN_LITERAL_FROM_STR("temperature");
-static const az_span telemetry_name_light_span       = AZ_SPAN_LITERAL_FROM_STR("light");
+//static const az_span telemetry_name_temperature_span = AZ_SPAN_LITERAL_FROM_STR("temperature");
+//static const az_span telemetry_name_light_span       = AZ_SPAN_LITERAL_FROM_STR("light");
 
 //static const az_span telemetry_name_long       = AZ_SPAN_LITERAL_FROM_STR("telemetry_Lng");
 //static const az_span telemetry_name_bool       = AZ_SPAN_LITERAL_FROM_STR("telemetry_Bool");
@@ -71,13 +71,13 @@ static const az_span property_telemetry_interval_span = AZ_SPAN_LITERAL_FROM_STR
 
 // Button Press
 button_press_data_t button_press_data = {0};
-static char         button_event_buffer[128];
+//static char         button_event_buffer[128];
 
-static const az_span event_name_button_event_span = AZ_SPAN_LITERAL_FROM_STR("button_event");
-static const az_span event_name_button_name_span  = AZ_SPAN_LITERAL_FROM_STR("button_name");
-static const az_span event_name_button_sw1_span   = AZ_SPAN_LITERAL_FROM_STR("SW1");
-static const az_span event_name_button_sw2_span   = AZ_SPAN_LITERAL_FROM_STR("SW2");
-static const az_span event_name_press_count_span  = AZ_SPAN_LITERAL_FROM_STR("press_count");
+//static const az_span event_name_button_event_span = AZ_SPAN_LITERAL_FROM_STR("button_event");
+//static const az_span event_name_button_name_span  = AZ_SPAN_LITERAL_FROM_STR("button_name");
+//static const az_span event_name_button_sw1_span   = AZ_SPAN_LITERAL_FROM_STR("SW1");
+//static const az_span event_name_button_sw2_span   = AZ_SPAN_LITERAL_FROM_STR("SW2");
+//static const az_span event_name_press_count_span  = AZ_SPAN_LITERAL_FROM_STR("press_count");
 
 // LED Properties
 static const az_span led_blue_property_name_span   = AZ_SPAN_LITERAL_FROM_STR("led_b");
@@ -86,25 +86,25 @@ static const az_span led_yellow_property_name_span = AZ_SPAN_LITERAL_FROM_STR("l
 static const az_span led_red_property_name_span    = AZ_SPAN_LITERAL_FROM_STR("led_r");
 
 // Debug Level
-static const az_span debug_level_property_name_span = AZ_SPAN_LITERAL_FROM_STR("debugLevel");
+//static const az_span debug_level_property_name_span = AZ_SPAN_LITERAL_FROM_STR("debugLevel");
 
 // IP Address property
-static const az_span ip_address_property_name_span = AZ_SPAN_LITERAL_FROM_STR("ipAddress");
-#define DISABLE_LIGHT       0x1
-#define DISABLE_TEMPERATURE 0x2
-#define DISABLE_BUTTON      0x4
+//static const az_span ip_address_property_name_span = AZ_SPAN_LITERAL_FROM_STR("ipAddress");
+//#define DISABLE_LIGHT       0x1
+//#define DISABLE_TEMPERATURE 0x2
+//#define DISABLE_BUTTON      0x4
 
 // App MCU properties
-static const az_span app_property_1_name_span = AZ_SPAN_LITERAL_FROM_STR("property_1");
-static const az_span app_property_2_name_span = AZ_SPAN_LITERAL_FROM_STR("property_2");
-static const az_span app_property_3_name_span = AZ_SPAN_LITERAL_FROM_STR("property_3");
-static const az_span app_property_4_name_span = AZ_SPAN_LITERAL_FROM_STR("property_4");
+//static const az_span app_property_1_name_span = AZ_SPAN_LITERAL_FROM_STR("property_1");
+//static const az_span app_property_2_name_span = AZ_SPAN_LITERAL_FROM_STR("property_2");
+//static const az_span app_property_3_name_span = AZ_SPAN_LITERAL_FROM_STR("property_3");
+//static const az_span app_property_4_name_span = AZ_SPAN_LITERAL_FROM_STR("property_4");
 
 // Firmware Version Property
 static const az_span fw_version_property_name_span = AZ_SPAN_LITERAL_FROM_STR("firmwareVersion");
 
-static const az_span disable_telemetry_name_span = AZ_SPAN_LITERAL_FROM_STR("disableTelemetry");
-static uint32_t telemetry_disable_flag = 0;
+//static const az_span disable_telemetry_name_span = AZ_SPAN_LITERAL_FROM_STR("disableTelemetry");
+//static uint32_t telemetry_disable_flag = 0;
 
 static const az_span resp_success_span                     = AZ_SPAN_LITERAL_FROM_STR("Success");
 
@@ -126,6 +126,8 @@ static const az_span command_resp_alloc_error_sendMsg_span   = AZ_SPAN_LITERAL_F
 
 static const az_span twin_request_id_span = AZ_SPAN_LITERAL_FROM_STR("initial_get");
 
+twin_properties_t twin_properties;
+
 /**********************************************
 * Initialize twin property data structure
 **********************************************/
@@ -137,13 +139,13 @@ void init_twin_data(twin_properties_t* twin_properties)
     twin_properties->reported_led_red   = LED_TWIN_NO_CHANGE;
     twin_properties->reported_led_blue  = LED_TWIN_NO_CHANGE;
     twin_properties->reported_led_green = LED_TWIN_NO_CHANGE;
-    twin_properties->debugLevel         = SEVERITY_INFO;
-    twin_properties->ip_address[0]      = '\0';
-    twin_properties->app_property_1     = 0;
-    twin_properties->app_property_2     = 0;
-    twin_properties->app_property_3     = 0;
-    twin_properties->app_property_4     = 0;
-    twin_properties->telemetry_disable_flag = 0;
+    //twin_properties->debugLevel         = SEVERITY_INFO;
+    //twin_properties->ip_address[0]      = '\0';
+    //twin_properties->app_property_1     = 0;
+    //twin_properties->app_property_2     = 0;
+    //twin_properties->app_property_3     = 0;
+    //twin_properties->app_property_4     = 0;
+    //twin_properties->telemetry_disable_flag = 0;
 }
 
 /**************************************
@@ -279,6 +281,7 @@ static az_result append_reported_property_response_int32(
     return AZ_OK;
 }
 #endif
+#ifdef _ELIMINATE
 /**********************************************
 * Build sensor telemetry JSON
 **********************************************/
@@ -305,7 +308,7 @@ az_result build_sensor_telemetry_message(
     *out_payload_span = az_json_writer_get_bytes_used_in_destination(&jw);
     return AZ_OK;
 }
-
+#endif /* _ELIMINATE */
 /**********************************************
 * Create JSON document for command error response
 * e.g.
@@ -391,6 +394,7 @@ static az_result build_command_resp_payload(az_span response_span, az_span* resp
 *   }
 * }
 **********************************************/
+#ifdef _ELIMINATE
 static az_result append_button_press_telemetry(
     az_json_writer* jw,
     az_span         button_name_span,
@@ -474,7 +478,7 @@ void check_button_status(void)
     }
     return;
 }
-
+#endif /* _ELIMINATE */
 /**********************************************
 * Check if LED status has changed or not.
 * If any LED status has changed, update Device Twin
@@ -1187,6 +1191,7 @@ az_result process_device_twin_property(
                                                          &twin_properties->desired_led_yellow));
             twin_properties->flag.yellow_led_found = 1;
         }
+#ifdef _ELIMINATE
         else if (az_json_token_is_text_equal(&jr.token, debug_level_property_name_span))
         {
             // found writable property to control Yellow LED
@@ -1219,6 +1224,7 @@ az_result process_device_twin_property(
                                                           &twin_properties->telemetry_disable_flag));
             twin_properties->flag.telemetry_disable_found = 1;
         }
+#endif /* _ELIMINATE */
         else
         {
             char   buffer[32];
@@ -1490,11 +1496,11 @@ az_result send_reported_property(
             return rc;
         }
     }
-
+#ifdef _ELIMINATE
     // Set debug level
     if (twin_properties->flag.debug_level_found)
     {
-        //debug_setSeverity((debug_severity_t)twin_properties->debugLevel);
+        debug_setSeverity((debug_severity_t)twin_properties->debugLevel);
 
         if (az_result_failed(
 #ifdef IOT_PLUG_AND_PLAY_MODEL_ID
@@ -1539,7 +1545,8 @@ az_result send_reported_property(
             return rc;
         }
     }
-
+#endif /* _ELIMINATE */
+    
     // Add Red LED
     // Example with String Enum
     if (twin_properties->flag.is_initial_get || twin_properties->reported_led_red != LED_TWIN_NO_CHANGE)
@@ -1582,7 +1589,7 @@ az_result send_reported_property(
             return rc;
         }
     }
-
+#ifdef _ELIMINATE
     // Add IP Address
     if (twin_properties->flag.is_initial_get || twin_properties->flag.ip_address_updated != 0)
     {
@@ -1716,7 +1723,7 @@ az_result send_reported_property(
             return rc;
         }
     }
-
+#endif /* _ELIMINATE */
     if (twin_properties->flag.is_initial_get)
     {
         //tstrM2mRev fwInfo;
