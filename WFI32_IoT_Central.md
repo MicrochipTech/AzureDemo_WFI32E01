@@ -140,10 +140,10 @@ IoT Central allows you to create an application dashboard to monitor the telemet
 
     <img src=".//media/image89.png" style="width:5.in;height:1.28982in" alt="A screenshot of a cell phone Description automatically generated" />
 
-20. The `Device connection groups` pop-up window should appear. Confirm that `Authentication type` is set to `Shared access signature (SAS)`. Edit the `CLOUD.CFG` file one last time by updating the `REGISTRATION_ID` string with the Device ID and then `PRIMARY_KEY` string with the Primary key values that are shown on the Device connection groups pop-up window. Close the pop-up window when finished and make sure to save these latest changes to the `CLOUD.CFG` file
+20. The `Device connection groups` pop-up window should appear. Confirm that `Authentication type` is set to `Shared access signature (SAS)`. Edit the `CLOUD.CFG` file one final time by updating the `REGISTRATION_ID` string with the Device ID and then `PRIMARY_KEY` string with the Primary key values that are shown on the Device connection groups pop-up window. Click on each of the "Copy to clipboard" icons and paste the corresponding text into the `CLOUD.CFG` file. Close the pop-up window when finished and make sure to save this last set of changes to the `CLOUD.CFG` file
     ```bash
-    "REGISTRATION_ID":	"7tb1plo0w6",
-    "PRIMARY_KEY": "GRPke4QlR99LSUGoqUfHtN0uPzRh+Sroi0v2tCrD46w="
+    "REGISTRATION_ID":	"2ep4cjs1gka",
+    "PRIMARY_KEY": "d59fA5UptJ6bh+Il6YgOIZTjly6hN0h0p5REcUm7osk="
     ```
     <img src=".//media/image89a.png"/>
 
