@@ -6,7 +6,6 @@
         "@id": "dtmi:com:Microchip:WFI32_IoT_WM:press_count;1",
         "@type": [
           "Telemetry",
-          "NumberValue"
         ],
         "displayName": {
           "en": "Button Press Count"
@@ -17,7 +16,6 @@
       {
         "@type": [
           "Telemetry",
-          "NumberValue",
           "Temperature"
         ],
         "description": {
@@ -33,7 +31,6 @@
       {
         "@type": [
           "Telemetry",
-          "NumberValue",
           "Illuminance"
         ],
         "description": {
@@ -120,7 +117,6 @@
       {
         "@type": [
           "Property",
-          "NumberValue",
           "TimeSpan"
         ],
         "description": {
@@ -185,8 +181,7 @@
         "@id": "dtmi:com:Microchip:WFI32_IoT_ULP:SM8436_temperature;1",
         "@type": [
           "Telemetry",
-          "Temperature",
-          "NumberValue"
+          "Temperature"
         ],
         "displayName": {
           "en": "Temperature (SM8436)"
@@ -198,8 +193,7 @@
         "@id": "dtmi:com:Microchip:WFI32_IoT_ULP:SM8436_pressure;1",
         "@type": [
           "Telemetry",
-          "Pressure",
-          "NumberValue"
+          "Pressure"
         ],
         "displayName": {
           "en": "Pressure (SM8436)"
