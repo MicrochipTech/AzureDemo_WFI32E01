@@ -230,7 +230,7 @@
       "en": "Reports device temperature, light intensity, and the current state of the 2 buttons & 4 LEDs.  Provides ability to turn on/off any of the 4 LEDs."
     },
     "displayName": {
-      "en": "WFI32-IoT WM"
+      "en": "WFI32-IoT Click"
     },
     "schemas": [
       {
