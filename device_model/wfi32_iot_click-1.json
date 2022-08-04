@@ -1,5 +1,5 @@
   {
-    "@id": "dtmi:com:Microchip:WFI32_IoT_ULP;1",
+    "@id": "dtmi:com:Microchip:WFI32_IoT_Click;1",
     "@type": "Interface",
     "contents": [
       {
@@ -178,7 +178,7 @@
         }
       },
       {
-        "@id": "dtmi:com:Microchip:WFI32_IoT_ULP:SM8436_temperature;1",
+        "@id": "dtmi:com:Microchip:WFI32_IoT_Click:SM8436_temperature;1",
         "@type": [
           "Telemetry",
           "Temperature"
@@ -190,7 +190,7 @@
         "schema": "double"
       },
       {
-        "@id": "dtmi:com:Microchip:WFI32_IoT_ULP:SM8436_pressure;1",
+        "@id": "dtmi:com:Microchip:WFI32_IoT_Click:SM8436_pressure;1",
         "@type": [
           "Telemetry",
           "Pressure"
@@ -199,6 +199,30 @@
           "en": "Pressure (SM8436)"
         },
         "name": "SM8436_pressure",
+        "schema": "double"
+      },
+      {
+        "@id": "dtmi:com:Microchip:WFI32_IoT_Click:LMIS025B_temperature;1",
+        "@type": [
+          "Telemetry",
+          "Temperature"
+        ],
+        "displayName": {
+          "en": "Temperature (LMIS025B)"
+        },
+        "name": "LMIS025B_temperature",
+        "schema": "double"
+      },
+      {
+        "@id": "dtmi:com:Microchip:WFI32_IoT_Click:LMIS025B_pressure;1",
+        "@type": [
+          "Telemetry",
+          "Pressure"
+        ],
+        "displayName": {
+          "en": "Pressure (LMIS025B)"
+        },
+        "name": "LMIS025B_pressure",
         "schema": "double"
       }
     ],
