@@ -102,7 +102,7 @@ typedef enum
 
 /**
  * @brief Ultra-Low Press initialization function
- * @return Serial number read from the SM8436
+ * @return Serial number of the SM8436
  */
 uint32_t ULTRALOWPRESS_init(void);
 

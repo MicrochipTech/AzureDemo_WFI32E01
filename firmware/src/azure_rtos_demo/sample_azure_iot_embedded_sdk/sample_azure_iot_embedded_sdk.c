@@ -81,7 +81,11 @@ static UCHAR sample_iothub_device_id[SAMPLE_MAX_BUFFER];
 
 /* Define sample threads.  */
 #ifndef DISABLE_TELEMETRY_SAMPLE
+#ifdef CLICK_ULTRALOWPRESS
+extern ultralowpress_return_value_t ULTRALOWPRESS_status;
+#endif /* CLICK_ULTRALOWPRESS */
 #ifdef CLICK_VAVPRESS
+extern vavpress_return_value_t VAVPRESS_status;
 extern vavpress_sensor_param_data_t VAVPRESS_param_data;
 static float VAVPRESS_pressure;
 static float VAVPRESS_temperature;
@@ -593,18 +597,34 @@ void sample_telemetry_thread_entry(ULONG parameter)
     CHAR buffer[TELEMETRY_MSGLEN_MAX];
     UINT buffer_length;
     UCHAR loop = NX_TRUE;
-
+    uint32_t SM8436_serialNumber;
+    
     NX_PARAMETER_NOT_USED(parameter);
 
     APP_SENSORS_init();
 #ifdef CLICK_ULTRALOWPRESS
-    printf("[Ultra Low-Press Click] SM8436 Serial Number = %u\r\n", ULTRALOWPRESS_init());
+    SM8436_serialNumber = ULTRALOWPRESS_init();
+    printf("[ULP Click] Initializing SM8436\r\n");
+    if (ULTRALOWPRESS_status == ULTRALOWPRESS_OK)
+    {
+        printf("[ULP Click] SM8436 Serial Number = %u\r\n", SM8436_serialNumber);    
+    }
+    else
+    {
+        printf("[ULP Click] SM8436 not detected\r\n");          
+    }
 #endif /* CLICK_ULTRALOWPRESS */
 #ifdef CLICK_VAVPRESS
     VAVPRESS_init();
-    printf("[VAV Press Click] Initializing...\r\n");
+    printf("[VAV Click] Initializing LMIS025B\r\n");
+    if (VAVPRESS_status == VAVPRESS_ERROR)
+    {
+        printf("[VAV Click] LMIS025B not detected\r\n");          
+    }
 #endif /* CLICK_VAVPRESS */
-    
+
+    tx_thread_sleep(AZ_telemetryInterval * NX_IP_PERIODIC_RATE);
+        
     /* Loop to send telemetry messages */
     while (loop)
     {   
@@ -614,31 +634,29 @@ void sample_telemetry_thread_entry(ULONG parameter)
         send_telemetry_message(parameter, (UCHAR *)buffer, buffer_length);
 
 #ifdef CLICK_ULTRALOWPRESS
-        if (ULTRALOWPRESS_isReady())
+        if (ULTRALOWPRESS_status == ULTRALOWPRESS_OK)
         {
-            ULTRALOWPRESS_clearStatus();
-            buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
-                    "{\"SM8436_temperature\": %.2f, \"SM8436_pressure\": %.2f}",
-                    ULTRALOWPRESS_getTemperature(), ULTRALOWPRESS_getPressure() );                
-            send_telemetry_message(parameter, (UCHAR *)buffer, buffer_length);
-        }
-        else
-        {
-            printf("Failed to communicate with Ultra-Low Press click!\r\n");
+            if (ULTRALOWPRESS_isReady())
+            {
+                ULTRALOWPRESS_clearStatus();
+                buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
+                        "{\"SM8436_temperature\": %.2f, \"SM8436_pressure\": %.2f}",
+                        ULTRALOWPRESS_getTemperature(), ULTRALOWPRESS_getPressure() );                
+                send_telemetry_message(parameter, (UCHAR *)buffer, buffer_length);
+            }
         }
 #endif /* CLICK_ULTRALOWPRESS */
 
 #ifdef CLICK_VAVPRESS
-        if (VAVPRESS_getSensorReadings(&VAVPRESS_param_data, &VAVPRESS_pressure, &VAVPRESS_temperature))
+        if (VAVPRESS_status == VAVPRESS_OK)
         {
-            buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
-                    "{\"LMIS025B_temperature\": %.2f, \"LMIS025B_pressure\": %.2f}",
-                    VAVPRESS_temperature, VAVPRESS_pressure);                
-            send_telemetry_message(parameter, (UCHAR *)buffer, buffer_length);      
-        }
-        else
-        {
-            printf("Failed to communicate with VAV Press click!\r\n");
+            if (VAVPRESS_getSensorReadings(&VAVPRESS_param_data, &VAVPRESS_pressure, &VAVPRESS_temperature))
+            {
+                buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
+                        "{\"LMIS025B_temperature\": %.2f, \"LMIS025B_pressure\": %.2f}",
+                        VAVPRESS_temperature, VAVPRESS_pressure);                
+                send_telemetry_message(parameter, (UCHAR *)buffer, buffer_length);      
+            }
         }
 #endif /* CLICK_VAVPRESS */
 

@@ -29,33 +29,47 @@
 
 extern APP_SENSORS_DATA APP_SENSORS_data;
 
+vavpress_return_value_t VAVPRESS_status;
 vavpress_el_signature_data_t VAVPRESS_el_signature_data;
 vavpress_sensor_param_data_t VAVPRESS_param_data;
 
 void VAVPRESS_init(void)
 {
-    VAVPRESS_setDefaultConfig();
-    VAVPRESS_getElectronicSignature( &VAVPRESS_el_signature_data );
-    //printf( "--------------------------------\r\n" );
-    //printf( " Firmware Version : %.3f        \r\n", VAVPRESS_el_signature_data.firmware_version );
-    //printf( " Pressure Range   : %d Pa       \r\n", VAVPRESS_el_signature_data.pressure_range );
-    //printf( " Part #           : %.11s       \r\n", VAVPRESS_el_signature_data.part_number );
-    //printf( " Lot #            : %.7s        \r\n", VAVPRESS_el_signature_data.lot_number );
-    //printf( " Output Type      : %c          \r\n", VAVPRESS_el_signature_data.output_type );
-    //printf( " Scale Factor     : %d          \r\n", VAVPRESS_el_signature_data.scale_factor );
-    //printf( " Calibration ID   : %.2s        \r\n", VAVPRESS_el_signature_data.calibration_id );
-    //printf( " Week number      : %d          \r\n", VAVPRESS_el_signature_data.week_number );
-    //printf( " Year number      : %d          \r\n", VAVPRESS_el_signature_data.year_number );
-    //printf( " Sequence number  : %d          \r\n", VAVPRESS_el_signature_data.sequence_number );
-    //printf( "--------------------------------\r\n" );
-    VAVPRESS_param_data.scale_factor_temp = 72;
-    VAVPRESS_param_data.scale_factor_press = VAVPRESS_el_signature_data.scale_factor;
-    VAVPRESS_param_data.readout_at_known_temperature = 50;
-    VAVPRESS_param_data.known_temperature_c = 24.0;
+    vavpress_return_value_t error_code;
+    
+    error_code = VAVPRESS_setDefaultConfig();
+    if (error_code == VAVPRESS_OK)
+    {
+        VAVPRESS_status = VAVPRESS_OK;
+        VAVPRESS_getElectronicSignature( &VAVPRESS_el_signature_data );
+        //printf( "--------------------------------\r\n" );
+        //printf( " Firmware Version : %.3f        \r\n", VAVPRESS_el_signature_data.firmware_version );
+        //printf( " Pressure Range   : %d Pa       \r\n", VAVPRESS_el_signature_data.pressure_range );
+        //printf( " Part #           : %.11s       \r\n", VAVPRESS_el_signature_data.part_number );
+        //printf( " Lot #            : %.7s        \r\n", VAVPRESS_el_signature_data.lot_number );
+        //printf( " Output Type      : %c          \r\n", VAVPRESS_el_signature_data.output_type );
+        //printf( " Scale Factor     : %d          \r\n", VAVPRESS_el_signature_data.scale_factor );
+        //printf( " Calibration ID   : %.2s        \r\n", VAVPRESS_el_signature_data.calibration_id );
+        //printf( " Week number      : %d          \r\n", VAVPRESS_el_signature_data.week_number );
+        //printf( " Year number      : %d          \r\n", VAVPRESS_el_signature_data.year_number );
+        //printf( " Sequence number  : %d          \r\n", VAVPRESS_el_signature_data.sequence_number );
+        //printf( "--------------------------------\r\n" );
+        VAVPRESS_param_data.scale_factor_temp = 72;
+        VAVPRESS_param_data.scale_factor_press = VAVPRESS_el_signature_data.scale_factor;
+        VAVPRESS_param_data.readout_at_known_temperature = 50;
+        VAVPRESS_param_data.known_temperature_c = 24.0;
+    }
+    else
+    {
+        VAVPRESS_status = VAVPRESS_ERROR;
+        printf("[VAV Click] LMIS025B was not found during initialization\r\n");
+    }
 }
 
-bool VAVPRESS_setDefaultConfig(void)
+vavpress_return_value_t VAVPRESS_setDefaultConfig(void)
 {
+    vavpress_return_value_t error_code;
+    
     // Click default configuration.
     vavpress_sensor_param_data_t param_data;
     
@@ -64,15 +78,15 @@ bool VAVPRESS_setDefaultConfig(void)
     VAVPRESS_param_data.readout_at_known_temperature = 50;
     VAVPRESS_param_data.known_temperature_c = 24.0;
     
-    VAVPRESS_setDefaultSensorParams( &param_data );
-    return VAVPRESS_OK;
+    error_code = VAVPRESS_setDefaultSensorParams( &param_data );
+    return error_code;
 }
 
-bool VAVPRESS_setDefaultSensorParams(vavpress_sensor_param_data_t *param_data)
+vavpress_return_value_t VAVPRESS_setDefaultSensorParams(vavpress_sensor_param_data_t *param_data)
 {
     vavpress_el_signature_data_t el_signature_data;
      
-    bool error_flag = VAVPRESS_getElectronicSignature( &el_signature_data );
+    vavpress_return_value_t error_flag = VAVPRESS_getElectronicSignature( &el_signature_data );
     
     param_data->scale_factor_temp = 72;
     param_data->scale_factor_press = el_signature_data.scale_factor;
@@ -82,7 +96,7 @@ bool VAVPRESS_setDefaultSensorParams(vavpress_sensor_param_data_t *param_data)
     return error_flag;
 }
 
-bool VAVPRESS_getReadoutData(int16_t *press_data, int16_t *temp_data)
+vavpress_return_value_t VAVPRESS_getReadoutData(int16_t *press_data, int16_t *temp_data)
 {
     //uint8_t tx_buf[ 1 ];
     //uint8_t rx_buf[ 4 ];
@@ -117,13 +131,13 @@ bool VAVPRESS_getReadoutData(int16_t *press_data, int16_t *temp_data)
     return true;
 }
 
-bool VAVPRESS_getSensorReadings(vavpress_sensor_param_data_t *param_data, float *diff_press, float *temperature)
+vavpress_return_value_t VAVPRESS_getSensorReadings(vavpress_sensor_param_data_t *param_data, float *diff_press, float *temperature)
 {
     int16_t press_data;
     int16_t temp_data;
     float tmp;
 
-    bool error_flag = VAVPRESS_getReadoutData (&press_data, &temp_data);
+    vavpress_return_value_t error_flag = VAVPRESS_getReadoutData (&press_data, &temp_data);
     
     tmp = ( float ) press_data;
     tmp /= ( float ) param_data->scale_factor_press;
@@ -138,7 +152,7 @@ bool VAVPRESS_getSensorReadings(vavpress_sensor_param_data_t *param_data, float 
     return error_flag;
 }
 
-bool VAVPRESS_getElectronicSignature(vavpress_el_signature_data_t *el_signature_data)
+vavpress_return_value_t VAVPRESS_getElectronicSignature(vavpress_el_signature_data_t *el_signature_data)
 {
     //uint8_t tx_buf[ 1 ];
     uint8_t rx_buf[EL_SIGNATURE_NUMBYTES];

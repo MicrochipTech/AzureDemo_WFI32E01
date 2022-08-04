@@ -29,6 +29,8 @@
     
 extern APP_SENSORS_DATA APP_SENSORS_data;
 
+ultralowpress_return_value_t ULTRALOWPRESS_status;
+    
 uint32_t ULTRALOWPRESS_init(void)
 {
     uint32_t serial_number = 0;
@@ -40,6 +42,17 @@ uint32_t ULTRALOWPRESS_init(void)
     APP_SENSORS_read(ULTRALOWPRESS_I2CADDR, ULTRALOWPRESS_REG_SERIAL_NUM_L, 1);
     serial_number |= APP_SENSORS_data.i2c.rxBuffer[0];
 
+    if (serial_number == 0)
+    {
+        ULTRALOWPRESS_status = ULTRALOWPRESS_ERROR;
+        printf("[ULP Click] SM8436 was not found during initialization\r\n");
+    }
+    else
+    {
+        ULTRALOWPRESS_status = ULTRALOWPRESS_OK;        
+        printf("[ULP Click] SM8436 Serial Number = %u\r\n", serial_number);
+    }
+    
     return (serial_number);
 }
 
