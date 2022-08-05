@@ -48,12 +48,20 @@ As a solution builder, you can use IoT Central to develop a cloud-hosted IoT sol
 
  8. Before typing anything in the terminal emulator window, **disable** the local echo feature in the terminal settings for best results.  In the terminal window, hit `[RETURN]` to bring up the Command Line Interface prompt (which is simply the `>` character). Type `help` and then hit `[RETURN]` to get the list of available commands for the CLI.  The Command Line Interface allows you to send simple ASCII-string commands to set or get the user-configurable operating parameters of the application while it is running
 
-    <img src=".//media/image44.png" style="width:5.in;height:3.18982in" alt="A screenshot of a cell phone Description automatically generated" />
+    <img src=".//media/image44.png" style="width:5.in;height:2.68982in" alt="A screenshot of a cell phone Description automatically generated" />
 
-9. Configure the WFI32-IoT Board's internal Wi-Fi settings with your wireless router’s SSID and password by editing the `WIFI.CFG` file located in the `WFI32-IOT` disk drive. Using the text editor of your choice, modify the one existing line in the file so that `my_SSID` and `my_PSWD` reflect the correct authentication settings for the wireless router you'd like the WFI32-IoT Board to connect with. Save the changes to the file and then re-open the file to confirm that your changes were correctly saved. To be on the safe side, there should be no spaces used in the SSID and password.
+9. Enter in the `wifi` command on the CLI. You should see that the WFI32-IoT Board replies with a message that it is *not* currently connected to Wi-Fi
+
+    <img src=".//media/image45.png" style="width:5.in;height:1.58982in" alt="A screenshot of a cell phone Description automatically generated" />
+
+10. Configure the WFI32-IoT Board's internal Wi-Fi settings with your wireless router’s SSID and password by editing the `WIFI.CFG` file located in the `WFI32-IOT` disk drive. Using the text editor of your choice, modify the one existing line in the file so that `my_SSID` and `my_PSWD` reflect the correct authentication settings for the wireless router you'd like the WFI32-IoT Board to connect with. Save the changes to the file and then re-open the file to confirm that your changes were correctly saved. To be on the safe side, there should be no spaces used in the SSID and password
     ```bash
     CMD:SEND_UART=wifi my_SSID,my_PSWD,2
     ```
+
+11. Enter in the `reset` command on the CLI. Within a few seconds, you should see the Blue LED on the WFI32-IoT Board stay constantly on - signifying that the board has successfuly connected to Wi-Fi
+
+    NOTE: Do not proceed until the WFI32-IoT Board has established a successful connection to Wi-Fi - the Blue LED needs to be always on!
 
 ## Create an IoT Central Application for your Device
 
@@ -85,23 +93,23 @@ IoT Central allows you to create an application dashboard to monitor the telemet
 
 5.	If there is no existing device template that corresponds to "WFI32_IoT", click on the `+ New` button at the top of the page
 
-    <img src=".//media/image70.png">
+    <img src=".//media/image70.png" style="width:5.0in;height:2.00833in" alt="A screenshot of a cell phone Description automatically generated" />
 
 6.	Click on the `IoT device` tile to import an existing capability model, then scroll down to the bottom of the page and select `Next: Customize`
 
-    <img src=".//media/image71.png">
+    <img src=".//media/image71.png" style="width:5.in;height:2.68982in" alt="A screenshot of a cell phone Description automatically generated" />
 
 7.	Type `WFI32_IoT_WM;1` in the `Device template name` field and click on the `Next: Review` button
 
-    <img src=".//media/image72.png">
+    <img src=".//media/image72.png" style="width:5.in;height:1.68982in" alt="A screenshot of a cell phone Description automatically generated" />
 
 8.	Confirm that the information listed under `Basic info` is correct and click on the `Create` button
 
-    <img src=".//media/image73.png">
+    <img src=".//media/image73.png" style="width:3.5in;height:0.0432in" alt="A screenshot of a cell phone Description automatically generated" />
 
 9.	Click on the `Import a model` tile which will allow you to upload an existing device model file to IoT Central
 
-    <img src=".//media/image74.png">
+    <img src=".//media/image74.png" style="width:5.in;height:2.68982in" alt="A screenshot of a cell phone Description automatically generated" />
 
 10.	Navigate to the `wfi32_iot_wm-1.json` file that is located in the `device_model` folder (should be located in the main demo folder) and then click on `Upload`
 
@@ -117,57 +125,63 @@ IoT Central allows you to create an application dashboard to monitor the telemet
 
     <img src=".//media/image84a.png" style="width:5.in;height:3.18982in" alt="A screenshot of a cell phone Description automatically generated" />
 
-14. Set the ID Scope value in the WFI32-IoT Board by editing the `CLOUD.CFG` file which is accessed via the `WFI32-IOT` disk drive. The unique ID Scope value will be used by the WFI32-IoT Board to connect to the built-in DPS used by your IoT Central application. Using the text editor of your choice, modify the existing line in the file so that the ID_SCOPE string is set to the value assigned to your IoT Central application, for example
+14. Enter in the `cloud` command on the CLI. You should see that the WFI32-IoT Board replies with a message that it is *not* currently connected to the Cloud
+
+    <img src=".//media/image85.png" style="width:5.in;height:2.18982in" alt="A screenshot of a cell phone Description automatically generated" />
+
+15. Set the ID Scope value in the WFI32-IoT Board by editing the `CLOUD.CFG` file which is accessed via the `WFI32-IOT` disk drive. The unique ID Scope value will be used by the WFI32-IoT Board to connect to the built-in DPS used by your IoT Central application. Using the text editor of your choice, modify the existing line in the file so that the ID_SCOPE string is set to the value assigned to your IoT Central application, for example
     ```bash
     "ID_SCOPE":	"0ne0041E397",
     ```
 
-15. Save the changes to the `CLOUD.CFG` file and then re-open the file to confirm that your changes were correctly saved for the `ID_SCOPE` value
+16. Save the changes to the `CLOUD.CFG` file and then re-open the file to confirm that your changes were correctly saved for the `ID_SCOPE` value
 
-16. Go back to your web browser to access the Azure IoT Central application.  Use the left-hand side pane and select `Connect` > `Devices`. Click `+ New` at the top to add a new device to your application (a one-time individual enrollment)
+17. Go back to your web browser to access the Azure IoT Central application.  Use the left-hand side pane and select `Connect` > `Devices`. Click `+ New` at the top to add a new device to your application (a one-time individual enrollment)
 
     <img src=".//media/image86.png">
 
-17. In the `Create a new device` window, it is suggested to accept the default device name and ID that are randomly-generated (but can be changed to more meaningful names if you like). Select `WFI32_IoT_WM;1` for the device template. Click on the `Create` button
+18. In the `Create a new device` window, it is suggested to accept the default device name and ID that are randomly-generated (but can be changed to more meaningful names if you like). Select `WFI32_IoT_WM;1` for the device template. Click on the `Create` button
 
-    <img src=".//media/image87.png">
+    <img src=".//media/image87.png" style="width:5.in;height:3.68982in" alt="A screenshot of a cell phone Description automatically generated" />
 
-18. Confirm that the new device is listed as `Registered` and that `Simulated = No`
+19. Confirm that the new device is listed as `Registered` and that `Simulated = No`
 
     <img src=".//media/image88.png">
 
-19. Click on the `Device name` instance and then click on `Connect` at the top of the device's page
+20. Click on the `Device name` instance and then click on `Connect` at the top of the device's page
 
     <img src=".//media/image89.png" style="width:5.in;height:1.28982in" alt="A screenshot of a cell phone Description automatically generated" />
 
-20. The `Device connection groups` pop-up window should appear. Confirm that `Authentication type` is set to `Shared access signature (SAS)`. Edit the `CLOUD.CFG` file one final time by updating the `REGISTRATION_ID` string with the Device ID and then `PRIMARY_KEY` string with the Primary key values that are shown on the Device connection groups pop-up window. Click on each of the "Copy to clipboard" icons and paste the corresponding text into the `CLOUD.CFG` file. Close the pop-up window when finished and make sure to save this last set of changes to the `CLOUD.CFG` file
+21. The `Device connection groups` pop-up window should appear. Confirm that `Authentication type` is set to `Shared access signature (SAS)`. Edit the `CLOUD.CFG` file one final time by updating the `REGISTRATION_ID` string with the Device ID and then `PRIMARY_KEY` string with the Primary key values that are shown on the Device connection groups pop-up window. Click on each of the "Copy to clipboard" icons and paste the corresponding text into the `CLOUD.CFG` file. Close the pop-up window when finished and make sure to save this last set of changes to the `CLOUD.CFG` file
     ```bash
     "REGISTRATION_ID":	"2ep4cjs1gka",
     "PRIMARY_KEY": "d59fA5UptJ6bh+Il6YgOIZTjly6hN0h0p5REcUm7osk="
     ```
-    <img src=".//media/image89a.png"/>
+    <img src=".//media/image89a.png" style="width:5.in;height:2.68982in" alt="A screenshot of a cell phone Description automatically generated" />
 
-21. Hit the `RESET` button on the WFI32-IoT Board and use the serial terminal program to confirm that the demo application is going through its startup sequence. When the "Connected to Azure IoT Hub" message appears, both Blue (Wi-Fi) and Green (Cloud) LEDs should be constantly on. By default, the temperature and light sensor readings should be sent to your IoT Central application every 5 seconds. The Yellow LED (Data) should be toggling approximately once per second
+22. Enter in the `reset` command on the CLI (or hit the `RESET` button on the WFI32-IoT Board)
 
-    <img src=".//media/image89b.png"/>
+    <img src=".//media/image89b.png" style="width:5.in;height:1.58982in" alt="A screenshot of a cell phone Description automatically generated" />
+
+23. View the diagnostic messages output to the serial terminal program to confirm that the demo application is going through its startup sequence. When the "Connected to Azure IoT Hub" message appears, both Blue (Wi-Fi) and Green (Cloud) LEDs should stay constantly on. By default, the temperature and light sensor readings should be sent to your IoT Central application every 5 seconds. The Yellow LED (Data) should be toggling approximately once per second
 
     <img src=".//media/image89c.png"/>
 
-22. Press each of the `SW1` & `SW2` user buttons on the WFI32-IoT Board at least a couple of times. The Red LED should blink on each user button press that is detected
+24. Press each of the `SW1` & `SW2` user buttons on the WFI32-IoT Board a few times. The Red LED should blink on each user button press that is detected
 
-    <img src=".//media/image89d.png"/>
+    <img src=".//media/image89d.png" style="width:5.in;height:2.08982in" alt="A screenshot of a cell phone Description automatically generated" />
 
-23. Click on the `Raw data` tab and confirm that the button press telemetry messages were received (scroll the web page to the right to view the `Button Press Count` & `Button Push Event` columns)
+25. Click on the `Raw data` tab and confirm that the button press telemetry messages were received (scroll the web page to the right to view the `Button Press Count` & `Button Push Event` columns)
 
-    <img src=".//media/image90.png"/>
+    <img src=".//media/image90.png" style="width:5.in;height:1.48982in" alt="A screenshot of a cell phone Description automatically generated" />
 
-24. Click on the `Refresh` icon to display all messages received since the previous page refresh operation.  Confirm that periodic telemetry messages are being continuously received approximately every 5 seconds (which is the default interval value for the `telemetryInterval` property that dictates the telemetry reporting frequency)
+26. Click on the `Refresh` icon to display all messages received since the previous page refresh operation.  Confirm that periodic telemetry messages are being continuously received approximately every 5 seconds (which is the default interval value for the `telemetryInterval` property that dictates the telemetry reporting frequency)
 
-    <img src=".//media/image91a.png" style="width:5.in;height:1.58982in" alt="A screenshot of a cell phone Description automatically generated" />
+    <img src=".//media/image91a.png" style="width:5.in;height:1.08982in" alt="A screenshot of a cell phone Description automatically generated" />
 
     <img src=".//media/image92a.png"/>
 
-25. Increase the ambient light source shining on top of the board. Wait approximately 10-15 seconds.  Click on the `Refresh` icon to confirm that the light sensor value has increased
+27. Increase the ambient light source shining on top of the board. Wait approximately 10-15 seconds.  Click on the `Refresh` icon to confirm that the light sensor value has increased
 
     <img src=".//media/image93a.png" style="width:5.in;height:2.18982in" alt="A screenshot of a cell phone Description automatically generated" />
 
