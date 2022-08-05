@@ -42,6 +42,10 @@ volatile uint32_t AZ_systemRebootTimer = 0;
 extern APP_CONNECT_STATUS appConnectStatus;
 extern APP_SENSORS_DATA APP_SENSORS_data;
 
+// define the modelID associated with device template and the dps payload
+#define SAMPLE_PNP_MODEL_ID         "dtmi:com:example:Thermostat;1"
+#define SAMPLE_PNP_DPS_PAYLOAD      "{\"modelId\":\"" SAMPLE_PNP_MODEL_ID "\"}"
+
 /* Generally, IoTHub Client and DPS Client do not run at the same time, user can use union as below to
    share the memory between IoTHub Client and DPS Client.
 
@@ -230,7 +234,15 @@ UINT iothub_device_id_length = sizeof(DEVICE_ID) - 1;
         printf("Failed on nx_azure_iot_hub_client_initialize!: error code = 0x%08x\r\n", status);
         return(status);
     }
-
+    
+/* Set the model id.  */
+    if ((status = nx_azure_iot_hub_client_model_id_set(iothub_client_ptr,
+                                                       (const UCHAR *)SAMPLE_PNP_MODEL_ID,
+                                                       sizeof(SAMPLE_PNP_MODEL_ID) - 1)))
+    {
+        printf("Failed on nx_azure_iot_hub_client_model_id_set!: error code = 0x%08x\r\n", status);
+    }
+    
     /* Add more CA certificates.  */
     if ((status = nx_azure_iot_hub_client_trusted_cert_add(iothub_client_ptr, &root_ca_cert_2)))
     {
@@ -516,7 +528,13 @@ UINT status;
         printf("Failed on nx_azure_iot_hub_client_symmetric_key_set!: error code = 0x%08x\r\n", status);
     }
 #endif /* USE_DEVICE_CERTIFICATE */
-
+    
+    /* send model ID to DPS if set*/
+    else if ((status = nx_azure_iot_provisioning_client_registration_payload_set(&prov_client, (UCHAR *)SAMPLE_PNP_DPS_PAYLOAD,
+                                                                                 sizeof(SAMPLE_PNP_DPS_PAYLOAD) - 1)))
+    {
+        printf("Failed on nx_azure_iot_provisioning_client_registration_payload_set!: error code = 0x%08x\r\n", status);
+    }
     /* Register device */
     else if ((status = nx_azure_iot_provisioning_client_register(&prov_client, NX_WAIT_FOREVER)))
     {
