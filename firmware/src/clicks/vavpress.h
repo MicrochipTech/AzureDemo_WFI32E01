@@ -54,19 +54,19 @@ extern "C"{
  * @brief VAV Press description command set.
  * @details Specified command set for description of VAV Press Click driver.
  */
-#define VAVPRESS_SET_CMD_RESET_FIRMWARE                   0x11
-#define VAVPRESS_SET_CMD_START_PRESSURE_CONVERSION        0x21
-#define VAVPRESS_SET_CMD_RETRIEVE_ELECTRONIC_SIGNATURE    0x23
+#define VAVPRESS_SET_CMD_RESET_FIRMWARE                 0x11
+#define VAVPRESS_SET_CMD_START_PRESSURE_CONVERSION      0x21
+#define VAVPRESS_SET_CMD_RETRIEVE_ELECTRONIC_SIGNATURE  0x23
 
 /**
  * @brief VAV Press device address setting.
  * @details Specified setting for device slave address selection of
  * VAV Press Click driver.
  */
-#define VAVPRESS_I2CADDR_0                           0x5C
-#define VAVPRESS_I2CADDR_1                           0x5D
-#define VAVPRESS_I2CADDR_2                           0x5E
-#define VAVPRESS_I2CADDR_3                           0x5F
+#define VAVPRESS_I2CADDR_0  0x5C // Default I2C address setting for VAV Click
+#define VAVPRESS_I2CADDR_1  0x5D
+#define VAVPRESS_I2CADDR_2  0x5E
+#define VAVPRESS_I2CADDR_3  0x5F
 
 /**
  * @brief VAV Press Click return value data.

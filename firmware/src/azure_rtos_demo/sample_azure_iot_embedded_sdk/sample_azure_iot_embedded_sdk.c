@@ -87,6 +87,7 @@ extern ultralowpress_return_value_t ULTRALOWPRESS_status;
 #ifdef CLICK_VAVPRESS
 extern vavpress_return_value_t VAVPRESS_status;
 extern vavpress_sensor_param_data_t VAVPRESS_param_data;
+extern vavpress_el_signature_data_t VAVPRESS_el_signature_data;
 static float VAVPRESS_pressure;
 static float VAVPRESS_temperature;
 #endif /* CLICK_VAVPRESS */
@@ -617,7 +618,20 @@ void sample_telemetry_thread_entry(ULONG parameter)
 #ifdef CLICK_VAVPRESS
     VAVPRESS_init();
     printf("[VAV Click] Initializing LMIS025B\r\n");
-    if (VAVPRESS_status == VAVPRESS_ERROR)
+    if (VAVPRESS_status == VAVPRESS_OK)
+    {
+        //printf("[VAV Click] Part #: %.11s\r\n", VAVPRESS_el_signature_data.part_number);
+        //printf("[VAV Click] Firmware Version: %.3f\r\n", VAVPRESS_el_signature_data.firmware_version);
+        printf("[VAV Click] Pressure Range: %d Pa\r\n", VAVPRESS_el_signature_data.pressure_range);
+        //printf("[VAV Click] Lot #: %.7s\r\n", VAVPRESS_el_signature_data.lot_number);
+        //printf("[VAV Click] Output Type: %c\r\n", VAVPRESS_el_signature_data.output_type);
+        //printf("[VAV Click] Scale Factor: %d\r\n", VAVPRESS_el_signature_data.scale_factor);
+        //printf("[VAV Click] Calibration ID: %.2s\r\n", VAVPRESS_el_signature_data.calibration_id);
+        //printf("[VAV Click] Week #: %d\r\n", VAVPRESS_el_signature_data.week_number);
+        //printf("[VAV Click] Year #: %d\r\n", VAVPRESS_el_signature_data.year_number);
+        //printf("[VAV Click] Sequence #: %d\r\n", VAVPRESS_el_signature_data.sequence_number);
+    }
+    else
     {
         printf("[VAV Click] LMIS025B not detected\r\n");          
     }
@@ -650,7 +664,7 @@ void sample_telemetry_thread_entry(ULONG parameter)
 #ifdef CLICK_VAVPRESS
         if (VAVPRESS_status == VAVPRESS_OK)
         {
-            if (VAVPRESS_getSensorReadings(&VAVPRESS_param_data, &VAVPRESS_pressure, &VAVPRESS_temperature))
+            if (VAVPRESS_getSensorReadings(&VAVPRESS_param_data, &VAVPRESS_pressure, &VAVPRESS_temperature) == VAVPRESS_OK)
             {
                 buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
                         "{\"LMIS025B_temperature\": %.2f, \"LMIS025B_pressure\": %.2f}",

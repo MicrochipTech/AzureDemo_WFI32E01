@@ -30,8 +30,8 @@
 extern APP_SENSORS_DATA APP_SENSORS_data;
 
 vavpress_return_value_t VAVPRESS_status;
-vavpress_el_signature_data_t VAVPRESS_el_signature_data;
 vavpress_sensor_param_data_t VAVPRESS_param_data;
+vavpress_el_signature_data_t VAVPRESS_el_signature_data;
 
 void VAVPRESS_init(void)
 {
@@ -42,18 +42,18 @@ void VAVPRESS_init(void)
     {
         VAVPRESS_status = VAVPRESS_OK;
         VAVPRESS_getElectronicSignature( &VAVPRESS_el_signature_data );
-        //printf( "--------------------------------\r\n" );
-        //printf( " Firmware Version : %.3f        \r\n", VAVPRESS_el_signature_data.firmware_version );
-        //printf( " Pressure Range   : %d Pa       \r\n", VAVPRESS_el_signature_data.pressure_range );
-        //printf( " Part #           : %.11s       \r\n", VAVPRESS_el_signature_data.part_number );
-        //printf( " Lot #            : %.7s        \r\n", VAVPRESS_el_signature_data.lot_number );
-        //printf( " Output Type      : %c          \r\n", VAVPRESS_el_signature_data.output_type );
-        //printf( " Scale Factor     : %d          \r\n", VAVPRESS_el_signature_data.scale_factor );
-        //printf( " Calibration ID   : %.2s        \r\n", VAVPRESS_el_signature_data.calibration_id );
-        //printf( " Week number      : %d          \r\n", VAVPRESS_el_signature_data.week_number );
-        //printf( " Year number      : %d          \r\n", VAVPRESS_el_signature_data.year_number );
-        //printf( " Sequence number  : %d          \r\n", VAVPRESS_el_signature_data.sequence_number );
-        //printf( "--------------------------------\r\n" );
+        //printf("--------------------------------\r\n" );
+        //printf(" Firmware Version : %.3f        \r\n", VAVPRESS_el_signature_data.firmware_version);
+        //printf(" Pressure Range   : %d Pa       \r\n", VAVPRESS_el_signature_data.pressure_range);
+        //printf(" Part #           : %.11s       \r\n", VAVPRESS_el_signature_data.part_number);
+        //printf(" Lot #            : %.7s        \r\n", VAVPRESS_el_signature_data.lot_number);
+        //printf(" Output Type      : %c          \r\n", VAVPRESS_el_signature_data.output_type);
+        //printf(" Scale Factor     : %d          \r\n", VAVPRESS_el_signature_data.scale_factor);
+        //printf(" Calibration ID   : %.2s        \r\n", VAVPRESS_el_signature_data.calibration_id);
+        //printf(" Week Number      : %d          \r\n", VAVPRESS_el_signature_data.week_number);
+        //printf(" Year Number      : %d          \r\n", VAVPRESS_el_signature_data.year_number);
+        //printf(" Sequence Number  : %d          \r\n", VAVPRESS_el_signature_data.sequence_number);
+        //printf("--------------------------------\r\n" );
         VAVPRESS_param_data.scale_factor_temp = 72;
         VAVPRESS_param_data.scale_factor_press = VAVPRESS_el_signature_data.scale_factor;
         VAVPRESS_param_data.readout_at_known_temperature = 50;
@@ -69,8 +69,6 @@ void VAVPRESS_init(void)
 vavpress_return_value_t VAVPRESS_setDefaultConfig(void)
 {
     vavpress_return_value_t error_code;
-    
-    // Click default configuration.
     vavpress_sensor_param_data_t param_data;
     
     VAVPRESS_param_data.scale_factor_temp = 72;
@@ -78,15 +76,14 @@ vavpress_return_value_t VAVPRESS_setDefaultConfig(void)
     VAVPRESS_param_data.readout_at_known_temperature = 50;
     VAVPRESS_param_data.known_temperature_c = 24.0;
     
-    error_code = VAVPRESS_setDefaultSensorParams( &param_data );
+    error_code = VAVPRESS_setDefaultSensorParams(&param_data);
     return error_code;
 }
 
 vavpress_return_value_t VAVPRESS_setDefaultSensorParams(vavpress_sensor_param_data_t *param_data)
 {
     vavpress_el_signature_data_t el_signature_data;
-     
-    vavpress_return_value_t error_flag = VAVPRESS_getElectronicSignature( &el_signature_data );
+    vavpress_return_value_t error_flag = VAVPRESS_getElectronicSignature(&el_signature_data);
     
     param_data->scale_factor_temp = 72;
     param_data->scale_factor_press = el_signature_data.scale_factor;
@@ -98,37 +95,27 @@ vavpress_return_value_t VAVPRESS_setDefaultSensorParams(vavpress_sensor_param_da
 
 vavpress_return_value_t VAVPRESS_getReadoutData(int16_t *press_data, int16_t *temp_data)
 {
-    //uint8_t tx_buf[ 1 ];
-    //uint8_t rx_buf[ 4 ];
-    int16_t tmp;
+    int16_t tmp = 0;
 
-    //tx_buf[ 0 ] = VAVPRESS_SET_CMD_START_PRESSURE_CONVERSION;
-
-    //err_t error_flag = i2c_master_write( &ctx->i2c, tx_buf, 1 );
-    //error_flag |= i2c_master_read( &ctx->i2c, rx_buf, 4 );
     APP_SENSORS_read(VAVPRESS_I2CADDR_0, VAVPRESS_SET_CMD_START_PRESSURE_CONVERSION, 4);
     
-            /*
-    tmp = rx_buf[ 1 ];
-    tmp <<= 9;
-    tmp |= rx_buf[ 0 ];
-    */
     tmp = APP_SENSORS_data.i2c.rxBuffer[1];
     tmp <<= 9;
     tmp |= APP_SENSORS_data.i2c.rxBuffer[0];
     *press_data = tmp >> 1;
-    /*
-    tmp = rx_buf[ 3 ];
-    tmp <<= 8;
-    tmp |= rx_buf[ 2 ];
-    */
     tmp = APP_SENSORS_data.i2c.rxBuffer[3];
     tmp <<= 8;
     tmp |= APP_SENSORS_data.i2c.rxBuffer[2];
-    
     *temp_data = tmp;
 
-    return true;
+    if (tmp == 0)
+    {
+        return VAVPRESS_ERROR;        
+    }
+    else
+    {
+        return VAVPRESS_OK;
+    }
 }
 
 vavpress_return_value_t VAVPRESS_getSensorReadings(vavpress_sensor_param_data_t *param_data, float *diff_press, float *temperature)
@@ -154,16 +141,10 @@ vavpress_return_value_t VAVPRESS_getSensorReadings(vavpress_sensor_param_data_t 
 
 vavpress_return_value_t VAVPRESS_getElectronicSignature(vavpress_el_signature_data_t *el_signature_data)
 {
-    //uint8_t tx_buf[ 1 ];
     uint8_t rx_buf[EL_SIGNATURE_NUMBYTES];
-    uint16_t tmp;
+    uint16_t tmp = 0;
     float tmp_f;
 
-    //tx_buf[ 0 ] = VAVPRESS_SET_CMD_RETRIEVE_ELECTRONIC_SIGNATURE;
-
-    //err_t error_flag = i2c_master_write( &ctx->i2c, tx_buf, 1 );
-    //APP_SENSORS_write(VAVPRESS_I2CADDR_0, VAVPRESS_SET_CMD_RETRIEVE_ELECTRONIC_SIGNATURE, 1);
-    //error_flag |= i2c_master_read( &ctx->i2c, rx_buf, 54 );
     APP_SENSORS_read(VAVPRESS_I2CADDR_0, VAVPRESS_SET_CMD_RETRIEVE_ELECTRONIC_SIGNATURE, EL_SIGNATURE_NUMBYTES);
     memcpy(rx_buf, APP_SENSORS_data.i2c.rxBuffer, EL_SIGNATURE_NUMBYTES);
     
@@ -208,7 +189,20 @@ vavpress_return_value_t VAVPRESS_getElectronicSignature(vavpress_el_signature_da
     tmp |= rx_buf[ 30 ];
     el_signature_data->sequence_number = tmp;
 
-    return true;
+    if ( (tmp == 0) &&
+         (el_signature_data->pressure_range == 0) &&
+         (el_signature_data->scale_factor == 0) &&
+         (el_signature_data->week_number == 0) &&
+         (el_signature_data->year_number == 0) &&
+         (el_signature_data->sequence_number == 0)
+       )
+    {
+        return VAVPRESS_ERROR;
+    }
+    else
+    {
+        return VAVPRESS_OK;
+    }
 }
 
 // ------------------------------------------------------------------------- END
