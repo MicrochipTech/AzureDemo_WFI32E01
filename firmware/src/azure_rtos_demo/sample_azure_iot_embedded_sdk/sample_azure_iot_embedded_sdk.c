@@ -88,8 +88,8 @@ extern ultralowpress_return_value_t ULTRALOWPRESS_status;
 extern vavpress_return_value_t VAVPRESS_status;
 extern vavpress_sensor_param_data_t VAVPRESS_param_data;
 extern vavpress_el_signature_data_t VAVPRESS_el_signature_data;
-static float VAVPRESS_pressure;
-static float VAVPRESS_temperature;
+//static float VAVPRESS_pressure;
+//static float VAVPRESS_temperature;
 #endif /* CLICK_VAVPRESS */
 static TX_THREAD sample_telemetry_thread;
 static ULONG sample_telemetry_thread_stack[SAMPLE_STACK_SIZE / sizeof(ULONG)];
@@ -599,6 +599,7 @@ void sample_telemetry_thread_entry(ULONG parameter)
     UINT buffer_length;
     UCHAR loop = NX_TRUE;
     uint32_t SM8436_serialNumber;
+    float temperature, pressure;
     
     NX_PARAMETER_NOT_USED(parameter);
 
@@ -643,7 +644,7 @@ void sample_telemetry_thread_entry(ULONG parameter)
     while (loop)
     {   
         buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
-                "{\"temperature\": %u, \"light\": %u}",
+                "{\"temperature\": %u, \"light\": %u}\r\n",
                 APP_SENSORS_readTemperature(), APP_SENSORS_readLight() );
         send_telemetry_message(parameter, (UCHAR *)buffer, buffer_length);
 
@@ -653,9 +654,15 @@ void sample_telemetry_thread_entry(ULONG parameter)
             if (ULTRALOWPRESS_isReady())
             {
                 ULTRALOWPRESS_clearStatus();
+                temperature = ULTRALOWPRESS_getTemperature();
+                printf("[ULP Click] temp_data read from register 0x2E = [ %x ] (hex)\r\n", APP_SENSORS_data.i2c.rxBuff08[0]);
+                tx_thread_sleep(100);
+                pressure = ULTRALOWPRESS_getPressure();
+                printf("[ULP Click] press_data read from register 0x30 = [ %x ] (hex)\r\n", APP_SENSORS_data.i2c.rxBuff08[0]);
+                tx_thread_sleep(100);                        
                 buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
-                        "{\"SM8436_temperature\": %.2f, \"SM8436_pressure\": %.2f}",
-                        ULTRALOWPRESS_getTemperature(), ULTRALOWPRESS_getPressure() );                
+                        "{\"SM8436_temperature\": %.2f, \"SM8436_pressure\": %.2f}\r\n",
+                        temperature, pressure );                
                 send_telemetry_message(parameter, (UCHAR *)buffer, buffer_length);
             }
         }
@@ -664,11 +671,15 @@ void sample_telemetry_thread_entry(ULONG parameter)
 #ifdef CLICK_VAVPRESS
         if (VAVPRESS_status == VAVPRESS_OK)
         {
-            if (VAVPRESS_getSensorReadings(&VAVPRESS_param_data, &VAVPRESS_pressure, &VAVPRESS_temperature) == VAVPRESS_OK)
+            if (VAVPRESS_getSensorReadings(&VAVPRESS_param_data, &pressure, &temperature) == VAVPRESS_OK)
             {
+                printf("[VAV Click] Start conversion data from command 0x21 = [ %x | %x | %x | %x ] (hex)\r\n",
+                        APP_SENSORS_data.i2c.rxBuff08[0], APP_SENSORS_data.i2c.rxBuff08[1],
+                        APP_SENSORS_data.i2c.rxBuff08[2], APP_SENSORS_data.i2c.rxBuff08[3]);
+                tx_thread_sleep(500);
                 buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
-                        "{\"LMIS025B_temperature\": %.2f, \"LMIS025B_pressure\": %.2f}",
-                        VAVPRESS_temperature, VAVPRESS_pressure);                
+                        "{\"LMIS025B_temperature\": %.2f, \"LMIS025B_pressure\": %.2f}\r\n",
+                        temperature, pressure);              
                 send_telemetry_message(parameter, (UCHAR *)buffer, buffer_length);      
             }
         }
