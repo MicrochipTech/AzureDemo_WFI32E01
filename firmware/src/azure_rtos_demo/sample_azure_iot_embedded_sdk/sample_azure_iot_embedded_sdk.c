@@ -655,10 +655,10 @@ void sample_telemetry_thread_entry(ULONG parameter)
             {
                 ULTRALOWPRESS_clearStatus();
                 temperature = ULTRALOWPRESS_getTemperature();
-                printf("[ULP Click] temp_data read from register 0x2E = [ %x ] (hex)\r\n", APP_SENSORS_data.i2c.rxBuff16[0]);
+                printf("[ULP Click] temp_data read from register 0x2E = [ %x ] (hex)\r\n", APP_SENSORS_data.i2c.rxBuffer[0]);
                 tx_thread_sleep(100);
                 pressure = ULTRALOWPRESS_getPressure();
-                printf("[ULP Click] press_data read from register 0x30 = [ %x ] (hex)\r\n", APP_SENSORS_data.i2c.rxBuff16[0]);
+                printf("[ULP Click] press_data read from register 0x30 = [ %x ] (hex)\r\n", APP_SENSORS_data.i2c.rxBuffer[0]);
                 tx_thread_sleep(100);                        
                 buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
                         "{\"SM8436_temperature\": %.2f, \"SM8436_pressure\": %.2f}\r\n",
@@ -673,9 +673,9 @@ void sample_telemetry_thread_entry(ULONG parameter)
         {
             if (VAVPRESS_getSensorReadings(&VAVPRESS_param_data, &pressure, &temperature) == VAVPRESS_OK)
             {
-                printf("[VAV Click] Start conversion data from command 0x21 = [ %x | %x | %x | %x ] (hex)\r\n",
-                        APP_SENSORS_data.i2c.rxBuff16[0], APP_SENSORS_data.i2c.rxBuff16[1],
-                        APP_SENSORS_data.i2c.rxBuff16[2], APP_SENSORS_data.i2c.rxBuff16[3]);
+                printf("[VAV Click] Results from SOC (command 0x21) = [ %x | %x | %x | %x ] (hex)\r\n",
+                        APP_SENSORS_data.i2c.rxBuffer[0], APP_SENSORS_data.i2c.rxBuffer[1],
+                        APP_SENSORS_data.i2c.rxBuffer[2], APP_SENSORS_data.i2c.rxBuffer[3]);
                 tx_thread_sleep(500);
                 buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
                         "{\"LMIS025B_temperature\": %.2f, \"LMIS025B_pressure\": %.2f}\r\n",
