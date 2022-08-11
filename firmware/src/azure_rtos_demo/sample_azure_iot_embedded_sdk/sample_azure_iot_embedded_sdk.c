@@ -621,7 +621,7 @@ void sample_telemetry_thread_entry(ULONG parameter)
     printf("[VAV Click] Initializing LMIS025B\r\n");
     if (VAVPRESS_status == VAVPRESS_OK)
     {
-        //printf("[VAV Click] Part #: %.11s\r\n", VAVPRESS_el_signature_data.part_number);
+        printf("[VAV Click] Part #: %.11s\r\n", VAVPRESS_el_signature_data.part_number);
         //printf("[VAV Click] Firmware Version: %.3f\r\n", VAVPRESS_el_signature_data.firmware_version);
         printf("[VAV Click] Pressure Range: %d Pa\r\n", VAVPRESS_el_signature_data.pressure_range);
         //printf("[VAV Click] Lot #: %.7s\r\n", VAVPRESS_el_signature_data.lot_number);
@@ -655,10 +655,10 @@ void sample_telemetry_thread_entry(ULONG parameter)
             {
                 ULTRALOWPRESS_clearStatus();
                 temperature = ULTRALOWPRESS_getTemperature();
-                printf("[ULP Click] temp_data read from register 0x2E = [ %x ] (hex)\r\n", APP_SENSORS_data.i2c.rxBuff08[0]);
+                printf("[ULP Click] temp_data read from register 0x2E = [ %x ] (hex)\r\n", APP_SENSORS_data.i2c.rxBuff16[0]);
                 tx_thread_sleep(100);
                 pressure = ULTRALOWPRESS_getPressure();
-                printf("[ULP Click] press_data read from register 0x30 = [ %x ] (hex)\r\n", APP_SENSORS_data.i2c.rxBuff08[0]);
+                printf("[ULP Click] press_data read from register 0x30 = [ %x ] (hex)\r\n", APP_SENSORS_data.i2c.rxBuff16[0]);
                 tx_thread_sleep(100);                        
                 buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
                         "{\"SM8436_temperature\": %.2f, \"SM8436_pressure\": %.2f}\r\n",
@@ -674,8 +674,8 @@ void sample_telemetry_thread_entry(ULONG parameter)
             if (VAVPRESS_getSensorReadings(&VAVPRESS_param_data, &pressure, &temperature) == VAVPRESS_OK)
             {
                 printf("[VAV Click] Start conversion data from command 0x21 = [ %x | %x | %x | %x ] (hex)\r\n",
-                        APP_SENSORS_data.i2c.rxBuff08[0], APP_SENSORS_data.i2c.rxBuff08[1],
-                        APP_SENSORS_data.i2c.rxBuff08[2], APP_SENSORS_data.i2c.rxBuff08[3]);
+                        APP_SENSORS_data.i2c.rxBuff16[0], APP_SENSORS_data.i2c.rxBuff16[1],
+                        APP_SENSORS_data.i2c.rxBuff16[2], APP_SENSORS_data.i2c.rxBuff16[3]);
                 tx_thread_sleep(500);
                 buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
                         "{\"LMIS025B_temperature\": %.2f, \"LMIS025B_pressure\": %.2f}\r\n",

@@ -97,15 +97,15 @@ vavpress_return_value_t VAVPRESS_getReadoutData(int16_t *press_data, int16_t *te
 {
     int16_t tmp = 0;
 
-    APP_SENSORS_read08(VAVPRESS_I2CADDR_0, VAVPRESS_SET_CMD_START_PRESSURE_CONVERSION, 4);
+    APP_SENSORS_read16(VAVPRESS_I2CADDR_0, VAVPRESS_SET_CMD_START_PRESSURE_CONVERSION, 4);
 
-    tmp = APP_SENSORS_data.i2c.rxBuff08[1];
+    tmp = APP_SENSORS_data.i2c.rxBuff16[1];
     tmp <<= 9;
-    tmp |= APP_SENSORS_data.i2c.rxBuff08[0];
+    tmp |= APP_SENSORS_data.i2c.rxBuff16[0];
     *press_data = tmp >> 1;
-    tmp = APP_SENSORS_data.i2c.rxBuff08[3];
+    tmp = APP_SENSORS_data.i2c.rxBuff16[3];
     tmp <<= 8;
-    tmp |= APP_SENSORS_data.i2c.rxBuff08[2];
+    tmp |= APP_SENSORS_data.i2c.rxBuff16[2];
     *temp_data = tmp;
 
     if (tmp == 0)
@@ -141,12 +141,12 @@ vavpress_return_value_t VAVPRESS_getSensorReadings(vavpress_sensor_param_data_t 
 
 vavpress_return_value_t VAVPRESS_getElectronicSignature(vavpress_el_signature_data_t *el_signature_data)
 {
-    uint8_t rx_buf[EL_SIGNATURE_NUMBYTES];
+    uint8_t rx_buf[EL_SIGNATURE_NUMWORDS];
     uint16_t tmp = 0;
     float tmp_f;
 
-    APP_SENSORS_read08(VAVPRESS_I2CADDR_0, VAVPRESS_SET_CMD_RETRIEVE_ELECTRONIC_SIGNATURE, EL_SIGNATURE_NUMBYTES);
-    memcpy(rx_buf, APP_SENSORS_data.i2c.rxBuff08, EL_SIGNATURE_NUMBYTES);
+    APP_SENSORS_read16(VAVPRESS_I2CADDR_0, VAVPRESS_SET_CMD_RETRIEVE_ELECTRONIC_SIGNATURE, EL_SIGNATURE_NUMWORDS);
+    memcpy(rx_buf, APP_SENSORS_data.i2c.rxBuff16, EL_SIGNATURE_NUMWORDS);
     
     if ( rx_buf[ 1 ] < 10 ) {
         tmp_f = ( float ) rx_buf[ 0 ] + ( ( float ) rx_buf[ 1 ] / 10 );
