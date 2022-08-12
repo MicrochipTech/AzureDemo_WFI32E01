@@ -83,7 +83,7 @@ typedef enum
  * @brief VAV Press Click electronic signature.
  * @details Electronic signature of VAV Press Click driver.
  */
-#define EL_SIGNATURE_NUMWORDS 54
+#define EL_SIGNATURE_NUMBYTES 54
 
 typedef struct
 {

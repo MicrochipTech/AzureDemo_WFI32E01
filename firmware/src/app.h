@@ -49,6 +49,7 @@
 // Section: Definitions
 // *****************************************************************************
 // *****************************************************************************
+#define WFI32IOT_SENSORS
 #define CLICK_ULTRALOWPRESS
 #define CLICK_VAVPRESS
 
