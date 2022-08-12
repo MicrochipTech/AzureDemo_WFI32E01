@@ -12,11 +12,22 @@
 
 APP_SENSORS_DATA APP_SENSORS_data;
 
-void APP_SENSORS_write(uint8_t addr, uint16_t reg, uint16_t val)
+void APP_SENSORS_write_MSB_b4_LSB(uint8_t addr, uint16_t reg, uint16_t val)
 {
     APP_SENSORS_data.i2c.txBuffer[0] = (uint8_t)reg;
     APP_SENSORS_data.i2c.txBuffer[1] = (uint8_t)(val >> 8);
     APP_SENSORS_data.i2c.txBuffer[2] = (uint8_t)(val & 0x00FF);
+    
+    DRV_I2C_WriteTransfer(APP_SENSORS_data.i2c.i2cHandle,
+            addr, 
+            (void*)APP_SENSORS_data.i2c.txBuffer, 3);
+}
+
+void APP_SENSORS_write_LSB_b4_MSB(uint8_t addr, uint16_t reg, uint16_t val)
+{
+    APP_SENSORS_data.i2c.txBuffer[0] = (uint8_t)reg;
+    APP_SENSORS_data.i2c.txBuffer[1] = (uint8_t)(val & 0x00FF);
+    APP_SENSORS_data.i2c.txBuffer[2] = (uint8_t)(val >> 8);
     
     DRV_I2C_WriteTransfer(APP_SENSORS_data.i2c.i2cHandle,
             addr, 
@@ -93,8 +104,8 @@ void APP_SENSORS_init(void)
         APP_SENSORS_DBG(SYS_ERROR_ERROR, "Failed to open I2C driver for reading sensors!\r\n");
     }
 
-    APP_SENSORS_write(MCP9808_I2C_ADDRESS, MCP9808_REG_CONFIG, MCP9808_CONFIG_DEFAULT);
-    APP_SENSORS_write(OPT3001_I2C_ADDRESS, OPT3001_REG_CONFIG, OPT3001_CONFIG_CONT_CONVERSION);
+    APP_SENSORS_write_MSB_b4_LSB(MCP9808_I2C_ADDRESS, MCP9808_REG_CONFIG, MCP9808_CONFIG_DEFAULT);
+    APP_SENSORS_write_MSB_b4_LSB(OPT3001_I2C_ADDRESS, OPT3001_REG_CONFIG, OPT3001_CONFIG_CONT_CONVERSION);
 }
 
 int16_t APP_SENSORS_readTemperature(void)
