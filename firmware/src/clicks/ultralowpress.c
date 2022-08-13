@@ -30,25 +30,37 @@
 extern APP_SENSORS_DATA APP_SENSORS_data;
 
 ultralowpress_return_value_t ULTRALOWPRESS_status;
+
+uint16_t ULTRALOWPRESS_reorderBytes(uint16_t word)
+{
+    uint16_t bytes_swapped;
     
+    bytes_swapped = ( ((word << 8 ) & 0xFF00) | ((word >> 8) & 0x00FF) );
+    
+    return (bytes_swapped);
+}
+
 uint32_t ULTRALOWPRESS_init(void)
 {
     uint32_t serial_number = 0;
 
     // Read the 32-bit serial number from the SM8436
     APP_SENSORS_read(ULTRALOWPRESS_I2CADDR, ULTRALOWPRESS_REG_SERIAL_NUM_L, 4);
+    APP_SENSORS_data.i2c.rxBuffer[0] = ULTRALOWPRESS_reorderBytes(APP_SENSORS_data.i2c.rxBuffer[0]);
+    APP_SENSORS_data.i2c.rxBuffer[1] = ULTRALOWPRESS_reorderBytes(APP_SENSORS_data.i2c.rxBuffer[1]);
+
     serial_number = APP_SENSORS_data.i2c.rxBuffer[1] << 16;
     serial_number |= APP_SENSORS_data.i2c.rxBuffer[0];
     
     if (serial_number == 0)
     {
         ULTRALOWPRESS_status = ULTRALOWPRESS_ERROR;
-        printf("[ULP Click] SM8436 was not found during initialization\r\n");
+        printf("<ULP Click> SM8436 was not found during initialization\r\n");
     }
     else
     {
         ULTRALOWPRESS_status = ULTRALOWPRESS_OK;        
-        printf("[ULP Click] SM8436 Serial Number = %u\r\n", serial_number);
+        printf("<ULP Click> SM8436 Serial Number = %u\r\n", serial_number);
     }
     
     return (serial_number);
@@ -57,7 +69,8 @@ uint32_t ULTRALOWPRESS_init(void)
 bool ULTRALOWPRESS_isReady(void)
 {
     APP_SENSORS_read(ULTRALOWPRESS_I2CADDR, ULTRALOWPRESS_REG_STATUS, 2);
-    
+    APP_SENSORS_data.i2c.rxBuffer[0] = ULTRALOWPRESS_reorderBytes(APP_SENSORS_data.i2c.rxBuffer[0]);
+            
     return ( APP_SENSORS_data.i2c.rxBuffer[0] & ULTRALOWPRESS_STATUS_TEMP_MASK ) && 
             ( APP_SENSORS_data.i2c.rxBuffer[0] & ULTRALOWPRESS_STATUS_PRESS_MASK );
 }
@@ -70,13 +83,15 @@ void ULTRALOWPRESS_clearStatus (void)
 float ULTRALOWPRESS_getTemperature(void)
 {
     APP_SENSORS_read(ULTRALOWPRESS_I2CADDR, ULTRALOWPRESS_REG_TEMP, 2);
-
+    APP_SENSORS_data.i2c.rxBuffer[0] = ULTRALOWPRESS_reorderBytes(APP_SENSORS_data.i2c.rxBuffer[0]);
+    
     return ( (APP_SENSORS_data.i2c.rxBuffer[0] - ULTRALOWPRESS_B0) / ULTRALOWPRESS_B1 );
 }
 
 float ULTRALOWPRESS_getPressure(void)
 {
     APP_SENSORS_read(ULTRALOWPRESS_I2CADDR, ULTRALOWPRESS_REG_PRESS, 2);
+    APP_SENSORS_data.i2c.rxBuffer[0] = ULTRALOWPRESS_reorderBytes(APP_SENSORS_data.i2c.rxBuffer[0]);
     
     return ULTRALOWPRESS_P_MIN + ( ( APP_SENSORS_data.i2c.rxBuffer[0] - ULTRALOWPRESS_OUT_MIN ) / 
             ( ULTRALOWPRESS_OUT_MAX - ULTRALOWPRESS_OUT_MIN ) ) * 

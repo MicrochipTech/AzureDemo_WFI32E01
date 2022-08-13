@@ -98,7 +98,7 @@ vavpress_return_value_t VAVPRESS_getReadoutData(int16_t *press_data, int16_t *te
     int16_t tmp = 0;
 
     APP_SENSORS_read(VAVPRESS_I2CADDR_0, VAVPRESS_SET_CMD_START_PRESSURE_CONVERSION, 8);
-
+        
     tmp = APP_SENSORS_data.i2c.rxBuffer[1];
     tmp <<= 9;
     tmp |= APP_SENSORS_data.i2c.rxBuffer[0];

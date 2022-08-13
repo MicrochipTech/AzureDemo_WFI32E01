@@ -668,21 +668,25 @@ void sample_telemetry_thread_entry(ULONG parameter)
         if (ULTRALOWPRESS_status == ULTRALOWPRESS_OK)
         {
             APP_SENSORS_read(ULTRALOWPRESS_I2CADDR, ULTRALOWPRESS_REG_STATUS, 2);
-            printf("\r\n<ULP Click> STATUS (addr 0x36) = [ %x ]", APP_SENSORS_data.i2c.rxBuffer[0]);
+            APP_SENSORS_data.i2c.rxBuffer[0] = ULTRALOWPRESS_reorderBytes(APP_SENSORS_data.i2c.rxBuffer[0]);
+            printf("\r\n<ULP Click> STATUS [ %x ] ", APP_SENSORS_data.i2c.rxBuffer[0]);
             if (ULTRALOWPRESS_isReady())
             {
                 ULTRALOWPRESS_clearStatus();
                 temperature = ULTRALOWPRESS_getTemperature();
-                printf("\r\n<ULP Click> DSP_T (addr 0x2E) = [ %x ]", APP_SENSORS_data.i2c.rxBuffer[0]);
+                printf("DSP_T [ %x ] ", APP_SENSORS_data.i2c.rxBuffer[0]);
                 pressure = ULTRALOWPRESS_getPressure();     
-                printf("\r\n<ULP Click> DSP_S (addr 0x30) = [ %x ]", APP_SENSORS_data.i2c.rxBuffer[0]);
-                tx_thread_sleep(500);
-                printf("\r\n");
+                printf("DSP_S [ %x ]\r\n", APP_SENSORS_data.i2c.rxBuffer[0]);
                 buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
                         "{\"SM8436_temperature\": %.2f, \"SM8436_pressure\": %.2f}",
                         temperature, pressure );                
                 send_telemetry_message(parameter, (UCHAR *)buffer, buffer_length);
             }
+            else
+            {
+                printf("\r\n<ULP Click> SM8436 is not ready...\r\n");
+            }
+            tx_thread_sleep(500);
         }
 #endif /* CLICK_ULTRALOWPRESS */
 #ifdef CLICK_VAVPRESS
