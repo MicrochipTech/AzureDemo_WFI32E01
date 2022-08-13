@@ -68,16 +68,16 @@ void ULTRALOWPRESS_clearStatus (void)
 }
 
 float ULTRALOWPRESS_getTemperature(void)
-{   
+{
     APP_SENSORS_read(ULTRALOWPRESS_I2CADDR, ULTRALOWPRESS_REG_TEMP, 2);
-    
+
     return ( (APP_SENSORS_data.i2c.rxBuffer[0] - ULTRALOWPRESS_B0) / ULTRALOWPRESS_B1 );
 }
 
 float ULTRALOWPRESS_getPressure(void)
 {
     APP_SENSORS_read(ULTRALOWPRESS_I2CADDR, ULTRALOWPRESS_REG_PRESS, 2);
-        
+    
     return ULTRALOWPRESS_P_MIN + ( ( APP_SENSORS_data.i2c.rxBuffer[0] - ULTRALOWPRESS_OUT_MIN ) / 
             ( ULTRALOWPRESS_OUT_MAX - ULTRALOWPRESS_OUT_MIN ) ) * 
             ( ULTRALOWPRESS_P_MAX - ULTRALOWPRESS_P_MIN );

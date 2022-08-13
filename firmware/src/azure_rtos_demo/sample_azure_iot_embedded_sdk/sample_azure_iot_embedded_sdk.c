@@ -658,7 +658,7 @@ void sample_telemetry_thread_entry(ULONG parameter)
     while (loop)
     {
 #ifdef WFI32IOT_SENSORS
-                printf("\r\n<WFI32-IoT> Reading temperature & light sensors...\r\n");
+        printf("\r\n<WFI32-IoT> Reading temperature & light sensors...\r\n");
         buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
                 "{\"temperature\": %u, \"light\": %u}",
                 APP_SENSORS_readTemperature(), APP_SENSORS_readLight() );
@@ -667,14 +667,17 @@ void sample_telemetry_thread_entry(ULONG parameter)
 #ifdef CLICK_ULTRALOWPRESS
         if (ULTRALOWPRESS_status == ULTRALOWPRESS_OK)
         {
+            APP_SENSORS_read(ULTRALOWPRESS_I2CADDR, ULTRALOWPRESS_REG_STATUS, 2);
+            printf("\r\n<ULP Click> STATUS (addr 0x36) = [ %x ]", APP_SENSORS_data.i2c.rxBuffer[0]);
             if (ULTRALOWPRESS_isReady())
             {
                 ULTRALOWPRESS_clearStatus();
                 temperature = ULTRALOWPRESS_getTemperature();
-                printf("\r\n<ULP Click> temp_data @ reg 0x2E = [ %x ] | ", APP_SENSORS_data.i2c.rxBuffer[0]);
+                printf("\r\n<ULP Click> DSP_T (addr 0x2E) = [ %x ]", APP_SENSORS_data.i2c.rxBuffer[0]);
                 pressure = ULTRALOWPRESS_getPressure();     
-                printf("press_data @ reg 0x30 = [ %x ]\r\n", APP_SENSORS_data.i2c.rxBuffer[0]);
-                tx_thread_sleep(500); 
+                printf("\r\n<ULP Click> DSP_S (addr 0x30) = [ %x ]", APP_SENSORS_data.i2c.rxBuffer[0]);
+                tx_thread_sleep(500);
+                printf("\r\n");
                 buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
                         "{\"SM8436_temperature\": %.2f, \"SM8436_pressure\": %.2f}",
                         temperature, pressure );                
