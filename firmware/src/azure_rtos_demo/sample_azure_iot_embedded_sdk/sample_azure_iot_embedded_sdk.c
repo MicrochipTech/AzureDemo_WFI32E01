@@ -667,11 +667,9 @@ void sample_telemetry_thread_entry(ULONG parameter)
 #ifdef CLICK_ULTRALOWPRESS
         if (ULTRALOWPRESS_status == ULTRALOWPRESS_OK)
         {
-            APP_SENSORS_read(ULTRALOWPRESS_I2CADDR, ULTRALOWPRESS_REG_STATUS, 2);
-            APP_SENSORS_data.i2c.rxBuffer[0] = ULTRALOWPRESS_reorderBytes(APP_SENSORS_data.i2c.rxBuffer[0]);
-            printf("\r\n<ULP Click> STATUS [ %x ] ", APP_SENSORS_data.i2c.rxBuffer[0]);
             if (ULTRALOWPRESS_isReady())
             {
+                printf("\r\n<ULP Click> STATUS [ %x ] ", APP_SENSORS_data.i2c.rxBuffer[0]);
                 ULTRALOWPRESS_clearStatus();
                 temperature = ULTRALOWPRESS_getTemperature();
                 printf("DSP_T [ %x ] ", APP_SENSORS_data.i2c.rxBuffer[0]);
