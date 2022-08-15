@@ -33,6 +33,33 @@ vavpress_return_value_t VAVPRESS_status;
 vavpress_sensor_param_data_t VAVPRESS_param_data;
 vavpress_el_signature_data_t VAVPRESS_el_signature_data;
 
+int16_t VAVPRESS_2sCompToDecimal(uint16_t twos_compliment_val)
+{
+    // [0x0000; 0x7FFF] corresponds to [0; 32,767]
+    // [0x8000; 0xFFFF] corresponds to [-32,768; -1]
+    // int16_t has the range [-32,768; 32,767]
+
+    uint16_t sign_mask = 0x8000;
+
+    // if positive
+    if ( (twos_compliment_val & sign_mask) == 0 ) {
+        return twos_compliment_val;
+    //  if negative
+    } else {
+        // invert all bits, add one, and make negative
+        return -(~twos_compliment_val + 1);
+    }
+}
+
+uint16_t VAVPRESS_reorderBytes(uint16_t word)
+{
+    uint16_t bytes_swapped;
+    
+    bytes_swapped = ( ((word << 8 ) & 0xFF00) | ((word >> 8) & 0x00FF) );
+    
+    return (bytes_swapped);
+}
+
 void VAVPRESS_init(void)
 {
     vavpress_return_value_t error_code;
@@ -96,19 +123,29 @@ vavpress_return_value_t VAVPRESS_setDefaultSensorParams(vavpress_sensor_param_da
 vavpress_return_value_t VAVPRESS_getReadoutData(int16_t *press_data, int16_t *temp_data)
 {
     int16_t tmp = 0;
+    uint8_t lsb_0, msb_0, lsb_1, msb_1;
+    
+    APP_SENSORS_read(VAVPRESS_I2CADDR_0, VAVPRESS_SET_CMD_START_PRESSURE_CONVERSION, 4);  
 
-    APP_SENSORS_read(VAVPRESS_I2CADDR_0, VAVPRESS_SET_CMD_START_PRESSURE_CONVERSION, 8);
-        
-    tmp = APP_SENSORS_data.i2c.rxBuffer[1];
-    tmp <<= 9;
-    tmp |= APP_SENSORS_data.i2c.rxBuffer[0];
-    *press_data = tmp >> 1;
-    tmp = APP_SENSORS_data.i2c.rxBuffer[3];
+    tmp = ((APP_SENSORS_data.i2c.rxBuffer[0] >> 8) & 0x00FF);
+    msb_0 = (uint8_t)tmp;
+    tmp = ((APP_SENSORS_data.i2c.rxBuffer[0]) & 0x00FF);
+    lsb_0 = (uint8_t)tmp;
+    tmp = msb_0;
     tmp <<= 8;
-    tmp |= APP_SENSORS_data.i2c.rxBuffer[2];
-    *temp_data = tmp;
-
-    if (tmp == 0)
+    tmp |= lsb_0;
+    *press_data = tmp >> 1;
+    
+    tmp = ((APP_SENSORS_data.i2c.rxBuffer[1] >> 8) & 0x00FF);
+    msb_1 = (uint8_t)tmp;
+    tmp = ((APP_SENSORS_data.i2c.rxBuffer[1]) & 0x00FF);
+    lsb_1 = (uint8_t)tmp;
+    tmp = msb_1;
+    tmp <<= 8;
+    tmp |= lsb_1;
+    *temp_data = tmp >> 1;
+    
+    if ( (press_data == 0) && (temp_data == 0) )
     {
         return VAVPRESS_ERROR;        
     }
@@ -125,11 +162,13 @@ vavpress_return_value_t VAVPRESS_getSensorReadings(vavpress_sensor_param_data_t 
     float tmp;
 
     vavpress_return_value_t error_flag = VAVPRESS_getReadoutData (&press_data, &temp_data);
-    
+
+    press_data = ULTRALOWPRESS_2sCompToDecimal(press_data);
     tmp = ( float ) press_data;
     tmp /= ( float ) param_data->scale_factor_press;
     *diff_press = tmp;
-    
+  
+    temp_data = ULTRALOWPRESS_2sCompToDecimal(temp_data);
     tmp = ( float ) temp_data;
     tmp -= ( float ) param_data->readout_at_known_temperature;
     tmp /= ( float ) param_data->scale_factor_temp;

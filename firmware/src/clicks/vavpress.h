@@ -55,7 +55,7 @@ extern "C"{
  * @details Specified command set for description of VAV Press Click driver.
  */
 #define VAVPRESS_SET_CMD_RESET_FIRMWARE                 0x11
-#define VAVPRESS_SET_CMD_START_PRESSURE_CONVERSION      0x21
+#define VAVPRESS_SET_CMD_START_PRESSURE_CONVERSION      0x20
 #define VAVPRESS_SET_CMD_RETRIEVE_ELECTRONIC_SIGNATURE  0x23
 
 /**
