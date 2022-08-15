@@ -64,11 +64,12 @@ void VAVPRESS_init(void)
 {
     vavpress_return_value_t error_code;
     
+    APP_SENSORS_write_LSB_b4_MSB(VAVPRESS_I2CADDR_0, VAVPRESS_SET_CMD_RESET_FIRMWARE, 1);
+    APP_SENSORS_write_LSB_b4_MSB(VAVPRESS_I2CADDR_0, VAVPRESS_SET_CMD_START_PRESSURE_CONVERSION, 1); 
     error_code = VAVPRESS_setDefaultConfig();
     if (error_code == VAVPRESS_OK)
     {
         VAVPRESS_status = VAVPRESS_OK;
-        VAVPRESS_getElectronicSignature( &VAVPRESS_el_signature_data );
         //printf("--------------------------------\r\n" );
         //printf(" Firmware Version : %.3f        \r\n", VAVPRESS_el_signature_data.firmware_version);
         //printf(" Pressure Range   : %d Pa       \r\n", VAVPRESS_el_signature_data.pressure_range);
@@ -109,11 +110,10 @@ vavpress_return_value_t VAVPRESS_setDefaultConfig(void)
 
 vavpress_return_value_t VAVPRESS_setDefaultSensorParams(vavpress_sensor_param_data_t *param_data)
 {
-    vavpress_el_signature_data_t el_signature_data;
-    vavpress_return_value_t error_flag = VAVPRESS_getElectronicSignature(&el_signature_data);
+    vavpress_return_value_t error_flag = VAVPRESS_getElectronicSignature(&VAVPRESS_el_signature_data);
     
     param_data->scale_factor_temp = 72;
-    param_data->scale_factor_press = el_signature_data.scale_factor;
+    param_data->scale_factor_press = VAVPRESS_el_signature_data.scale_factor;
     param_data->readout_at_known_temperature = 105;
     param_data->known_temperature_c = 23.1;
     
