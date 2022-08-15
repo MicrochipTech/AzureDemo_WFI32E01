@@ -42,7 +42,7 @@ As a solution builder, you can use IoT Central to develop a cloud-hosted IoT sol
 
 6. Right-click the `WFI32-IoT_Azure` project and select `Make and Program Device`.  This operation will automatically clean and build the project before attempting to program the target device. After the `BUILD SUCCESSFUL` message appears in the Output window, the application HEX file will be programmed onto the WFI32-IoT Board. Once programming has finished, the board will automatically reset and start running its application code
 
-7. Set up a Command Line Interface (CLI) to the board. Open a serial terminal (e.g. PuTTY, TeraTerm, etc.) and connect to the COM port corresponding to your board at `115200 baud` (e.g. open PuTTY Configuration window &gt; choose `session` &gt; choose `Serial`&gt; Enter the right COMx port). You can find the right COM number by opening your PC’s `Device Manager` &gt; expand `Ports(COM & LPT)` &gt; take note of `PICkit4 On Board Virtual COM Port (COMx)`)
+7. Set up a Command Line Interface (CLI) to the board. Open a serial terminal (e.g. PuTTY, TeraTerm, etc.) and connect to the COM port corresponding to your board at `115200 baud` (e.g. open PuTTY Configuration window &gt; choose `session` &gt; choose `Serial`&gt; enter/select the right COMx port). You can find the right COM port number by opening your PC’s `Device Manager` &gt; expand `Ports(COM & LPT)` &gt; take note of `USB Serial Device (COMx)`
 
     <img src=".//media/image43.png"/>
 
