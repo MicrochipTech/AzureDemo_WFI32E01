@@ -604,7 +604,7 @@ void sample_telemetry_thread_entry(ULONG parameter)
     NX_PARAMETER_NOT_USED(parameter);
 
     APP_SENSORS_init();
-
+    
     tx_thread_sleep(AZ_telemetryInterval * NX_IP_PERIODIC_RATE);
 
 #ifdef CLICK_ULTRALOWPRESS
@@ -620,6 +620,7 @@ void sample_telemetry_thread_entry(ULONG parameter)
     }
     tx_thread_sleep(100);
 #endif /* CLICK_ULTRALOWPRESS */
+
 #ifdef CLICK_VAVPRESS
     printf("<VAV Click> Initializing LMIS025B...\r\n");
     VAVPRESS_init();

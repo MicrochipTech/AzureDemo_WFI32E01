@@ -34,6 +34,8 @@ extern "C"{
 
 #include "definitions.h"
 
+#define EXTENDED_READOUT_NUMBYTES 4
+    
 /*!
  * @addtogroup vavpress VAV Press Click Driver
  * @brief API for configuring and manipulating VAV Press Click driver.
@@ -169,25 +171,7 @@ vavpress_return_value_t VAVPRESS_setDefaultSensorParams(vavpress_sensor_param_da
  *
  * @endcode
  */
-vavpress_return_value_t VAVPRESS_getReadoutData(int16_t *press_data, int16_t *temp_data);
 
-/**
- * @brief VAV Press get differential pressure and temperature function.
- * @details This function get differential pressure [ Pa ] and temperature [ degree Celsius ] data of the 
- * LMIS025BB3, digital low differential pressure sensors on the 
- * Vav Press click board™.
- * See #vavpress_t object definition for detailed explanation.
- * @param[in] param_data : Pointer to the memory location of the structure where data be stored.
- * @param[out] diff_press : Pressure [ Pa ].
- * @param[out] temperature : Temperature [ degree Celsius ].
- * @return @li @c  0 - Success,
- *         @li @c -1 - Error.
- *
- * See #err_t definition for detailed explanation.
- * @note None.
- *
- * @endcode
- */
 vavpress_return_value_t VAVPRESS_getSensorReadings(vavpress_sensor_param_data_t *param_data, float *diff_press, float *temperature);
 
 /**

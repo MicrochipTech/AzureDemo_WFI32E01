@@ -63,7 +63,7 @@ uint32_t ULTRALOWPRESS_init(void)
     uint32_t serial_number = 0;
 
     // Read the 32-bit serial number from the SM8436
-    APP_SENSORS_read(ULTRALOWPRESS_I2CADDR, ULTRALOWPRESS_REG_SERIAL_NUM_L, 4);
+    APP_SENSORS_writeRead(ULTRALOWPRESS_I2CADDR, ULTRALOWPRESS_REG_SERIAL_NUM_L, 4);
 
     serial_number = APP_SENSORS_data.i2c.rxBuffer[1] << 16;
     serial_number |= APP_SENSORS_data.i2c.rxBuffer[0];
@@ -86,7 +86,7 @@ bool ULTRALOWPRESS_isReady(void)
 {   
     uint16_t status_reg;
     
-    APP_SENSORS_read(ULTRALOWPRESS_I2CADDR, ULTRALOWPRESS_REG_STATUS, 2);
+    APP_SENSORS_writeRead(ULTRALOWPRESS_I2CADDR, ULTRALOWPRESS_REG_STATUS, 2);
     status_reg = APP_SENSORS_data.i2c.rxBuffer[0];
     
     return ( status_reg & ULTRALOWPRESS_STATUS_TEMP_MASK ) && 
@@ -95,14 +95,14 @@ bool ULTRALOWPRESS_isReady(void)
 
 void ULTRALOWPRESS_clearStatus (void)
 {
-    APP_SENSORS_write_LSB_b4_MSB(ULTRALOWPRESS_I2CADDR, ULTRALOWPRESS_REG_STATUS, ULTRALOWPRESS_STATUS_CLEAR);
+    APP_SENSORS_writeWord_LSB_b4_MSB(ULTRALOWPRESS_I2CADDR, ULTRALOWPRESS_REG_STATUS, ULTRALOWPRESS_STATUS_CLEAR);
 }
 
 float ULTRALOWPRESS_getTemperature(void)
 {
     int16_t decimal;
     
-    APP_SENSORS_read(ULTRALOWPRESS_I2CADDR, ULTRALOWPRESS_REG_TEMP, 2);
+    APP_SENSORS_writeRead(ULTRALOWPRESS_I2CADDR, ULTRALOWPRESS_REG_TEMP, 2);
     decimal = ULTRALOWPRESS_2sCompToDecimal(APP_SENSORS_data.i2c.rxBuffer[0]);
 
     return ( (decimal - ULTRALOWPRESS_B0) / ULTRALOWPRESS_B1 );
@@ -112,7 +112,7 @@ float ULTRALOWPRESS_getPressure(void)
 {
     int16_t decimal;
 
-    APP_SENSORS_read(ULTRALOWPRESS_I2CADDR, ULTRALOWPRESS_REG_PRESS, 2);
+    APP_SENSORS_writeRead(ULTRALOWPRESS_I2CADDR, ULTRALOWPRESS_REG_PRESS, 2);
     decimal = ULTRALOWPRESS_2sCompToDecimal(APP_SENSORS_data.i2c.rxBuffer[0]);
     
     return ULTRALOWPRESS_P_MIN + ( ( decimal - ULTRALOWPRESS_OUT_MIN ) / 

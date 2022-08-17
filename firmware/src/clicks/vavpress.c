@@ -64,8 +64,7 @@ void VAVPRESS_init(void)
 {
     vavpress_return_value_t error_code;
     
-    APP_SENSORS_write_LSB_b4_MSB(VAVPRESS_I2CADDR_0, VAVPRESS_SET_CMD_RESET_FIRMWARE, 1);
-    APP_SENSORS_write_LSB_b4_MSB(VAVPRESS_I2CADDR_0, VAVPRESS_SET_CMD_START_PRESSURE_CONVERSION, 1); 
+    APP_SENSORS_writeByte(VAVPRESS_I2CADDR_0, VAVPRESS_SET_CMD_RESET_FIRMWARE);
     error_code = VAVPRESS_setDefaultConfig();
     if (error_code == VAVPRESS_OK)
     {
@@ -92,6 +91,7 @@ void VAVPRESS_init(void)
         VAVPRESS_status = VAVPRESS_ERROR;
         printf("[VAV Click] LMIS025B was not found during initialization\r\n");
     }
+    APP_SENSORS_writeByte(VAVPRESS_I2CADDR_0, VAVPRESS_SET_CMD_START_PRESSURE_CONVERSION);
 }
 
 vavpress_return_value_t VAVPRESS_setDefaultConfig(void)
@@ -120,62 +120,27 @@ vavpress_return_value_t VAVPRESS_setDefaultSensorParams(vavpress_sensor_param_da
     return error_flag;
 }
 
-vavpress_return_value_t VAVPRESS_getReadoutData(int16_t *press_data, int16_t *temp_data)
-{
-    int16_t tmp = 0;
-    uint8_t lsb_0, msb_0, lsb_1, msb_1;
-    
-    APP_SENSORS_read(VAVPRESS_I2CADDR_0, VAVPRESS_SET_CMD_START_PRESSURE_CONVERSION, 4);  
-
-    tmp = ((APP_SENSORS_data.i2c.rxBuffer[0] >> 8) & 0x00FF);
-    msb_0 = (uint8_t)tmp;
-    tmp = ((APP_SENSORS_data.i2c.rxBuffer[0]) & 0x00FF);
-    lsb_0 = (uint8_t)tmp;
-    tmp = msb_0;
-    tmp <<= 8;
-    tmp |= lsb_0;
-    *press_data = tmp >> 1;
-    
-    tmp = ((APP_SENSORS_data.i2c.rxBuffer[1] >> 8) & 0x00FF);
-    msb_1 = (uint8_t)tmp;
-    tmp = ((APP_SENSORS_data.i2c.rxBuffer[1]) & 0x00FF);
-    lsb_1 = (uint8_t)tmp;
-    tmp = msb_1;
-    tmp <<= 8;
-    tmp |= lsb_1;
-    *temp_data = tmp >> 1;
-    
-    if ( (press_data == 0) && (temp_data == 0) )
-    {
-        return VAVPRESS_ERROR;        
-    }
-    else
-    {
-        return VAVPRESS_OK;
-    }
-}
-
 vavpress_return_value_t VAVPRESS_getSensorReadings(vavpress_sensor_param_data_t *param_data, float *diff_press, float *temperature)
 {
     int16_t press_data;
     int16_t temp_data;
     float tmp;
 
-    vavpress_return_value_t error_flag = VAVPRESS_getReadoutData (&press_data, &temp_data);
+    APP_SENSORS_justRead(VAVPRESS_I2CADDR_0, EXTENDED_READOUT_NUMBYTES);
 
-    press_data = ULTRALOWPRESS_2sCompToDecimal(press_data);
+    press_data = VAVPRESS_2sCompToDecimal((int16_t)APP_SENSORS_data.i2c.rxBuffer[0]);
     tmp = ( float ) press_data;
     tmp /= ( float ) param_data->scale_factor_press;
     *diff_press = tmp;
   
-    temp_data = ULTRALOWPRESS_2sCompToDecimal(temp_data);
+    temp_data = VAVPRESS_2sCompToDecimal((int16_t)APP_SENSORS_data.i2c.rxBuffer[1]);
     tmp = ( float ) temp_data;
     tmp -= ( float ) param_data->readout_at_known_temperature;
     tmp /= ( float ) param_data->scale_factor_temp;
     tmp += param_data->known_temperature_c; 
     *temperature = tmp;
 
-    return error_flag;
+    return VAVPRESS_OK;
 }
 
 vavpress_return_value_t VAVPRESS_getElectronicSignature(vavpress_el_signature_data_t *el_signature_data)
@@ -184,7 +149,7 @@ vavpress_return_value_t VAVPRESS_getElectronicSignature(vavpress_el_signature_da
     uint16_t tmp = 0;
     float tmp_f;
 
-    APP_SENSORS_read(VAVPRESS_I2CADDR_0, VAVPRESS_SET_CMD_RETRIEVE_ELECTRONIC_SIGNATURE, EL_SIGNATURE_NUMBYTES);
+    APP_SENSORS_writeRead(VAVPRESS_I2CADDR_0, VAVPRESS_SET_CMD_RETRIEVE_ELECTRONIC_SIGNATURE, EL_SIGNATURE_NUMBYTES);
     memcpy(rx_buf, APP_SENSORS_data.i2c.rxBuffer, EL_SIGNATURE_NUMBYTES);
     
     if ( rx_buf[ 1 ] < 10 ) {
