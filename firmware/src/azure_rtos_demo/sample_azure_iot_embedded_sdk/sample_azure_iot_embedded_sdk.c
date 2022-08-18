@@ -693,8 +693,10 @@ void sample_telemetry_thread_entry(ULONG parameter)
         {
             if (VAVPRESS_getSensorReadings(&VAVPRESS_param_data, &pressure, &temperature) == VAVPRESS_OK)
             {
-                printf("\r\n<VAV Click> Extended data readout ( pressure | temperature ) = [ %x | %x ]\r\n",
-                        APP_SENSORS_data.i2c.rxBuffer[0], APP_SENSORS_data.i2c.rxBuffer[1]);
+                printf("\r\n<VAV Click> Extended data readout ( pressure | temperature ) = [ %x (%i) | %x (%i) ]\r\n",
+                        APP_SENSORS_data.i2c.rxBuffer[0], VAVPRESS_2sCompToDecimal(APP_SENSORS_data.i2c.rxBuffer[0]),
+                        APP_SENSORS_data.i2c.rxBuffer[1], VAVPRESS_2sCompToDecimal(APP_SENSORS_data.i2c.rxBuffer[1])
+                      );
                 tx_thread_sleep(500);
                 buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
                         "{\"LMIS025B_temperature\": %.2f, \"LMIS025B_pressure\": %.2f}",
