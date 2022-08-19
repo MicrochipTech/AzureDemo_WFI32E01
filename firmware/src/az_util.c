@@ -874,7 +874,7 @@ az_result process_direct_method_command(
     az_span   payload_span      = az_span_create_from_str((char*)payload);
 
 #ifdef IOT_PLUG_AND_PLAY_MODEL_ID
-    debug_printInfo("AZURE: Processing Command '%s'", command_request->command_name);
+    debug_printInfo("AZURE: Processing Command '%s'", (char*)command_request->command_name._internal.ptr);
 #else
     debug_printInfo("AZURE: Processing Command '%s'", method_request->name);
 #endif
