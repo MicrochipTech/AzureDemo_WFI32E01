@@ -132,10 +132,9 @@ IoT Central allows you to create an application dashboard to monitor the telemet
 
     <img src=".//media/image74.png" style="width:5.in;height:2.68982in" alt="A screenshot of a cell phone Description automatically generated" />
 
-10.	Navigate to the `device_model` folder (located in the main demo folder) and select one of the following device model files to upload
+10.	Navigate to the `device_model` folder (located in the demo top-level main folder) and select the latest device model file to upload (e.g. `wfi32_iot_wm-1.json`)
 
-- `wfi32_iot_wm-1.json` if no Click boards are connected
-- `wfi32_iot_click-1.json` if at least one of the supported Click boards is connected
+    <img src=".//media/image77.png">
 
 11.	Note all the capabilities that were imported from the JSON file and then click on the `Publish` icon at the top of the page.  A pop-up window should appear to confirm the details for the new template to be added - then click on the `Publish` button
 
@@ -151,15 +150,17 @@ IoT Central allows you to create an application dashboard to monitor the telemet
 
     <img src=".//media/image78b.png" style="width:2.0in;height:2.5in" alt="A screenshot of a cell phone Description automatically generated" />
 
-15.	Type in `Properties` for the `Form name`. Click on `Properties` and then check every box in the list. Hit the `Save` icon
+15.	Type in `Properties` for the `Form name`. Expand the `Properties` category and then check every box in the list. Hit the `Save` icon at the top of the page
 
     <img src=".//media/image78c.png" style="width:2.0in;height:3.0in" alt="A screenshot of a cell phone Description automatically generated" />
 
-16.	Hit the `Back` icon. Click on `Views` and then select `Generate default views`
+16.	Hit the `Back` icon at the top of the page. Click on `Views` and then select `Generate default views`
 
     <img src=".//media/image78d.png" style="width:2.0in;height:2.2in" alt="A screenshot of a cell phone Description automatically generated" />
 
 17.	Click on the `Generate default dashboard view(s)` button
+
+    <img src=".//media/image78e.png" style="width:5.0in;height:2.5in" alt="A screenshot of a cell phone Description automatically generated" />
 
 18.	Click on the `Publish` icon at the top of the page.  A pop-up window should appear to confirm the latest changes to be made to the template - then click on the `Publish` button
 

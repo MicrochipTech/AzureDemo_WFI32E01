@@ -661,7 +661,7 @@ void sample_telemetry_thread_entry(ULONG parameter)
 #ifdef WFI32IOT_SENSORS
         //printf("\r\n<WFI32-IoT> Reading temperature & light sensors...\r\n");
         buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
-                "{\"temperature\": %u, \"light\": %u}",
+                "{\"WFI32IoT_temperature\": %u, \"WFI32IoT_light\": %u}",
                 APP_SENSORS_readTemperature(), APP_SENSORS_readLight() );
         send_telemetry_message(parameter, (UCHAR *)buffer, buffer_length);
 #endif /* WFI32IOT_SENSORS */
@@ -677,7 +677,7 @@ void sample_telemetry_thread_entry(ULONG parameter)
                 pressure = ULTRALOWPRESS_getPressure();     
                 //printf("DSP_S [ %x ]\r\n", APP_SENSORS_data.i2c.rxBuffer[0]);
                 buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
-                        "{\"SM8436_temperature\": %.2f, \"SM8436_pressure\": %.2f}",
+                        "{\"ULP_temperature\": %.2f, \"ULP_pressure\": %.2f}",
                         temperature, pressure );                
                 send_telemetry_message(parameter, (UCHAR *)buffer, buffer_length);
             }
@@ -699,7 +699,7 @@ void sample_telemetry_thread_entry(ULONG parameter)
                       //);
                 //tx_thread_sleep(500);
                 buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
-                        "{\"LMIS025B_temperature\": %.2f, \"LMIS025B_pressure\": %.2f}",
+                        "{\"VAV_temperature\": %.2f, \"VAV_pressure\": %.2f}",
                         temperature, pressure);              
                 send_telemetry_message(parameter, (UCHAR *)buffer, buffer_length);      
             }
