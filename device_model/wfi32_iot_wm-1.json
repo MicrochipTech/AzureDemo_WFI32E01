@@ -242,7 +242,7 @@
           "displayName": {
             "en": "LED On"
           },
-          "enumValue": 1,
+          "enumValue": 0,
           "name": "On"
         },
         {
@@ -250,7 +250,7 @@
           "displayName": {
             "en": "LED Off"
           },
-          "enumValue": 2,
+          "enumValue": 1,
           "name": "Off"
         },
         {
@@ -258,7 +258,7 @@
           "displayName": {
             "en": "LED Blinking"
           },
-          "enumValue": 3,
+          "enumValue": 2,
           "name": "Blink"
         }
       ],
