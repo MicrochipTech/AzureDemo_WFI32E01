@@ -128,13 +128,14 @@ IoT Central allows you to create an application dashboard to monitor the telemet
 
     <img src=".//media/image73.png" style="width:3.5in;height:0.0432in" alt="A screenshot of a cell phone Description automatically generated" />
 
-9.	Click on the `Import a model` tile which will allow you to upload an existing device model file to IoT Central
+9.	Click on the `Import a model` tile which will allow you to upload an existing device model file into the IoT Central application
 
     <img src=".//media/image74.png" style="width:5.in;height:2.68982in" alt="A screenshot of a cell phone Description automatically generated" />
 
-10.	Navigate to the `wfi32_iot_wm-1.json` file that is located in the `device_model` folder (should be located in the main demo folder) and then click on `Upload`
+10.	Navigate to the `device_model` folder (located in the main demo folder) and select one of the following device model files to upload
 
-    <img src=".//media/image77.png">
+- `wfi32_iot_wm-1.json` if no Click boards are connected
+- `wfi32_iot_click-1.json` if at least one of the supported Click boards is connected
 
 11.	Note all the capabilities that were imported from the JSON file and then click on the `Publish` icon at the top of the page.  A pop-up window should appear to confirm the details for the new template to be added - then click on the `Publish` button
 
@@ -226,7 +227,7 @@ IoT Central allows you to create an application dashboard to monitor the telemet
 
     <img src=".//media/image93a.png" style="width:5.in;height:2.18982in" alt="A screenshot of a cell phone Description automatically generated" />
 
-34. Note there are other views besides the `Raw data` tab. Click on the `About` and `Overview` tabs to view the property values and telemetry data of the device
+34. Note there are other views besides the `Raw data` tab. Click on the `About` and `Overview` tabs to view the property values and telemetry data of the device. If any of the Click boards are installed, you should see the telemetry being reported from the additional sensors (e.g. SM8436_temperature, SM8436_pressure, LMIS025B_temperature, LMIS025B_pressure)
 
 35. Click on the `Properties` tab. This view allows you to change the state of the Yellow LED and update the telemetry reporting interval since these are properties that have been defined as writable by the cloud. The remaining LEDs are used as status indicators so they are not writable from the cloud. For any property changes to actually take effect, the `Save` icon must be clicked after making your selections
 
