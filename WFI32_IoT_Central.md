@@ -18,27 +18,6 @@ The web UI lets you quickly connect devices, monitor device conditions, create r
 
 As a solution builder, you can use IoT Central to develop a cloud-hosted IoT solution that uses IoT Plug and Play devices. IoT Plug and Play devices connect directly to an IoT Central application where you can use customizable dashboards to monitor and control your devices. You can also use device templates in the IoT Central web UI to create and edit [Device Twins Definition Language (DTDL)](https://github.com/Azure/opendigitaltwins-dtdl) models.
 
-## Generate the Device Certificate in PEM Format
-
-The device certificate for your WFI32-IoT Board comes pre-programmed in the `WFI32-IOT` Mass Storage Class drive. However, the certificate file is in binary format (signified by the use of DER for the file name extension). Since most web servers want the device certificate to be in text-based Privacy Enhanced Mail (PEM) format, we need to convert the existing certificate from DER to PEM format.
-
-1. Connect the board to PC, then make sure a device named `WFI32-IOT` shows up as a disk drive (i.e. Mass Storage Device) on the `Desktop` or in a `File Explorer` window
-
-2. Using a `File Explorer` window, access the `WFI32-IOT` Mass Storage Class drive and locate the <`device_certificate_name`>.DER file. Most likely, the default name of the device certificate file is the unique serial number of your device (e.g. sn012319AAC99CF42A01)
-
-3. Make a copy of the DER file and put it into any convenient folder on your hard drive
-
-4. Using a command line window such as `PowerShell` or `Command Prompt`, navigate to the folder where the DER file was copied to and then execute the following command line
-
-    ```bash
-    openssl x509 -inform der -in <device_certificate_name>.der -out <device_certificate_name>.pem
-    ```
-5. Make a copy of the newly-created PEM file and put it into the `WFI32-IOT` Mass Storage Class drive
-
-6. Confirm that the `WFI32-IOT` Mass Storage Class drive now contains both <`device_certificate_name`>.DER & <`device_certificate_name`>.PEM files. Both files contain the same device certificate information but in 2 different formats
-
-    <img src=".//media/image20.png" style="width:2.8in;height:2.0in" alt="A screenshot of a cell phone Description automatically generated" />
-
 ## Program the Plug and Play Demo
 
 1. Clone/download the MPLAB X demo project by issuing the following commands in a `Command Prompt` or `PowerShell` window
@@ -228,7 +207,7 @@ IoT Central allows you to create an application dashboard to monitor the telemet
 
     <img src=".//media/image93a.png" style="width:5.in;height:2.18982in" alt="A screenshot of a cell phone Description automatically generated" />
 
-34. Note there are other views besides the `Raw data` tab. Click on the `About` and `Overview` tabs to view the property values and telemetry data of the device. If any of the Click boards are installed, you should see the telemetry being reported from the additional sensors (e.g. SM8436_temperature, SM8436_pressure, LMIS025B_temperature, LMIS025B_pressure)
+34. Note there are other views besides the `Raw data` tab. Click on the `About` and `Overview` tabs to view the property values and telemetry data of the device. If any of the Click boards are installed, you should see the telemetry being reported from the additional sensors (e.g. ULP_temperature, ULP_pressure, VAV_temperature, VAV_pressure)
 
 35. Click on the `Properties` tab. This view allows you to change the state of the Yellow LED and update the telemetry reporting interval since these are properties that have been defined as writable by the cloud. The remaining LEDs are used as status indicators so they are not writable from the cloud. For any property changes to actually take effect, the `Save` icon must be clicked after making your selections
 
