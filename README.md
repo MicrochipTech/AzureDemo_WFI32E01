@@ -2,7 +2,7 @@
 
 ## Introduction
 
- This document describes how to connect the WFI32-IoT Board (featuring the fully certified, highly integrated WFI32E01PC module) to Azure IoT Central which leverages Microsoft’s Azure RTOS to enable better experiences of embedded firmware development for Cloud applications.
+ This document describes how to connect the WFI32-IoT Board (featuring the fully certified, highly integrated WFI32E01PC wireless module) to Azure IoT Central which leverages Microsoft’s Azure RTOS to enable better experiences of embedded firmware development for Cloud applications.
 
 <img src=".//media/image1.png" />
 
@@ -65,14 +65,14 @@ This is the high-level view of the Embedded C SDK (which is included within Azur
 The TLS connection performs both authentication and encryption.
 Authentication consists of two parts:
 
-- Server authentication; the board authenticates the server
-- Client authentication; the server authenticates the board
+- Authentication of the server (the device authenticates the server)
+- Authentication of the client (the server authenticates the device)
 
 Server authentication happens transparently to the user since the WFI32E01PC certified module (integrating Microchip's Trust&GO secure element) on the WFI32-IoT  board comes preloaded with the required CA certificate. During client authentication the client private key must be used, but since this is stored inside the secure element and cannot be extracted, all calculations must be done inside the secure element. The main application will in turn call the secure element's library API’s to perform the calculations. Before the TLS connection is complete, a shared secret key must be negotiated between the server and the client. This key is used to encrypt all future communications during the connection.
 
 ### MQTT Connection
 
-After successfully connecting on the TLS level, the board starts establishing the MQTT connection. Since the TLS handles authentication and security, MQTT does not have to provide a username or password.
+After successfully connecting on the TLS level, the board starts establishing the MQTT connection. Since the TLS handles authentication and security, MQTT does not require a username nor password.
 
 ## Create an Azure Account and Subscription
 

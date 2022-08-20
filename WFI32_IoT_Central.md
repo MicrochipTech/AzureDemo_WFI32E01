@@ -23,7 +23,7 @@ As a solution builder, you can use IoT Central to develop a cloud-hosted IoT sol
 1. Clone/download the MPLAB X demo project by issuing the following commands in a `Command Prompt` or `PowerShell` window
 
     ```bash
-    git clone https://github.com/Azure-Samples/Microchip-WFI32-IoT.git
+    git clone <Demo URL>
     ```
 
 2. Connect the board to PC, then make sure a device named `WFI32-IOT` shows up as a disk drive (i.e. Mass Storage Device) on the `Desktop` or in a `File Explorer` window
@@ -114,6 +114,8 @@ IoT Central allows you to create an application dashboard to monitor the telemet
 10.	Navigate to the `device_model` folder (located in the demo top-level main folder) and select the latest device model file to upload (e.g. `wfi32_iot_wm-2.json`)
 
     <img src=".//media/image77.png">
+
+    NOTE: All IoT Plug and Play certified devices have their device models published in the Azure [Device Models Repository](https://devicemodels.azure.com/). The complete set of device models for all of Microchip's certified devices can be found at https://github.com/Azure/iot-plugandplay-models/tree/main/dtmi/com/microchip
 
 11.	Note all the capabilities that were imported from the JSON file and then click on the `Publish` icon at the top of the page.  A pop-up window should appear to confirm the details for the new template to be added - then click on the `Publish` button
 
@@ -209,7 +211,7 @@ IoT Central allows you to create an application dashboard to monitor the telemet
 
 34. Note there are other views besides the `Raw data` tab. Click on the `About` and `Overview` tabs to view the property values and telemetry data of the device. If any of the Click boards are installed, you should see the telemetry being reported from the additional sensors (e.g. ULP_temperature, ULP_pressure, VAV_temperature, VAV_pressure)
 
-35. Click on the `Properties` tab. This view allows you to change the state of the Yellow LED and update the telemetry reporting interval since these are properties that have been defined as writable by the cloud. The remaining LEDs are used as status indicators so they are not writable from the cloud. For any property changes to actually take effect, the `Save` icon must be clicked after making your selections
+35. Click on the `Properties` tab. This view allows you to change the state of the Yellow LED and update the telemetry reporting interval since these are properties that have been defined as writable by the cloud. The remaining LEDs are used as status indicators so they are not writable from the cloud. Feel free to change the Yellow LED's state between On, Off, and Blinking and visually confirm if the Yellow LED physically changes its state. Change the telemetry interval and verify if the telemetry is being updated more or less frequently based on your selection. For any property changes to actually take effect, the `Save` icon must be clicked after making your selections
 
     <img src=".//media/image93b.png" style="width:5.0in;height:4.18982in" alt="A screenshot of a cell phone Description automatically generated" />
 
