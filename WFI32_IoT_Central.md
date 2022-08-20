@@ -99,7 +99,7 @@ IoT Central allows you to create an application dashboard to monitor the telemet
 
     <img src=".//media/image71.png" style="width:5.in;height:2.68982in" alt="A screenshot of a cell phone Description automatically generated" />
 
-7.	Type `WFI32_IoT_WM;1` in the `Device template name` field and click on the `Next: Review` button
+7.	Type `WFI32_IoT_WM;2` in the `Device template name` field and click on the `Next: Review` button
 
     <img src=".//media/image72.png" style="width:5.in;height:1.68982in" alt="A screenshot of a cell phone Description automatically generated" />
 
@@ -111,7 +111,7 @@ IoT Central allows you to create an application dashboard to monitor the telemet
 
     <img src=".//media/image74.png" style="width:5.in;height:2.68982in" alt="A screenshot of a cell phone Description automatically generated" />
 
-10.	Navigate to the `device_model` folder (located in the demo top-level main folder) and select the latest device model file to upload (e.g. `wfi32_iot_wm-1.json`)
+10.	Navigate to the `device_model` folder (located in the demo top-level main folder) and select the latest device model file to upload (e.g. `wfi32_iot_wm-2.json`)
 
     <img src=".//media/image77.png">
 
@@ -121,7 +121,7 @@ IoT Central allows you to create an application dashboard to monitor the telemet
 
     <img src=".//media/image78.png">
 
-13.	Click on the template name (e.g. WFI32_IoT_WM;1), then click on `Views`
+13.	Click on the template name (e.g. WFI32_IoT_WM;2), then click on `Views`
 
     <img src=".//media/image78a.png">
 
