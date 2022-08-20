@@ -211,9 +211,19 @@ IoT Central allows you to create an application dashboard to monitor the telemet
 
 34. Note there are other views besides the `Raw data` tab. Click on the `About` and `Overview` tabs to view the property values and telemetry data of the device. If any of the Click boards are installed, you should see the telemetry being reported from the additional sensors (e.g. ULP_temperature, ULP_pressure, VAV_temperature, VAV_pressure)
 
-35. Click on the `Properties` tab. This view allows you to change the state of the Yellow LED and update the telemetry reporting interval since these are properties that have been defined as writable by the cloud. The remaining LEDs are used as status indicators so they are not writable from the cloud. Feel free to change the Yellow LED's state between On, Off, and Blinking and visually confirm if the Yellow LED physically changes its state. Change the telemetry interval and verify if the telemetry is being updated more or less frequently based on your selection. For any property changes to actually take effect, the `Save` icon must be clicked after making your selections
+35. Click on the `Command` tab. Type a text message in the `String to send` box and then click on the `Run` button. Confirm that the message was received in the serial console window; e.g. Receive method call: sendMsg, with payload:{"sendMsgString":"Hello world!!!"}
 
-    <img src=".//media/image93b.png" style="width:5.0in;height:4.18982in" alt="A screenshot of a cell phone Description automatically generated" />
+    <img src=".//media/image93b.png" style="width:5.0in;height:2.2in" alt="A screenshot of a cell phone Description automatically generated" />
+
+36. Click on the `command history` link and note the response that was received from the device
+
+    <img src=".//media/image93c.png" style="width:3.0in;height:0.7in" alt="A screenshot of a cell phone Description automatically generated" />
+
+    <img src=".//media/image93d.png" style="width:4.0in;height:1.25in" alt="A screenshot of a cell phone Description automatically generated" />
+
+37. Click on the `Properties` tab. This view allows you to change the state of the Yellow LED and update the telemetry reporting interval since these are properties that have been defined as writable by the cloud. The remaining LEDs are used as status indicators so they are not writable from the cloud. Feel free to change the Yellow LED's state between On, Off, and Blinking and visually confirm if the Yellow LED physically changes its state. Change the telemetry interval and verify if the telemetry is being updated more or less frequently based on your selection. For any property changes to actually take effect, the `Save` icon must be clicked after making your selections
+
+    <img src=".//media/image94.png" style="width:5.0in;height:4.18982in" alt="A screenshot of a cell phone Description automatically generated" />
 
 ## Connect your Device to the Dashboard for Data Visualization
 
