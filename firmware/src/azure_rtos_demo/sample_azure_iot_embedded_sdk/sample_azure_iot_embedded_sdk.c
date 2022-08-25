@@ -409,7 +409,7 @@ static void log_callback(az_log_classification classification, UCHAR *msg, UINT 
 {
     if (classification == AZ_LOG_IOT_AZURERTOS)
     {
-        printf("%.*s", msg_len, (CHAR *)msg);
+       printf("%.*s", msg_len, (CHAR *)msg);
     }
 }
 
@@ -815,6 +815,26 @@ void sample_c2d_thread_entry(ULONG parameter)
 #endif /* DISABLE_C2D_SAMPLE */
 
 #ifndef DISABLE_DIRECT_METHOD_SAMPLE
+
+int reboot_command(char* payload)
+{
+    int payload_size = strlen(payload);
+    int delay = 0;
+    // example payload: "PT5S", quotes are transmitted.  
+    // So 'P' is character 1 in string instead of 0 
+    if(payload[1] == 'P' && payload[2] == 'T' && payload[payload_size-2] == 'S')
+    {  // payload is expected format, convert delay to integer
+        payload[payload_size-2] = 0;
+        delay = (uint32_t) atoi(&payload[3]);
+        payload[payload_size-2] = 'S';
+        printf("reboot in %d seconds...\r\n", delay);
+    }
+    else
+    {
+        printf("invalid reboot payload, expected format \"PT5S\", for 5 second delay\r\n");
+    }
+    return delay;
+}
 void sample_direct_method_thread_entry(ULONG parameter)
 {
     UCHAR loop = NX_TRUE;
@@ -824,9 +844,8 @@ void sample_direct_method_thread_entry(ULONG parameter)
     const UCHAR *method_name_ptr;
     USHORT context_length;
     VOID *context_ptr;
-    char command_name[32];
-    char command_payload[32];
-    char response_payload[32]="{ \"name\" : \"reboot\" }";
+    char command[32];
+    char payload[64];
 
     NX_PARAMETER_NOT_USED(parameter);
 
@@ -841,18 +860,18 @@ void sample_direct_method_thread_entry(ULONG parameter)
             printf("Direct method receive failed!: error code = 0x%08x\r\n", status);
             break;
         }
-
         printf("Receive method call: %.*s, with payload:", (INT)method_name_length, (CHAR *)method_name_ptr);
-        sprintf_packet(command_payload, packet_ptr);
-        printf("%s", command_payload);
-        memcpy(command_name,method_name_ptr, method_name_length);
-        if(strcmp(command_name, "reboot")== 0)
-        {
-            process_reboot_command(command_payload, response_payload, method_response_payload, status);
+        sprintf_packet(payload, packet_ptr);
+        printf("%s\r\n", payload);
+
+        memset(command, 0, sizeof(command));
+        memcpy(command, method_name_ptr, method_name_length);
+
+        if (strcmp(command, "reboot") == 0)
+        {  // if command is reboot, process payload to gather delay
+            AZ_systemRebootTimer = reboot_command(payload);
         }
         
-        printf("\r\n");
-
         if ((status = nx_azure_iot_hub_client_direct_method_message_response(&iothub_client, 200 /* method status */,
                                                                              context_ptr, context_length,
                                                                              (UCHAR *)method_response_payload, sizeof(method_response_payload) - 1,
