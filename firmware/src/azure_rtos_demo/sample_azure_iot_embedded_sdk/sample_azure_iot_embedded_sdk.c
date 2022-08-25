@@ -44,7 +44,7 @@ extern APP_SENSORS_DATA APP_SENSORS_data;
 extern APP_LED_CTRL appLedCtrl[APP_LED_TOTAL];
 
 // define the modelID associated with device template and the dps payload
-#define SAMPLE_PNP_MODEL_ID         "dtmi:com:Microchip:WFI32_IoT_WM;1"
+#define SAMPLE_PNP_MODEL_ID         "dtmi:com:Microchip:WFI32_IoT_WM;2"
 #define SAMPLE_PNP_DPS_PAYLOAD      "{\"modelId\":\"" SAMPLE_PNP_MODEL_ID "\"}"
 
 /* Generally, IoTHub Client and DPS Client do not run at the same time, user can use union as below to
