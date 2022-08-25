@@ -72,6 +72,12 @@ extern "C" {
                                                 + 1 \
                                                 + sizeof(WIFI_AUTH))
 
+#define PEM_HEADER "-----BEGIN CERTIFICATE-----\n"
+#define PEM_FOOTER "\n-----END CERTIFICATE-----\n"
+
+/* TODO: max size? */    
+#define CERT_MAX_SIZE 1000
+    
 extern char default_id_scope[];
 extern char default_registration_id[];
 extern char default_primary_key[];
@@ -92,7 +98,7 @@ typedef enum
     APP_PIC32MZ_W1_STATE_MOUNT_DISK=0,
     APP_PIC32MZ_W1_STATE_MSD_CONNECT,
     APP_PIC32MZ_W1_STATE_FORMAT_DISK,
-    APP_PIC32MZ_W1_STATE_CHECK_DEV_CERT_FILE,            
+    APP_PIC32MZ_W1_STATE_CHECK_CERT_FILES,            
     APP_PIC32MZ_W1_STATE_CHECK_AZURE_CFG_FILE,
     APP_PIC32MZ_W1_STATE_CHECK_WIFI_CFG_FILE,    
     APP_PIC32MZ_W1_STATE_READ_CERT_WIFI_CLOUD_CFG_FILE,    
@@ -132,13 +138,15 @@ typedef struct
     /* SYS_FS File handle */
     SYS_FS_HANDLE fileHandle;
     SYS_FS_FSTAT fileStatus;
-    /* TODO: Define any additional data used by the application. */
+    
     SYS_CONSOLE_HANDLE consoleHandle;
     DRV_HANDLE wdrvHandle;
     uint8_t ValidCrednetials;
-    /* TODO: Define any additional data used by the application. */
-    char ecc608SerialNum[64];
-    char ecc608PemCert[1024];
+    
+    /* Serial number in hex string format; 9 bytes binary */
+    char ecc608SerialNum[27];
+    
+    char ecc608DeviceCert[1024];
 } APP_PIC32MZ_W1_DATA;
 
 // *****************************************************************************

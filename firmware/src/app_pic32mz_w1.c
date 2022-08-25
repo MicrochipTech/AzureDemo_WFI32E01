@@ -410,7 +410,7 @@ void APP_PIC32MZ_W1_Tasks ( void )
                  * the handler is set */
 
                 USB_DEVICE_EventHandlerSet(app_pic32mz_w1Data.usbDeviceHandle, USBDeviceEventHandler, (uintptr_t) &app_pic32mz_w1Data);
-                app_pic32mz_w1Data.appPic32mzW1State = APP_PIC32MZ_W1_STATE_CHECK_DEV_CERT_FILE;                
+                app_pic32mz_w1Data.appPic32mzW1State = APP_PIC32MZ_W1_STATE_CHECK_CERT_FILES;                
             } else {
                 app_pic32mz_w1Data.appPic32mzW1State = APP_PIC32MZ_W1_STATE_ERROR;
             }
@@ -438,11 +438,13 @@ void APP_PIC32MZ_W1_Tasks ( void )
             break;
         }
                 
-        case APP_PIC32MZ_W1_STATE_CHECK_DEV_CERT_FILE:
+        case APP_PIC32MZ_W1_STATE_CHECK_CERT_FILES:
         {     
             extern ATCAIfaceCfg atecc608_0_init_data;
             ATCA_STATUS atcaStat;
             int status;
+            char certFileName[ATCA_SERIAL_NUM_SIZE*3+15];
+               
             /* set the next default case */
             app_pic32mz_w1Data.appPic32mzW1State = APP_PIC32MZ_W1_STATE_CHECK_AZURE_CFG_FILE;
                        
@@ -452,52 +454,174 @@ void APP_PIC32MZ_W1_Tasks ( void )
                 /* Uncomment below code to read and print ECC608's serial number */
                 uint8_t sernum[ATCA_SERIAL_NUM_SIZE], tempAsciiBuf[ATCA_SERIAL_NUM_SIZE*3];
                 size_t displen = sizeof (tempAsciiBuf);                
+                
+                size_t certificateSize = 0;
+                uint8_t certificate[CERT_MAX_SIZE];
+                size_t b64_certificateSize;
+                char b64_certificate[CERT_MAX_SIZE];
+                
+                
                 atcab_read_serial_number(sernum);
+                                    
                 memset(app_pic32mz_w1Data.ecc608SerialNum, 0, sizeof(app_pic32mz_w1Data.ecc608SerialNum));
                 atcab_bin2hex_(sernum, ATCA_SERIAL_NUM_SIZE, (char *)tempAsciiBuf, &displen, false, false, true);
-                sprintf(app_pic32mz_w1Data.ecc608SerialNum, AZURE_DEVICE_CRT_FILE_NAME_FMT, tempAsciiBuf);                
-                SYS_CONSOLE_PRINT("Serial Number of the Device: %s\r\n", tempAsciiBuf);
-
-                if(SYS_FS_FileStat(app_pic32mz_w1Data.ecc608SerialNum, &app_pic32mz_w1Data.fileStatus) != SYS_FS_RES_SUCCESS)            
+                sprintf(app_pic32mz_w1Data.ecc608SerialNum, "%s", tempAsciiBuf);                
+                SYS_CONSOLE_PRINT("Serial Number of the Device: %s\r\n", app_pic32mz_w1Data.ecc608SerialNum);
+                                
+            
+                /* Read the device certificate from ECC608 and store it to filesystem in PEM format */
+                sprintf(certFileName, "sn%s_device.pem", app_pic32mz_w1Data.ecc608SerialNum);                
+                if(SYS_FS_FileStat(certFileName, &app_pic32mz_w1Data.fileStatus) != SYS_FS_RES_SUCCESS)            
                 {                               
-                    /*Read device cert signer by the signer above*/
-                    size_t deviceCertSize = 0;
-                    status = tng_atcacert_max_device_cert_size(&deviceCertSize);
+                    status = tng_atcacert_max_device_cert_size(&certificateSize);
                     if (ATCA_SUCCESS != status) {
-                        SYS_CONSOLE_PRINT("tng_atcacert_max_signer_cert_size Failed \r\n");                     
+                        SYS_CONSOLE_PRINT("tng_atcacert_max_device_cert_size Failed \r\n");                     
                     }
-
-                    uint8_t deviceCert[deviceCertSize];
-                    status = tng_atcacert_read_device_cert((uint8_t*) &deviceCert, &deviceCertSize, NULL);
+                    if (certificateSize > CERT_MAX_SIZE) {
+                        /* TODO: */
+                        app_pic32mz_w1Data.appPic32mzW1State = APP_PIC32MZ_W1_STATE_ERROR;
+                    }
+                    status = tng_atcacert_read_device_cert((uint8_t*) &certificate, &certificateSize, NULL);
                     if (ATCA_SUCCESS != status) {
                         SYS_CONSOLE_PRINT("tng_atcacert_read_device_cert Failed (%x) \r\n", status);                        
                     }
                     else
                     {                                                      
-                        app_pic32mz_w1Data.fileHandle = SYS_FS_FileOpen(app_pic32mz_w1Data.ecc608SerialNum, SYS_FS_FILE_OPEN_WRITE);              
-                        if(app_pic32mz_w1Data.fileHandle != SYS_FS_HANDLE_INVALID)
-                        {                            
-                            memset(fileBuffer, 0, sizeof(fileBuffer));
-                            sprintf(fileBuffer, APP_USB_MSD_WIFI_CONFIG_DATA_TEMPLATE, APP_STA_DEFAULT_SSID, APP_STA_DEFAULT_PASSPHRASE, APP_STA_DEFAULT_AUTH);
-                            if(SYS_FS_FileWrite(app_pic32mz_w1Data.fileHandle, deviceCert, deviceCertSize) == deviceCertSize)                              
-                            { 
-                                SYS_FS_FileSync(app_pic32mz_w1Data.fileHandle);
-                                SYS_CONSOLE_PRINT("Default device certificate saved!\n");                         
-                            }
-                            else
-                            {                                                
-                                SYS_CONSOLE_PRINT("Device certificate file write fail!\n");
+                        app_pic32mz_w1Data.fileHandle = SYS_FS_FileOpen(certFileName, SYS_FS_FILE_OPEN_WRITE);
+                        if (app_pic32mz_w1Data.fileHandle != SYS_FS_HANDLE_INVALID) {
+                            
+                            atcab_base64encode(certificate, certificateSize, b64_certificate, &b64_certificateSize);
+
+                            if (SYS_FS_FileWrite(app_pic32mz_w1Data.fileHandle, PEM_HEADER, sizeof (PEM_HEADER) - 1) != (sizeof (PEM_HEADER) - 1)) {
+                                SYS_CONSOLE_PRINT("Device certificate file write fail!\r\n");
                                 app_pic32mz_w1Data.appPic32mzW1State = APP_PIC32MZ_W1_STATE_ERROR;
                             }
-                            SYS_FS_FileClose(app_pic32mz_w1Data.fileHandle); 
+
+                            if (SYS_FS_FileWrite(app_pic32mz_w1Data.fileHandle, b64_certificate, b64_certificateSize) == b64_certificateSize) {
+                                SYS_FS_FileSync(app_pic32mz_w1Data.fileHandle);
+                                SYS_CONSOLE_PRINT("Device certificate saved in PEM format!\r\n");
+                            } else {
+                                SYS_CONSOLE_PRINT("Device certificate file write fail!\r\n");
+                                app_pic32mz_w1Data.appPic32mzW1State = APP_PIC32MZ_W1_STATE_ERROR;
+                            }
+
+                            if (SYS_FS_FileWrite(app_pic32mz_w1Data.fileHandle, PEM_FOOTER, sizeof (PEM_FOOTER) - 1) != (sizeof (PEM_FOOTER) - 1)) {
+                                SYS_CONSOLE_PRINT("Device certificate file write fail!\r\n");
+                                app_pic32mz_w1Data.appPic32mzW1State = APP_PIC32MZ_W1_STATE_ERROR;
+                            }
+
+                            SYS_FS_FileClose(app_pic32mz_w1Data.fileHandle);
                         }
                         else
                         {
                             app_pic32mz_w1Data.appPic32mzW1State = APP_PIC32MZ_W1_STATE_ERROR;
-                            SYS_CONSOLE_PRINT("File open failed!\n");
+                            SYS_CONSOLE_PRINT("File open failed!\r\n");
                         } 
-                    }                            
-                }                
+                    }
+                }
+                
+                /* Read the signer certificate from ECC608 and store it to filesystem in PEM format */
+                sprintf(certFileName, "sn%s_signer.pem", app_pic32mz_w1Data.ecc608SerialNum);                
+                if(SYS_FS_FileStat(certFileName, &app_pic32mz_w1Data.fileStatus) != SYS_FS_RES_SUCCESS)            
+                {                               
+                    status = tng_atcacert_max_device_cert_size(&certificateSize);
+                    if (ATCA_SUCCESS != status) {
+                        SYS_CONSOLE_PRINT("tng_atcacert_max_device_cert_size Failed \r\n");                     
+                    }
+                    if (certificateSize > CERT_MAX_SIZE) {
+                        /* TODO: */
+                        app_pic32mz_w1Data.appPic32mzW1State = APP_PIC32MZ_W1_STATE_ERROR;
+                    }
+                    status = tng_atcacert_read_signer_cert((uint8_t*) &certificate, &certificateSize);
+                    if (ATCA_SUCCESS != status) {
+                        SYS_CONSOLE_PRINT("tng_atcacert_read_signer_cert Failed (%x) \r\n", status);                        
+                    }
+                    else
+                    {                                                      
+                        app_pic32mz_w1Data.fileHandle = SYS_FS_FileOpen(certFileName, SYS_FS_FILE_OPEN_WRITE);
+                        if (app_pic32mz_w1Data.fileHandle != SYS_FS_HANDLE_INVALID) {
+                            
+                            atcab_base64encode(certificate, certificateSize, b64_certificate, &b64_certificateSize);
+
+                            if (SYS_FS_FileWrite(app_pic32mz_w1Data.fileHandle, PEM_HEADER, sizeof (PEM_HEADER) - 1) != (sizeof (PEM_HEADER) - 1)) {
+                                SYS_CONSOLE_PRINT("Signer certificate file write fail!\r\n");
+                                app_pic32mz_w1Data.appPic32mzW1State = APP_PIC32MZ_W1_STATE_ERROR;
+                            }
+
+                            if (SYS_FS_FileWrite(app_pic32mz_w1Data.fileHandle, b64_certificate, b64_certificateSize) == b64_certificateSize) {
+                                SYS_FS_FileSync(app_pic32mz_w1Data.fileHandle);
+                                SYS_CONSOLE_PRINT("Signer certificate saved in PEM format!\r\n");
+                            } else {
+                                SYS_CONSOLE_PRINT("Signer certificate file write fail!\r\n");
+                                app_pic32mz_w1Data.appPic32mzW1State = APP_PIC32MZ_W1_STATE_ERROR;
+                            }
+
+                            if (SYS_FS_FileWrite(app_pic32mz_w1Data.fileHandle, PEM_FOOTER, sizeof (PEM_FOOTER) - 1) != (sizeof (PEM_FOOTER) - 1)) {
+                                SYS_CONSOLE_PRINT("Signer certificate file write fail!\r\n");
+                                app_pic32mz_w1Data.appPic32mzW1State = APP_PIC32MZ_W1_STATE_ERROR;
+                            }
+
+                            SYS_FS_FileClose(app_pic32mz_w1Data.fileHandle);
+                        }
+                        else
+                        {
+                            app_pic32mz_w1Data.appPic32mzW1State = APP_PIC32MZ_W1_STATE_ERROR;
+                            SYS_CONSOLE_PRINT("File open failed!\r\n");
+                        } 
+                    }
+                }
+
+                  /* Read the root certificate from ECC608 and store it to filesystem in PEM format */
+                sprintf(certFileName, "sn%s_root.pem", app_pic32mz_w1Data.ecc608SerialNum);                
+                if(SYS_FS_FileStat(certFileName, &app_pic32mz_w1Data.fileStatus) != SYS_FS_RES_SUCCESS)            
+                {                               
+                    status = tng_atcacert_max_device_cert_size(&certificateSize);
+                    if (ATCA_SUCCESS != status) {
+                        SYS_CONSOLE_PRINT("tng_atcacert_max_device_cert_size Failed \r\n");                     
+                    }
+                    if (certificateSize > CERT_MAX_SIZE) {
+                        /* TODO: */
+                        app_pic32mz_w1Data.appPic32mzW1State = APP_PIC32MZ_W1_STATE_ERROR;
+                    }
+                    status = tng_atcacert_root_cert((uint8_t*) &certificate, &certificateSize);
+                    if (ATCA_SUCCESS != status) {
+                        SYS_CONSOLE_PRINT("tng_atcacert_root_cert Failed (%x) \r\n", status);                        
+                    }
+                    else
+                    {                                                      
+                        app_pic32mz_w1Data.fileHandle = SYS_FS_FileOpen(certFileName, SYS_FS_FILE_OPEN_WRITE);
+                        if (app_pic32mz_w1Data.fileHandle != SYS_FS_HANDLE_INVALID) {
+                            
+                            atcab_base64encode(certificate, certificateSize, b64_certificate, &b64_certificateSize);
+
+                            if (SYS_FS_FileWrite(app_pic32mz_w1Data.fileHandle, PEM_HEADER, sizeof (PEM_HEADER) - 1) != (sizeof (PEM_HEADER) - 1)) {
+                                SYS_CONSOLE_PRINT("Root certificate file write fail!\r\n");
+                                app_pic32mz_w1Data.appPic32mzW1State = APP_PIC32MZ_W1_STATE_ERROR;
+                            }
+
+                            if (SYS_FS_FileWrite(app_pic32mz_w1Data.fileHandle, b64_certificate, b64_certificateSize) == b64_certificateSize) {
+                                SYS_FS_FileSync(app_pic32mz_w1Data.fileHandle);
+                                SYS_CONSOLE_PRINT("Root certificate saved in PEM format!\r\n");
+                            } else {
+                                SYS_CONSOLE_PRINT("Root certificate file write fail!\r\n");
+                                app_pic32mz_w1Data.appPic32mzW1State = APP_PIC32MZ_W1_STATE_ERROR;
+                            }
+
+                            if (SYS_FS_FileWrite(app_pic32mz_w1Data.fileHandle, PEM_FOOTER, sizeof (PEM_FOOTER) - 1) != (sizeof (PEM_FOOTER) - 1)) {
+                                SYS_CONSOLE_PRINT("Root certificate file write fail!\r\n");
+                                app_pic32mz_w1Data.appPic32mzW1State = APP_PIC32MZ_W1_STATE_ERROR;
+                            }
+
+                            SYS_FS_FileClose(app_pic32mz_w1Data.fileHandle);
+                        }
+                        else
+                        {
+                            app_pic32mz_w1Data.appPic32mzW1State = APP_PIC32MZ_W1_STATE_ERROR;
+                            SYS_CONSOLE_PRINT("File open failed!\r\n");
+                        } 
+                    }
+                }
+              
                 atcab_release();             
             }
             else
