@@ -111,9 +111,11 @@ typedef struct
 // *****************************************************************************
 
 void APP_SENSORS_init(void);
-void APP_SENSORS_write_MSB_b4_LSB(uint8_t addr, uint16_t reg, uint16_t val);
-void APP_SENSORS_write_LSB_b4_MSB(uint8_t addr, uint16_t reg, uint16_t val);
-void APP_SENSORS_read(uint8_t addr, uint16_t reg, uint8_t size);
+void APP_SENSORS_writeByte(uint8_t addr, uint8_t val);
+void APP_SENSORS_writeWord_MSB_b4_LSB(uint8_t addr, uint16_t reg, uint16_t val);
+void APP_SENSORS_writeWord_LSB_b4_MSB(uint8_t addr, uint16_t reg, uint16_t val);
+void APP_SENSORS_justRead(uint8_t addr, uint8_t size);
+void APP_SENSORS_writeRead(uint8_t addr, uint16_t reg, uint8_t size);
 int16_t APP_SENSORS_readTemperature(void);
 uint32_t APP_SENSORS_readLight(void);
 

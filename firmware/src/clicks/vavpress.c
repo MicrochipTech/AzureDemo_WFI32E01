@@ -33,15 +33,42 @@ vavpress_return_value_t VAVPRESS_status;
 vavpress_sensor_param_data_t VAVPRESS_param_data;
 vavpress_el_signature_data_t VAVPRESS_el_signature_data;
 
+int16_t VAVPRESS_2sCompToDecimal(uint16_t twos_compliment_val)
+{
+    // [0x0000; 0x7FFF] corresponds to [0; 32,767]
+    // [0x8000; 0xFFFF] corresponds to [-32,768; -1]
+    // int16_t has the range [-32,768; 32,767]
+
+    uint16_t sign_mask = 0x8000;
+
+    // if positive
+    if ( (twos_compliment_val & sign_mask) == 0 ) {
+        return twos_compliment_val;
+    //  if negative
+    } else {
+        // invert all bits, add one, and make negative
+        return -(~twos_compliment_val + 1);
+    }
+}
+
+uint16_t VAVPRESS_reorderBytes(uint16_t word)
+{
+    uint16_t bytes_swapped;
+    
+    bytes_swapped = ( ((word << 8 ) & 0xFF00) | ((word >> 8) & 0x00FF) );
+    
+    return (bytes_swapped);
+}
+
 void VAVPRESS_init(void)
 {
     vavpress_return_value_t error_code;
     
+    APP_SENSORS_writeByte(VAVPRESS_I2CADDR_0, VAVPRESS_SET_CMD_RESET_FIRMWARE);
     error_code = VAVPRESS_setDefaultConfig();
     if (error_code == VAVPRESS_OK)
     {
         VAVPRESS_status = VAVPRESS_OK;
-        VAVPRESS_getElectronicSignature( &VAVPRESS_el_signature_data );
         //printf("--------------------------------\r\n" );
         //printf(" Firmware Version : %.3f        \r\n", VAVPRESS_el_signature_data.firmware_version);
         //printf(" Pressure Range   : %d Pa       \r\n", VAVPRESS_el_signature_data.pressure_range);
@@ -64,6 +91,7 @@ void VAVPRESS_init(void)
         VAVPRESS_status = VAVPRESS_ERROR;
         printf("[VAV Click] LMIS025B was not found during initialization\r\n");
     }
+    APP_SENSORS_writeByte(VAVPRESS_I2CADDR_0, VAVPRESS_SET_CMD_START_PRESSURE_CONVERSION);
 }
 
 vavpress_return_value_t VAVPRESS_setDefaultConfig(void)
@@ -82,40 +110,14 @@ vavpress_return_value_t VAVPRESS_setDefaultConfig(void)
 
 vavpress_return_value_t VAVPRESS_setDefaultSensorParams(vavpress_sensor_param_data_t *param_data)
 {
-    vavpress_el_signature_data_t el_signature_data;
-    vavpress_return_value_t error_flag = VAVPRESS_getElectronicSignature(&el_signature_data);
+    vavpress_return_value_t error_flag = VAVPRESS_getElectronicSignature(&VAVPRESS_el_signature_data);
     
     param_data->scale_factor_temp = 72;
-    param_data->scale_factor_press = el_signature_data.scale_factor;
+    param_data->scale_factor_press = VAVPRESS_el_signature_data.scale_factor;
     param_data->readout_at_known_temperature = 105;
     param_data->known_temperature_c = 23.1;
     
     return error_flag;
-}
-
-vavpress_return_value_t VAVPRESS_getReadoutData(int16_t *press_data, int16_t *temp_data)
-{
-    int16_t tmp = 0;
-
-    APP_SENSORS_read(VAVPRESS_I2CADDR_0, VAVPRESS_SET_CMD_START_PRESSURE_CONVERSION, 8);
-        
-    tmp = APP_SENSORS_data.i2c.rxBuffer[1];
-    tmp <<= 9;
-    tmp |= APP_SENSORS_data.i2c.rxBuffer[0];
-    *press_data = tmp >> 1;
-    tmp = APP_SENSORS_data.i2c.rxBuffer[3];
-    tmp <<= 8;
-    tmp |= APP_SENSORS_data.i2c.rxBuffer[2];
-    *temp_data = tmp;
-
-    if (tmp == 0)
-    {
-        return VAVPRESS_ERROR;        
-    }
-    else
-    {
-        return VAVPRESS_OK;
-    }
 }
 
 vavpress_return_value_t VAVPRESS_getSensorReadings(vavpress_sensor_param_data_t *param_data, float *diff_press, float *temperature)
@@ -124,19 +126,21 @@ vavpress_return_value_t VAVPRESS_getSensorReadings(vavpress_sensor_param_data_t 
     int16_t temp_data;
     float tmp;
 
-    vavpress_return_value_t error_flag = VAVPRESS_getReadoutData (&press_data, &temp_data);
-    
+    APP_SENSORS_justRead(VAVPRESS_I2CADDR_0, EXTENDED_READOUT_NUMBYTES);
+
+    press_data = VAVPRESS_2sCompToDecimal((int16_t)APP_SENSORS_data.i2c.rxBuffer[0]);
     tmp = ( float ) press_data;
     tmp /= ( float ) param_data->scale_factor_press;
     *diff_press = tmp;
-    
+  
+    temp_data = VAVPRESS_2sCompToDecimal((int16_t)APP_SENSORS_data.i2c.rxBuffer[1]);
     tmp = ( float ) temp_data;
     tmp -= ( float ) param_data->readout_at_known_temperature;
     tmp /= ( float ) param_data->scale_factor_temp;
     tmp += param_data->known_temperature_c; 
     *temperature = tmp;
 
-    return error_flag;
+    return VAVPRESS_OK;
 }
 
 vavpress_return_value_t VAVPRESS_getElectronicSignature(vavpress_el_signature_data_t *el_signature_data)
@@ -145,7 +149,7 @@ vavpress_return_value_t VAVPRESS_getElectronicSignature(vavpress_el_signature_da
     uint16_t tmp = 0;
     float tmp_f;
 
-    APP_SENSORS_read(VAVPRESS_I2CADDR_0, VAVPRESS_SET_CMD_RETRIEVE_ELECTRONIC_SIGNATURE, EL_SIGNATURE_NUMBYTES);
+    APP_SENSORS_writeRead(VAVPRESS_I2CADDR_0, VAVPRESS_SET_CMD_RETRIEVE_ELECTRONIC_SIGNATURE, EL_SIGNATURE_NUMBYTES);
     memcpy(rx_buf, APP_SENSORS_data.i2c.rxBuffer, EL_SIGNATURE_NUMBYTES);
     
     if ( rx_buf[ 1 ] < 10 ) {

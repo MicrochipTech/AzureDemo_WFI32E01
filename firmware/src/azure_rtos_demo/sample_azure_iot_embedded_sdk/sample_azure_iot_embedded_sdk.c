@@ -604,7 +604,7 @@ void sample_telemetry_thread_entry(ULONG parameter)
     NX_PARAMETER_NOT_USED(parameter);
 
     APP_SENSORS_init();
-
+    
     tx_thread_sleep(AZ_telemetryInterval * NX_IP_PERIODIC_RATE);
 
 #ifdef CLICK_ULTRALOWPRESS
@@ -620,6 +620,7 @@ void sample_telemetry_thread_entry(ULONG parameter)
     }
     tx_thread_sleep(100);
 #endif /* CLICK_ULTRALOWPRESS */
+
 #ifdef CLICK_VAVPRESS
     printf("<VAV Click> Initializing LMIS025B...\r\n");
     VAVPRESS_init();
@@ -658,9 +659,9 @@ void sample_telemetry_thread_entry(ULONG parameter)
     while (loop)
     {
 #ifdef WFI32IOT_SENSORS
-        printf("\r\n<WFI32-IoT> Reading temperature & light sensors...\r\n");
+        //printf("\r\n<WFI32-IoT> Reading temperature & light sensors...\r\n");
         buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
-                "{\"temperature\": %u, \"light\": %u}",
+                "{\"WFI32IoT_temperature\": %u, \"WFI32IoT_light\": %u}",
                 APP_SENSORS_readTemperature(), APP_SENSORS_readLight() );
         send_telemetry_message(parameter, (UCHAR *)buffer, buffer_length);
 #endif /* WFI32IOT_SENSORS */
@@ -669,22 +670,22 @@ void sample_telemetry_thread_entry(ULONG parameter)
         {
             if (ULTRALOWPRESS_isReady())
             {
-                printf("\r\n<ULP Click> STATUS [ %x ] ", APP_SENSORS_data.i2c.rxBuffer[0]);
+                //printf("\r\n<ULP Click> STATUS [ %x ] ", APP_SENSORS_data.i2c.rxBuffer[0]);
                 ULTRALOWPRESS_clearStatus();
                 temperature = ULTRALOWPRESS_getTemperature();
-                printf("DSP_T [ %x ] ", APP_SENSORS_data.i2c.rxBuffer[0]);
+                //printf("DSP_T [ %x ] ", APP_SENSORS_data.i2c.rxBuffer[0]);
                 pressure = ULTRALOWPRESS_getPressure();     
-                printf("DSP_S [ %x ]\r\n", APP_SENSORS_data.i2c.rxBuffer[0]);
+                //printf("DSP_S [ %x ]\r\n", APP_SENSORS_data.i2c.rxBuffer[0]);
                 buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
-                        "{\"SM8436_temperature\": %.2f, \"SM8436_pressure\": %.2f}",
+                        "{\"ULP_temperature\": %.2f, \"ULP_pressure\": %.2f}",
                         temperature, pressure );                
                 send_telemetry_message(parameter, (UCHAR *)buffer, buffer_length);
             }
             else
             {
-                printf("\r\n<ULP Click> SM8436 is not ready...\r\n");
+                //printf("\r\n<ULP Click> SM8436 is not ready...\r\n");
             }
-            tx_thread_sleep(500);
+            //tx_thread_sleep(500);
         }
 #endif /* CLICK_ULTRALOWPRESS */
 #ifdef CLICK_VAVPRESS
@@ -692,12 +693,13 @@ void sample_telemetry_thread_entry(ULONG parameter)
         {
             if (VAVPRESS_getSensorReadings(&VAVPRESS_param_data, &pressure, &temperature) == VAVPRESS_OK)
             {
-                printf("\r\n<VAV Click> Results from SOC (command 0x21) = [ %x | %x | %x | %x ]\r\n",
-                        APP_SENSORS_data.i2c.rxBuffer[0], APP_SENSORS_data.i2c.rxBuffer[1],
-                        APP_SENSORS_data.i2c.rxBuffer[2], APP_SENSORS_data.i2c.rxBuffer[3]);
-                tx_thread_sleep(500);
+                //printf("\r\n<VAV Click> Extended data readout ( pressure | temperature ) = [ %x (%i) | %x (%i) ]\r\n",
+                        //APP_SENSORS_data.i2c.rxBuffer[0], VAVPRESS_2sCompToDecimal(APP_SENSORS_data.i2c.rxBuffer[0]),
+                        //APP_SENSORS_data.i2c.rxBuffer[1], VAVPRESS_2sCompToDecimal(APP_SENSORS_data.i2c.rxBuffer[1])
+                      //);
+                //tx_thread_sleep(500);
                 buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
-                        "{\"LMIS025B_temperature\": %.2f, \"LMIS025B_pressure\": %.2f}",
+                        "{\"VAV_temperature\": %.2f, \"VAV_pressure\": %.2f}",
                         temperature, pressure);              
                 send_telemetry_message(parameter, (UCHAR *)buffer, buffer_length);      
             }
