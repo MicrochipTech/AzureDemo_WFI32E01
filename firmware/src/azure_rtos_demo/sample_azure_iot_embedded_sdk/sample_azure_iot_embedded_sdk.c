@@ -41,6 +41,11 @@ volatile uint32_t AZ_systemRebootTimer = 0;
 /* External variables used by the application  */
 extern APP_CONNECT_STATUS appConnectStatus;
 extern APP_SENSORS_DATA APP_SENSORS_data;
+extern APP_LED_CTRL appLedCtrl[APP_LED_TOTAL];
+
+// define the modelID associated with device template and the dps payload
+#define SAMPLE_PNP_MODEL_ID         "dtmi:com:Microchip:WFI32_IoT_WM;1"
+#define SAMPLE_PNP_DPS_PAYLOAD      "{\"modelId\":\"" SAMPLE_PNP_MODEL_ID "\"}"
 
 /* Generally, IoTHub Client and DPS Client do not run at the same time, user can use union as below to
    share the memory between IoTHub Client and DPS Client.
@@ -110,11 +115,16 @@ static const CHAR *sample_properties[MAX_PROPERTY_COUNT][2] = {{"propertyA", "va
 static CHAR method_response_payload[] = "{\"status\": \"OK\"}";
 static TX_THREAD sample_direct_method_thread;
 static ULONG sample_direct_method_thread_stack[SAMPLE_STACK_SIZE / sizeof(ULONG)];
+az_result process_reboot_command(
+    az_span   payload_span,
+    az_span   response_span,
+    az_span*  out_response_span,
+    uint16_t* out_response_status);
 #endif /* DISABLE_DIRECT_METHOD_SAMPLE */
 
 #ifndef DISABLE_DEVICE_TWIN_SAMPLE
 extern twin_properties_t twin_properties;
-static CHAR fixed_reported_properties[] = "{\"sample_report\": \"OK\"}";
+//static CHAR fixed_reported_properties[] = "{\"sample_report\": \"OK\"}";
 static TX_THREAD sample_device_twin_thread;
 static ULONG sample_device_twin_thread_stack[SAMPLE_STACK_SIZE / sizeof(ULONG)];
 #endif /* DISABLE_DEVICE_TWIN_SAMPLE */
@@ -169,7 +179,90 @@ static VOID printf_packet(NX_PACKET *packet_ptr)
         packet_ptr = packet_ptr -> nx_packet_next;
     }
 }
+static VOID sprintf_packet(char* buf, NX_PACKET *packet_ptr)
+{
+    while (packet_ptr != NX_NULL)
+    {
+        sprintf(buf, "%.*s", (INT)(packet_ptr -> nx_packet_append_ptr - packet_ptr -> nx_packet_prepend_ptr),
+               (CHAR *)packet_ptr -> nx_packet_prepend_ptr);
+        packet_ptr = packet_ptr -> nx_packet_next;
+    }
+}
+static bool find_property_value(char*buf, const char* param, char*retStr )
+{
+    /* ret true parameter found, false parameter not found
+     *   if found, retStr will have resulting parameter string
+     *   else retStr will not be modified
+     */
+    
+    int rxCount=0;
+    char * ptrInterval = strstr(buf, param);
+    if (ptrInterval == 0)
+    {
+        return false;
+    }
+    else
+    {
+        ptrInterval += strlen(param)+1;
+        while(*ptrInterval!=',' && *ptrInterval!='}')
+        {
+            retStr[rxCount++] = *ptrInterval++;
+        }
+        retStr[rxCount] = 0;
+        return true;
+    }
+}
 
+#define PROPERTY_TELEMETRY_INTERVAL "\"telemetryInterval\""
+#define PROPERTY_LEDY "\"led_y\""
+#define PROPERTY_VERSION_FIELD "\"$version\""
+
+/* static int parse_packet_data(char* packetData, char* responseProperty, int responseSize)
+ 
+   packetData is a JSON (input) character array from proper write
+   responseProperty is the (output) char array to return the response data
+   responseSize (input) is the size of responseProperty array
+   property_version (output) is the version from the packet.
+  
+   returns responseLength (int), with the size of response.  Will return 0 if no data was found
+ */
+static int parse_packet_data(char* packetData, char* responseProperty, int responseSize)
+{    
+    bool bPropertyFound = false;
+    char propertyValue[30];
+    char tempStr[60];
+    int responseLength = 0;
+    
+    memset(responseProperty, 0, responseSize);
+    responseProperty[0] = '{';
+    bPropertyFound = find_property_value(packetData, PROPERTY_TELEMETRY_INTERVAL, propertyValue);
+    if(bPropertyFound == true)
+    {
+        //printf("%s = %s\r\n", PROPERTY_TELEMETRY_INTERVAL, propertyValue);
+        AZ_telemetryInterval = atoi(propertyValue);
+        sprintf(tempStr, "%s: %s", PROPERTY_TELEMETRY_INTERVAL, propertyValue);
+        responseLength += strlen(tempStr);
+        strcat(responseProperty, tempStr);            
+    } 
+    
+    bPropertyFound = find_property_value(packetData, PROPERTY_LEDY, propertyValue);
+    if(bPropertyFound == true)
+    {
+        if(responseLength>0)
+        {
+            strcat(responseProperty,", ");
+        }
+        //printf("%s = %s\r\n", PROPERTY_LEDY, propertyValue);
+        appLedCtrl[APP_LED_YELLOW].mode = atoi(propertyValue);
+        sprintf(tempStr, "%s: %s", PROPERTY_LEDY, propertyValue);
+        responseLength += strlen(tempStr);
+        strcat(responseProperty, tempStr);            
+    } 
+    
+
+    strcat(responseProperty, "}");
+    return strlen(responseProperty);
+}
 static VOID connection_status_callback(NX_AZURE_IOT_HUB_CLIENT *hub_client_ptr, UINT status)
 {
     NX_PARAMETER_NOT_USED(hub_client_ptr);
@@ -231,7 +324,17 @@ UINT iothub_device_id_length = sizeof(DEVICE_ID) - 1;
         printf("Failed on nx_azure_iot_hub_client_initialize!: error code = 0x%08x\r\n", status);
         return(status);
     }
-
+    
+/* Set the model id.  */
+#ifdef SAMPLE_PNP_MODEL_ID
+    if ((status = nx_azure_iot_hub_client_model_id_set(iothub_client_ptr,
+                                                       (const UCHAR *)SAMPLE_PNP_MODEL_ID,
+                                                       sizeof(SAMPLE_PNP_MODEL_ID) - 1)))
+    {
+        printf("Failed on nx_azure_iot_hub_client_model_id_set!: error code = 0x%08x\r\n", status);
+    }
+#endif
+    
     /* Add more CA certificates.  */
     if ((status = nx_azure_iot_hub_client_trusted_cert_add(iothub_client_ptr, &root_ca_cert_2)))
     {
@@ -308,6 +411,7 @@ static void log_callback(az_log_classification classification, UCHAR *msg, UINT 
     if (classification == AZ_LOG_IOT_AZURERTOS)
     {
         printf("%.*s", msg_len, (CHAR *)msg);
+       printf("%.*s", msg_len, (CHAR *)msg);
     }
 }
 
@@ -517,7 +621,15 @@ UINT status;
         printf("Failed on nx_azure_iot_hub_client_symmetric_key_set!: error code = 0x%08x\r\n", status);
     }
 #endif /* USE_DEVICE_CERTIFICATE */
-
+    
+    /* send model ID to DPS if set*/
+#ifdef SAMPLE_PNP_DPS_PAYLOAD
+    else if ((status = nx_azure_iot_provisioning_client_registration_payload_set(&prov_client, (UCHAR *)SAMPLE_PNP_DPS_PAYLOAD,
+                                                                                 sizeof(SAMPLE_PNP_DPS_PAYLOAD) - 1)))
+    {
+        printf("Failed on nx_azure_iot_provisioning_client_registration_payload_set!: error code = 0x%08x\r\n", status);
+    }
+#endif
     /* Register device */
     else if ((status = nx_azure_iot_provisioning_client_register(&prov_client, NX_WAIT_FOREVER)))
     {
@@ -599,8 +711,7 @@ void sample_telemetry_thread_entry(ULONG parameter)
     UINT buffer_length;
     UCHAR loop = NX_TRUE;
     uint32_t SM8436_serialNumber;
-    float temperature, pressure;
-    
+    float temperature, pressure;    
     NX_PARAMETER_NOT_USED(parameter);
 
     APP_SENSORS_init();
@@ -750,6 +861,26 @@ void sample_c2d_thread_entry(ULONG parameter)
 #endif /* DISABLE_C2D_SAMPLE */
 
 #ifndef DISABLE_DIRECT_METHOD_SAMPLE
+
+int reboot_command(char* payload)
+{
+    int payload_size = strlen(payload);
+    int delay = 0;
+    // example payload: "PT5S", quotes are transmitted.  
+    // So 'P' is character 1 in string instead of 0 
+    if(payload[1] == 'P' && payload[2] == 'T' && payload[payload_size-2] == 'S')
+    {  // payload is expected format, convert delay to integer
+        payload[payload_size-2] = 0;
+        delay = (uint32_t) atoi(&payload[3]);
+        payload[payload_size-2] = 'S';
+        printf("reboot in %d seconds...\r\n", delay);
+    }
+    else
+    {
+        printf("invalid reboot payload, expected format \"PT5S\", for 5 second delay\r\n");
+    }
+    return delay;
+}
 void sample_direct_method_thread_entry(ULONG parameter)
 {
     UCHAR loop = NX_TRUE;
@@ -759,6 +890,8 @@ void sample_direct_method_thread_entry(ULONG parameter)
     const UCHAR *method_name_ptr;
     USHORT context_length;
     VOID *context_ptr;
+    char command[32];
+    char payload[64];
 
     NX_PARAMETER_NOT_USED(parameter);
 
@@ -773,11 +906,18 @@ void sample_direct_method_thread_entry(ULONG parameter)
             printf("Direct method receive failed!: error code = 0x%08x\r\n", status);
             break;
         }
-
         printf("Receive method call: %.*s, with payload:", (INT)method_name_length, (CHAR *)method_name_ptr);
-        printf_packet(packet_ptr);
-        printf("\r\n");
+        sprintf_packet(payload, packet_ptr);
+        printf("%s\r\n", payload);
 
+        memset(command, 0, sizeof(command));
+        memcpy(command, method_name_ptr, method_name_length);
+
+        if (strcmp(command, "reboot") == 0)
+        {  // if command is reboot, process payload to gather delay
+            AZ_systemRebootTimer = reboot_command(payload);
+        }
+        
         if ((status = nx_azure_iot_hub_client_direct_method_message_response(&iothub_client, 200 /* method status */,
                                                                              context_ptr, context_length,
                                                                              (UCHAR *)method_response_payload, sizeof(method_response_payload) - 1,
@@ -802,6 +942,12 @@ void sample_device_twin_thread_entry(ULONG parameter)
     UINT response_status;
     UINT request_id;
     ULONG reported_property_version;
+    char responseProperty[120];
+    int responsePropertyLen;
+    char receivedProperties[100];
+    char propertyValue[30];
+    
+    bool bPropertyFound;
 
     NX_PARAMETER_NOT_USED(parameter);
 
@@ -820,8 +966,18 @@ void sample_device_twin_thread_entry(ULONG parameter)
     }
 
     printf("Receive twin properties :");
-    printf_packet(packet_ptr);
-    printf("\r\n");
+    sprintf_packet(receivedProperties, packet_ptr);
+    printf("%s\r\n", receivedProperties);
+    bPropertyFound = find_property_value(receivedProperties, "\"telemetryInterval\"", propertyValue);
+    if(bPropertyFound == true)
+    {
+        //printf("%s = %s\r\n", "\"telemetryInterval\"", propertyValue);
+        AZ_telemetryInterval = atoi(propertyValue);        
+    }
+    else
+    {
+        printf("\"telemetryInterval\" not detected\r\n");
+    }
 
     nx_packet_release(packet_ptr);
 
@@ -836,13 +992,26 @@ void sample_device_twin_thread_entry(ULONG parameter)
         }
 
         printf("Receive desired property call: ");
-        printf_packet(packet_ptr);
-        printf("\r\n");
+        // todo decode packet.....
 
+        sprintf_packet(receivedProperties, packet_ptr);
+        printf("%s\r\n", receivedProperties);
+        
+        responsePropertyLen = parse_packet_data(receivedProperties, responseProperty, sizeof(responseProperty));
+        bPropertyFound = find_property_value(receivedProperties, PROPERTY_VERSION_FIELD, propertyValue);
+        if(bPropertyFound == true)
+        {
+            reported_property_version = atoi(propertyValue);
+        }
+        if (responsePropertyLen > 2)
+        {
+            response_status = 200;
+        }
+        printf("%s\r\n", responseProperty);
         nx_packet_release(packet_ptr);
 
         if ((status = nx_azure_iot_hub_client_device_twin_reported_properties_send(&iothub_client,
-                                                                                   (UCHAR *)fixed_reported_properties, sizeof(fixed_reported_properties) - 1,
+                                                                                   (UCHAR *)responseProperty, responsePropertyLen,
                                                                                    &request_id, &response_status,
                                                                                    &reported_property_version,
                                                                                    NX_WAIT_FOREVER)))
