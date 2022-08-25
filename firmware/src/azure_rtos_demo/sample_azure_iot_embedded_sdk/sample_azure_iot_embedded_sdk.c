@@ -12,6 +12,7 @@
 
 #include "nx_api.h"
 #include "nx_azure_iot_hub_client.h"
+#include "nx_azure_iot_hub_client_properties.h"
 #include "nx_azure_iot_provisioning_client.h"
 
 /* These are sample files, user can build their own certificate and ciphersuites.  */
@@ -110,6 +111,11 @@ static ULONG sample_c2d_thread_stack[SAMPLE_STACK_SIZE / sizeof(ULONG)];
 static const CHAR *sample_properties[MAX_PROPERTY_COUNT][2] = {{"propertyA", "valueA"},
                                                                {"propertyB", "valueB"}};
 #endif /* !defined(DISABLE_TELEMETRY_SAMPLE) && !defined(DISABLE_C2D_SAMPLE) */
+
+// property names for LEDs
+static const CHAR sample_prop_name_LED_blue[] = "led_b";
+static const CHAR sample_prop_name_LED_green[] = "led_g";
+static const CHAR sample_prop_name_LED_red[] = "led_r";
 
 #ifndef DISABLE_DIRECT_METHOD_SAMPLE
 static CHAR method_response_payload[] = "{\"status\": \"OK\"}";
@@ -262,6 +268,71 @@ static int parse_packet_data(char* packetData, char* responseProperty, int respo
 
     strcat(responseProperty, "}");
     return strlen(responseProperty);
+}
+static void sample_reported_properties_send_action(NX_AZURE_IOT_HUB_CLIENT *hub_client_ptr)
+{
+UINT status = 0;
+UINT response_status;
+UINT request_id;
+NX_AZURE_IOT_JSON_WRITER json_writer;
+NX_PACKET *packet_ptr;
+ULONG reported_property_version;
+
+    if ((appConnectStatus.wifi == false) || (appConnectStatus.cloud == false)) 
+    {
+        return;
+    }
+
+    if ((status = nx_azure_iot_hub_client_reported_properties_create(hub_client_ptr,
+                                                                     &packet_ptr, NX_WAIT_FOREVER)))
+    {
+        printf("Failed create reported properties: error code = 0x%08x\r\n", status);
+        return;
+    }
+    
+    if ((status = nx_azure_iot_json_writer_init(&json_writer, packet_ptr, NX_WAIT_FOREVER)))
+    {
+        printf("Failed init json writer: error code = 0x%08x\r\n", status);
+        nx_packet_release(packet_ptr);
+        return;
+    }
+
+    if ((status = nx_azure_iot_json_writer_append_begin_object(&json_writer)) ||
+        (status = nx_azure_iot_json_writer_append_property_with_int32_value(&json_writer,
+                                                                             (const UCHAR *)sample_prop_name_LED_blue,
+                                                                             sizeof(sample_prop_name_LED_blue) - 1,
+                                                                             appLedCtrl[APP_LED_BLUE].mode)) ||
+        (status = nx_azure_iot_json_writer_append_property_with_int32_value(&json_writer,
+                                                                             (const UCHAR *)sample_prop_name_LED_green,
+                                                                             sizeof(sample_prop_name_LED_green) - 1,
+                                                                             appLedCtrl[APP_LED_GREEN].mode)) ||
+        (status = nx_azure_iot_json_writer_append_property_with_int32_value(&json_writer,
+                                                                             (const UCHAR *)sample_prop_name_LED_red,
+                                                                             sizeof(sample_prop_name_LED_red) - 1,
+                                                                             appLedCtrl[APP_LED_RED].mode)) ||
+        (status = nx_azure_iot_json_writer_append_end_object(&json_writer)))
+    {
+        printf("Build reported property failed: error code = 0x%08x\r\n", status);
+        nx_packet_release(packet_ptr);
+        return;
+    }
+
+    if ((status = nx_azure_iot_hub_client_reported_properties_send(hub_client_ptr,
+                                                                   packet_ptr,
+                                                                   &request_id, &response_status,
+                                                                   &reported_property_version,
+                                                                   (5 * NX_IP_PERIODIC_RATE))))
+    {
+        printf("Reported properties failed!: error code = 0x%08x\r\n", status);
+        nx_packet_release(packet_ptr);
+        return;
+    }
+
+    if ((response_status < 200) || (response_status >= 300))
+    {
+        printf("Reported properties failed with code : %d\r\n", response_status);
+        return;
+    }
 }
 static VOID connection_status_callback(NX_AZURE_IOT_HUB_CLIENT *hub_client_ptr, UINT status)
 {
@@ -816,6 +887,9 @@ void sample_telemetry_thread_entry(ULONG parameter)
             }
         }
 #endif /* CLICK_VAVPRESS */
+#ifdef SEND_LED_PROPERTIES_WITH_TELEMETRY
+        sample_reported_properties_send_action(&iothub_client);
+#endif
 
         tx_thread_sleep(AZ_telemetryInterval * NX_IP_PERIODIC_RATE);
     }
@@ -981,6 +1055,8 @@ void sample_device_twin_thread_entry(ULONG parameter)
 
     nx_packet_release(packet_ptr);
 
+    sample_reported_properties_send_action(&iothub_client);
+    
     /* Loop to receive device twin message.  */
     while (loop)
     {
