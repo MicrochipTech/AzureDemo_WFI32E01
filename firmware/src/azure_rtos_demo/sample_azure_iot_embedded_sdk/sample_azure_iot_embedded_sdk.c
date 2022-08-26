@@ -12,6 +12,7 @@
 
 #include "nx_api.h"
 #include "nx_azure_iot_hub_client.h"
+#include "nx_azure_iot_hub_client_properties.h"
 #include "nx_azure_iot_provisioning_client.h"
 
 /* These are sample files, user can build their own certificate and ciphersuites.  */
@@ -110,6 +111,11 @@ static ULONG sample_c2d_thread_stack[SAMPLE_STACK_SIZE / sizeof(ULONG)];
 static const CHAR *sample_properties[MAX_PROPERTY_COUNT][2] = {{"propertyA", "valueA"},
                                                                {"propertyB", "valueB"}};
 #endif /* !defined(DISABLE_TELEMETRY_SAMPLE) && !defined(DISABLE_C2D_SAMPLE) */
+
+// property names for LEDs
+static const CHAR sample_prop_name_LED_blue[] = "led_b";
+static const CHAR sample_prop_name_LED_green[] = "led_g";
+static const CHAR sample_prop_name_LED_red[] = "led_r";
 
 #ifndef DISABLE_DIRECT_METHOD_SAMPLE
 static CHAR method_response_payload[] = "{\"status\": \"OK\"}";
@@ -262,6 +268,71 @@ static int parse_packet_data(char* packetData, char* responseProperty, int respo
 
     strcat(responseProperty, "}");
     return strlen(responseProperty);
+}
+static void sample_reported_properties_send_action(NX_AZURE_IOT_HUB_CLIENT *hub_client_ptr)
+{
+UINT status = 0;
+UINT response_status;
+UINT request_id;
+NX_AZURE_IOT_JSON_WRITER json_writer;
+NX_PACKET *packet_ptr;
+ULONG reported_property_version;
+
+    if ((appConnectStatus.wifi == false) || (appConnectStatus.cloud == false)) 
+    {
+        return;
+    }
+
+    if ((status = nx_azure_iot_hub_client_reported_properties_create(hub_client_ptr,
+                                                                     &packet_ptr, NX_WAIT_FOREVER)))
+    {
+        printf("Failed create reported properties: error code = 0x%08x\r\n", status);
+        return;
+    }
+    
+    if ((status = nx_azure_iot_json_writer_init(&json_writer, packet_ptr, NX_WAIT_FOREVER)))
+    {
+        printf("Failed init json writer: error code = 0x%08x\r\n", status);
+        nx_packet_release(packet_ptr);
+        return;
+    }
+
+    if ((status = nx_azure_iot_json_writer_append_begin_object(&json_writer)) ||
+        (status = nx_azure_iot_json_writer_append_property_with_int32_value(&json_writer,
+                                                                             (const UCHAR *)sample_prop_name_LED_blue,
+                                                                             sizeof(sample_prop_name_LED_blue) - 1,
+                                                                             appLedCtrl[APP_LED_BLUE].mode)) ||
+        (status = nx_azure_iot_json_writer_append_property_with_int32_value(&json_writer,
+                                                                             (const UCHAR *)sample_prop_name_LED_green,
+                                                                             sizeof(sample_prop_name_LED_green) - 1,
+                                                                             appLedCtrl[APP_LED_GREEN].mode)) ||
+        (status = nx_azure_iot_json_writer_append_property_with_int32_value(&json_writer,
+                                                                             (const UCHAR *)sample_prop_name_LED_red,
+                                                                             sizeof(sample_prop_name_LED_red) - 1,
+                                                                             appLedCtrl[APP_LED_RED].mode)) ||
+        (status = nx_azure_iot_json_writer_append_end_object(&json_writer)))
+    {
+        printf("Build reported property failed: error code = 0x%08x\r\n", status);
+        nx_packet_release(packet_ptr);
+        return;
+    }
+
+    if ((status = nx_azure_iot_hub_client_reported_properties_send(hub_client_ptr,
+                                                                   packet_ptr,
+                                                                   &request_id, &response_status,
+                                                                   &reported_property_version,
+                                                                   (5 * NX_IP_PERIODIC_RATE))))
+    {
+        printf("Reported properties failed!: error code = 0x%08x\r\n", status);
+        nx_packet_release(packet_ptr);
+        return;
+    }
+
+    if ((response_status < 200) || (response_status >= 300))
+    {
+        printf("Reported properties failed with code : %d\r\n", response_status);
+        return;
+    }
 }
 static VOID connection_status_callback(NX_AZURE_IOT_HUB_CLIENT *hub_client_ptr, UINT status)
 {
@@ -816,6 +887,9 @@ void sample_telemetry_thread_entry(ULONG parameter)
             }
         }
 #endif /* CLICK_VAVPRESS */
+#ifdef SEND_LED_PROPERTIES_WITH_TELEMETRY
+        sample_reported_properties_send_action(&iothub_client);
+#endif
 
         tx_thread_sleep(AZ_telemetryInterval * NX_IP_PERIODIC_RATE);
     }
@@ -881,6 +955,23 @@ int reboot_command(char* payload)
     }
     return delay;
 }
+void sendMsg_command(char* payload)
+{
+    #define PROPERTY_MSG_TEXT  "\"sendMsgString\""
+    bool bPropertyFound;
+    char propertyValue[64];
+  
+    bPropertyFound = find_property_value(payload, PROPERTY_MSG_TEXT, propertyValue);
+    if(bPropertyFound == true)
+    {
+        printf("Message received from cloud: %s\r\n", PROPERTY_MSG_TEXT, propertyValue);
+                    
+    }
+    else
+    {
+        printf("unexpected object data for sendMsg method\r\n");
+    }
+}
 void sample_direct_method_thread_entry(ULONG parameter)
 {
     UCHAR loop = NX_TRUE;
@@ -917,7 +1008,10 @@ void sample_direct_method_thread_entry(ULONG parameter)
         {  // if command is reboot, process payload to gather delay
             AZ_systemRebootTimer = reboot_command(payload);
         }
-        
+        if (strcmp(command, "sendMsg") == 0)
+        {  // if command is sendMsg, pull text from object and print to terminal
+            sendMsg_command(payload);
+        }
         if ((status = nx_azure_iot_hub_client_direct_method_message_response(&iothub_client, 200 /* method status */,
                                                                              context_ptr, context_length,
                                                                              (UCHAR *)method_response_payload, sizeof(method_response_payload) - 1,
@@ -944,7 +1038,7 @@ void sample_device_twin_thread_entry(ULONG parameter)
     ULONG reported_property_version;
     char responseProperty[120];
     int responsePropertyLen;
-    char receivedProperties[100];
+    char receivedProperties[180];
     char propertyValue[30];
     
     bool bPropertyFound;
@@ -964,23 +1058,37 @@ void sample_device_twin_thread_entry(ULONG parameter)
         printf("device twin document receive failed!: error code = 0x%08x\r\n", status);
         return;
     }
-
+    
     printf("Receive twin properties :");
     sprintf_packet(receivedProperties, packet_ptr);
-    printf("%s\r\n", receivedProperties);
-    bPropertyFound = find_property_value(receivedProperties, "\"telemetryInterval\"", propertyValue);
-    if(bPropertyFound == true)
-    {
-        //printf("%s = %s\r\n", "\"telemetryInterval\"", propertyValue);
-        AZ_telemetryInterval = atoi(propertyValue);        
+    int rxProp_size = strlen(receivedProperties);
+    int txIndex = 0;
+    while(rxProp_size > 100)
+    {       
+        printf("%.*s", 100, &receivedProperties[txIndex]);
+        rxProp_size -= 100;
+        txIndex += 100;
+        tx_thread_sleep(100);        
     }
-    else
-    {
-        printf("\"telemetryInterval\" not detected\r\n");
-    }
+    printf("%.*s\r\n", rxProp_size, &receivedProperties[txIndex]);
+    tx_thread_sleep(100);
+    
+    responsePropertyLen = parse_packet_data(receivedProperties, responseProperty, sizeof(responseProperty));
+//    bPropertyFound = find_property_value(receivedProperties, "\"telemetryInterval\"", propertyValue);
+//    if(bPropertyFound == true)
+//    {
+//        //printf("%s = %s\r\n", "\"telemetryInterval\"", propertyValue);
+//        AZ_telemetryInterval = atoi(propertyValue);        
+//    }
+//    else
+//    {
+//        printf("\"telemetryInterval\" not detected\r\n");
+//    }
 
     nx_packet_release(packet_ptr);
 
+    sample_reported_properties_send_action(&iothub_client);
+    
     /* Loop to receive device twin message.  */
     while (loop)
     {

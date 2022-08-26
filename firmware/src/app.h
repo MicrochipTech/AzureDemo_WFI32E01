@@ -52,6 +52,7 @@
 #define WFI32IOT_SENSORS
 #define CLICK_ULTRALOWPRESS
 #define CLICK_VAVPRESS
+#define SEND_LED_PROPERTIES_WITH_TELEMETRY
 
 // *****************************************************************************
 // *****************************************************************************
