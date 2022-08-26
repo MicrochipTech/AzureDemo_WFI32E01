@@ -115,6 +115,7 @@ static const CHAR *sample_properties[MAX_PROPERTY_COUNT][2] = {{"propertyA", "va
 // property names for LEDs
 static const CHAR sample_prop_name_LED_blue[] = "led_b";
 static const CHAR sample_prop_name_LED_green[] = "led_g";
+static const CHAR sample_prop_name_LED_yellow[] = "led_y";
 static const CHAR sample_prop_name_LED_red[] = "led_r";
 
 #ifndef DISABLE_DIRECT_METHOD_SAMPLE
@@ -306,6 +307,10 @@ ULONG reported_property_version;
                                                                              (const UCHAR *)sample_prop_name_LED_green,
                                                                              sizeof(sample_prop_name_LED_green) - 1,
                                                                              appLedCtrl[APP_LED_GREEN].mode)) ||
+        (status = nx_azure_iot_json_writer_append_property_with_int32_value(&json_writer,
+                                                                             (const UCHAR *)sample_prop_name_LED_yellow,
+                                                                             sizeof(sample_prop_name_LED_yellow) - 1,
+                                                                             appLedCtrl[APP_LED_YELLOW].mode)) ||
         (status = nx_azure_iot_json_writer_append_property_with_int32_value(&json_writer,
                                                                              (const UCHAR *)sample_prop_name_LED_red,
                                                                              sizeof(sample_prop_name_LED_red) - 1,
