@@ -952,11 +952,11 @@ int reboot_command(char* payload)
         payload[payload_size-2] = 0;
         delay = (uint32_t) atoi(&payload[3]);
         payload[payload_size-2] = 'S';
-        printf("reboot in %d seconds...\r\n", delay);
+        printf("Reboot in %d seconds...\r\n", delay);
     }
     else
     {
-        printf("invalid reboot payload, expected format \"PT5S\", for 5 second delay\r\n");
+        printf("Invalid reboot payload, expected format \"PT5S\", for 5 second delay\r\n");
     }
     return delay;
 }
@@ -1012,6 +1012,10 @@ void sample_direct_method_thread_entry(ULONG parameter)
         if (strcmp(command, "reboot") == 0)
         {  // if command is reboot, process payload to gather delay
             AZ_systemRebootTimer = reboot_command(payload);
+            if (AZ_systemRebootTimer == 0)
+            {
+                SYS_RESET_SoftwareReset();
+            }
         }
         if (strcmp(command, "sendMsg") == 0)
         {  // if command is sendMsg, pull text from object and print to terminal
