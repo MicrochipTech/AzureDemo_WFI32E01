@@ -1154,7 +1154,7 @@ void send_button_event(ULONG parameter, UINT number, UINT count)
     NX_PARAMETER_NOT_USED(parameter);
        
     buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
-            "{\"button_event\":\"SW%u\", \"press_count\": %u}", number, count);
+            "{\"button_event\":{\"button_name\":\"SW%u\",\"press_count\":%u}}", number, count);
     send_telemetry_message(parameter, (UCHAR *)buffer, buffer_length);
 }
 
