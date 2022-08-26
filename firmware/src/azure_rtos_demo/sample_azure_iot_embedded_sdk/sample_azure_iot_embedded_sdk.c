@@ -45,7 +45,7 @@ extern APP_SENSORS_DATA APP_SENSORS_data;
 extern APP_LED_CTRL appLedCtrl[APP_LED_TOTAL];
 
 // define the modelID associated with device template and the dps payload
-#define SAMPLE_PNP_MODEL_ID         "dtmi:com:Microchip:WFI32_IoT_WM;1"
+#define SAMPLE_PNP_MODEL_ID         "dtmi:com:Microchip:WFI32_IoT_WM;2"
 #define SAMPLE_PNP_DPS_PAYLOAD      "{\"modelId\":\"" SAMPLE_PNP_MODEL_ID "\"}"
 
 /* Generally, IoTHub Client and DPS Client do not run at the same time, user can use union as below to
@@ -955,6 +955,23 @@ int reboot_command(char* payload)
     }
     return delay;
 }
+void sendMsg_command(char* payload)
+{
+    #define PROPERTY_MSG_TEXT  "\"sendMsgString\""
+    bool bPropertyFound;
+    char propertyValue[64];
+  
+    bPropertyFound = find_property_value(payload, PROPERTY_MSG_TEXT, propertyValue);
+    if(bPropertyFound == true)
+    {
+        printf("Message received from cloud: %s\r\n", PROPERTY_MSG_TEXT, propertyValue);
+                    
+    }
+    else
+    {
+        printf("unexpected object data for sendMsg method\r\n");
+    }
+}
 void sample_direct_method_thread_entry(ULONG parameter)
 {
     UCHAR loop = NX_TRUE;
@@ -991,7 +1008,10 @@ void sample_direct_method_thread_entry(ULONG parameter)
         {  // if command is reboot, process payload to gather delay
             AZ_systemRebootTimer = reboot_command(payload);
         }
-        
+        if (strcmp(command, "sendMsg") == 0)
+        {  // if command is sendMsg, pull text from object and print to terminal
+            sendMsg_command(payload);
+        }
         if ((status = nx_azure_iot_hub_client_direct_method_message_response(&iothub_client, 200 /* method status */,
                                                                              context_ptr, context_length,
                                                                              (UCHAR *)method_response_payload, sizeof(method_response_payload) - 1,
@@ -1018,7 +1038,7 @@ void sample_device_twin_thread_entry(ULONG parameter)
     ULONG reported_property_version;
     char responseProperty[120];
     int responsePropertyLen;
-    char receivedProperties[100];
+    char receivedProperties[180];
     char propertyValue[30];
     
     bool bPropertyFound;
@@ -1038,20 +1058,32 @@ void sample_device_twin_thread_entry(ULONG parameter)
         printf("device twin document receive failed!: error code = 0x%08x\r\n", status);
         return;
     }
-
+    
     printf("Receive twin properties :");
     sprintf_packet(receivedProperties, packet_ptr);
-    printf("%s\r\n", receivedProperties);
-    bPropertyFound = find_property_value(receivedProperties, "\"telemetryInterval\"", propertyValue);
-    if(bPropertyFound == true)
-    {
-        //printf("%s = %s\r\n", "\"telemetryInterval\"", propertyValue);
-        AZ_telemetryInterval = atoi(propertyValue);        
+    int rxProp_size = strlen(receivedProperties);
+    int txIndex = 0;
+    while(rxProp_size > 100)
+    {       
+        printf("%.*s", 100, &receivedProperties[txIndex]);
+        rxProp_size -= 100;
+        txIndex += 100;
+        tx_thread_sleep(100);        
     }
-    else
-    {
-        printf("\"telemetryInterval\" not detected\r\n");
-    }
+    printf("%.*s\r\n", rxProp_size, &receivedProperties[txIndex]);
+    tx_thread_sleep(100);
+    
+    responsePropertyLen = parse_packet_data(receivedProperties, responseProperty, sizeof(responseProperty));
+//    bPropertyFound = find_property_value(receivedProperties, "\"telemetryInterval\"", propertyValue);
+//    if(bPropertyFound == true)
+//    {
+//        //printf("%s = %s\r\n", "\"telemetryInterval\"", propertyValue);
+//        AZ_telemetryInterval = atoi(propertyValue);        
+//    }
+//    else
+//    {
+//        printf("\"telemetryInterval\" not detected\r\n");
+//    }
 
     nx_packet_release(packet_ptr);
 
