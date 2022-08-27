@@ -894,8 +894,10 @@ void sample_telemetry_thread_entry(ULONG parameter)
 #endif /* CLICK_VAVPRESS */
 #ifdef SEND_LED_PROPERTIES_WITH_TELEMETRY
         sample_reported_properties_send_action(&iothub_client);
-#endif
-
+#endif /* SEND_LED_PROPERTIES_WITH_TELEMETRY */
+#ifdef PNP_CERTIFICATION_TESTING
+        send_button_event(parameter, 1, button_press_data.sw1_press_count);
+#endif /* PNP_CERTIFICATION_TESTING */
         tx_thread_sleep(AZ_telemetryInterval * NX_IP_PERIODIC_RATE);
     }
 }
