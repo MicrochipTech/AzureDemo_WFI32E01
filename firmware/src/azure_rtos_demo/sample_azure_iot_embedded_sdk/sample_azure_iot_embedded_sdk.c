@@ -781,6 +781,21 @@ void send_telemetry_message(ULONG parameter, UCHAR *message, UINT mesg_length)
     printf("%s\r\n", message);   
 }
 
+void send_button_event(ULONG parameter, UINT number, UINT count)
+{
+    CHAR buffer[TELEMETRY_MSGLEN_MAX];
+    UINT buffer_length;
+
+    NX_PARAMETER_NOT_USED(parameter);
+       
+    buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
+            "{\"button_event\": {\"button_name\": \"SW%u\", \"press_count\": %u}}", number, count);
+    send_telemetry_message(parameter, (UCHAR *)buffer, buffer_length);
+    buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
+            "{\"press_count\": %.2f}", (double)(button_press_data.sw1_press_count + button_press_data.sw2_press_count));
+    send_telemetry_message(parameter, (UCHAR *)buffer, buffer_length);
+}
+
 void sample_telemetry_thread_entry(ULONG parameter)
 {
     CHAR buffer[TELEMETRY_MSGLEN_MAX];
@@ -958,10 +973,11 @@ int reboot_command(char* payload)
     }
     else
     {
-        printf("Invalid reboot payload, expected format \"PT5S\", for 5 second delay\r\n");
+        printf("Invalid reboot payload: expected format \"PT<x>S\" (where 'x' = # of seconds)\r\n");
     }
     return delay;
 }
+
 void sendMsg_command(char* payload)
 {
     #define PROPERTY_MSG_TEXT  "\"sendMsgString\""
@@ -1147,21 +1163,6 @@ void sample_device_twin_thread_entry(ULONG parameter)
     }
 }
 #endif /* DISABLE_DEVICE_TWIN_SAMPLE */
-
-void send_button_event(ULONG parameter, UINT number, UINT count)
-{
-    CHAR buffer[TELEMETRY_MSGLEN_MAX];
-    UINT buffer_length;
-
-    NX_PARAMETER_NOT_USED(parameter);
-       
-    buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
-            "{\"button_event\": {\"button_name\": \"SW%u\", \"press_count\": %u}}", number, count);
-    send_telemetry_message(parameter, (UCHAR *)buffer, buffer_length);
-    buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
-            "{\"press_count\": %.2f}", (double)(button_press_data.sw1_press_count + button_press_data.sw2_press_count));
-    send_telemetry_message(parameter, (UCHAR *)buffer, buffer_length);
-}
 
 #ifndef DISABLE_APP_CTRL_SAMPLE
 void sample_app_ctrl_thread_entry(ULONG parameter)
