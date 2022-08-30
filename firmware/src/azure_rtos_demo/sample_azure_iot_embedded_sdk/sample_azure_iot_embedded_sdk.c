@@ -1185,6 +1185,10 @@ void sample_device_twin_thread_entry(ULONG parameter)
         {
             reported_property_version = atoi(propertyValue);
         }
+        else
+        {   // if version property not found, set to 0 for functions below.
+            reported_property_version = 0;
+        }
         if (responsePropertyLen > 2)
         {
             response_status = 200;
