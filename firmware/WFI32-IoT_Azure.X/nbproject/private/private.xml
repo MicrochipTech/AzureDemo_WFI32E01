@@ -3,19 +3,7 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/proj/WFI32-IoT_Azure_PnP_Demo/firmware/src/app.h</file>
-            <file>file:/C:/proj/WFI32-IoT_Azure_PnP_Demo/firmware/src/azure_rtos_demo/sample_azure_iot_embedded_sdk/sample_azure_iot_embedded_sdk.c</file>
-            <file>file:/C:/proj/WFI32-IoT_Azure_PnP_Demo/firmware/src/config/pic32mz_w1/driver/usb/usbfs/src/templates/usb_BDTFunctions_PIC32.h</file>
-            <file>file:/C:/proj/WFI32-IoT_Azure_PnP_Demo/firmware/src/third_party/azure_rtos/netxduo/addons/azure_iot/azure-sdk-for-c/sdk/src/azure/iot/az_iot_hub_client_twin.c</file>
-            <file>file:/C:/proj/WFI32-IoT_Azure_PnP_Demo/firmware/src/third_party/azure_rtos/netxduo/addons/azure_iot/nx_azure_iot_json_writer.h</file>
-            <file>file:/C:/proj/WFI32-IoT_Azure_PnP_Demo/firmware/src/third_party/azure_rtos/netxduo/addons/azure_iot/azure-sdk-for-c/sdk/inc/azure/iot/az_iot_hub_client.h</file>
-            <file>file:/C:/proj/WFI32-IoT_Azure_PnP_Demo/firmware/src/azure_rtos_demo/sample_azure_iot_embedded_sdk/sample_config.h</file>
-            <file>file:/C:/proj/WFI32-IoT_Azure_PnP_Demo/firmware/src/third_party/azure_rtos/netxduo/addons/azure_iot/nx_azure_iot_json_writer.c</file>
-            <file>file:/C:/proj/WFI32-IoT_Azure_PnP_Demo/firmware/src/third_party/azure_rtos/netxduo/addons/azure_iot/azure-sdk-for-c/sdk/src/azure/iot/az_iot_hub_client_properties.c</file>
-            <file>file:/C:/proj/WFI32-IoT_Azure_PnP_Demo/firmware/src/third_party/azure_rtos/netxduo/addons/azure_iot/nx_azure_iot_hub_client.c</file>
-            <file>file:/C:/proj/WFI32-IoT_Azure_PnP_Demo/firmware/src/third_party/azure_rtos/netxduo/addons/azure_iot/nx_azure_iot_hub_client_properties.c</file>
-            <file>file:/C:/proj/WFI32-IoT_Azure_PnP_Demo/firmware/src/third_party/azure_rtos/netxduo/addons/azure_iot/nx_azure_iot_hub_client.h</file>
-            <file>file:/C:/proj/WFI32-IoT_Azure_PnP_Demo/firmware/src/third_party/azure_rtos/netxduo/addons/azure_iot/nx_azure_iot_hub_client_properties.h</file>
+            <file>file:/Users/c14166/Azure/WFI32-IoT_Azure_PnP_Demo/firmware/src/azure_rtos_demo/sample_azure_iot_embedded_sdk/sample_azure_iot_embedded_sdk.c</file>
         </group>
     </open-files>
 </project-private>

@@ -117,6 +117,7 @@ static const CHAR *sample_properties[MAX_PROPERTY_COUNT][2] = {{"propertyA", "va
 // property names for LEDs
 static const CHAR sample_prop_name_LED_blue[] = "led_b";
 static const CHAR sample_prop_name_LED_green[] = "led_g";
+static const CHAR sample_prop_name_LED_yellow[] = "led_y";
 static const CHAR sample_prop_name_LED_red[] = "led_r";
 
 #ifndef DISABLE_DIRECT_METHOD_SAMPLE
@@ -360,6 +361,10 @@ ULONG reported_property_version;
                                                                              (const UCHAR *)sample_prop_name_LED_green,
                                                                              sizeof(sample_prop_name_LED_green) - 1,
                                                                              appLedCtrl[APP_LED_GREEN].mode)) ||
+        (status = nx_azure_iot_json_writer_append_property_with_int32_value(&json_writer,
+                                                                             (const UCHAR *)sample_prop_name_LED_yellow,
+                                                                             sizeof(sample_prop_name_LED_yellow) - 1,
+                                                                             appLedCtrl[APP_LED_YELLOW].mode)) ||
         (status = nx_azure_iot_json_writer_append_property_with_int32_value(&json_writer,
                                                                              (const UCHAR *)sample_prop_name_LED_red,
                                                                              sizeof(sample_prop_name_LED_red) - 1,
@@ -830,6 +835,21 @@ void send_telemetry_message(ULONG parameter, UCHAR *message, UINT mesg_length)
     printf("%s\r\n", message);   
 }
 
+void send_button_event(ULONG parameter, UINT number, UINT count)
+{
+    CHAR buffer[TELEMETRY_MSGLEN_MAX];
+    UINT buffer_length;
+
+    NX_PARAMETER_NOT_USED(parameter);
+       
+    buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
+            "{\"button_event\": {\"button_name\": \"SW%u\", \"press_count\": %u}}", number, count);
+    send_telemetry_message(parameter, (UCHAR *)buffer, buffer_length);
+    buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
+            "{\"press_count\": %.2f}", (double)(button_press_data.sw1_press_count + button_press_data.sw2_press_count));
+    send_telemetry_message(parameter, (UCHAR *)buffer, buffer_length);
+}
+
 void sample_telemetry_thread_entry(ULONG parameter)
 {
     CHAR buffer[TELEMETRY_MSGLEN_MAX];
@@ -943,8 +963,10 @@ void sample_telemetry_thread_entry(ULONG parameter)
 #endif /* CLICK_VAVPRESS */
 #ifdef SEND_LED_PROPERTIES_WITH_TELEMETRY
         sample_reported_properties_send_action(&iothub_client);
-#endif
-
+#endif /* SEND_LED_PROPERTIES_WITH_TELEMETRY */
+#ifdef PNP_CERTIFICATION_TESTING
+        send_button_event(parameter, 1, button_press_data.sw1_press_count);
+#endif /* PNP_CERTIFICATION_TESTING */
         tx_thread_sleep(AZ_telemetryInterval * NX_IP_PERIODIC_RATE);
     }
 }
@@ -1001,14 +1023,15 @@ int reboot_command(char* payload)
         payload[payload_size-2] = 0;
         delay = (uint32_t) atoi(&payload[3]);
         payload[payload_size-2] = 'S';
-        printf("reboot in %d seconds...\r\n", delay);
+        printf("Reboot in %d seconds...\r\n", delay);
     }
     else
     {
-        printf("invalid reboot payload, expected format \"PT5S\", for 5 second delay\r\n");
+        printf("Invalid reboot payload: expected format \"PT<x>S\" (where 'x' = # of seconds)\r\n");
     }
     return delay;
 }
+
 void sendMsg_command(char* payload)
 {
     #define PROPERTY_MSG_TEXT  "\"sendMsgString\""
@@ -1094,13 +1117,12 @@ void sample_device_twin_thread_entry(ULONG parameter)
     NX_PACKET *packet_ptr;
     UINT status = 0;
     UINT response_status;
-//     UINT request_id;
+
     ULONG reported_property_version;
     char responseProperty[120];
     int responsePropertyLen;
     char receivedProperties[180];
     char propertyValue[30];
- //   NX_AZURE_IOT_JSON_WRITER json_writer;
     
     bool bPropertyFound;
 
@@ -1135,7 +1157,8 @@ void sample_device_twin_thread_entry(ULONG parameter)
     tx_thread_sleep(100);
     
     responsePropertyLen = parse_packet_data(receivedProperties, responseProperty, sizeof(responseProperty));
-    
+
+
     nx_packet_release(packet_ptr);
 
     sample_reported_properties_send_action(&iothub_client);
@@ -1187,21 +1210,6 @@ void sample_device_twin_thread_entry(ULONG parameter)
     }
 }
 #endif /* DISABLE_DEVICE_TWIN_SAMPLE */
-
-void send_button_event(ULONG parameter, UINT number, UINT count)
-{
-    CHAR buffer[TELEMETRY_MSGLEN_MAX];
-    UINT buffer_length;
-
-    NX_PARAMETER_NOT_USED(parameter);
-       
-    buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
-            "{\"button_event\":{\"button_name\" : \"SW%u\", \"press_count\": %u}", number, count);
-    send_telemetry_message(parameter, (UCHAR *)buffer, buffer_length);
-    buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
-            "{\"press_count\": %.2f}", (double)count);
-    send_telemetry_message(parameter, (UCHAR *)buffer, buffer_length);
-}
 
 #ifndef DISABLE_APP_CTRL_SAMPLE
 void sample_app_ctrl_thread_entry(ULONG parameter)
