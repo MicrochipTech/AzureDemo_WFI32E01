@@ -36,9 +36,11 @@ static ULONG nx_azure_iot_thread_stack[NX_AZURE_IOT_STACK_SIZE / sizeof(ULONG)];
 /* Define the prototypes for AZ IoT.  */
 static NX_AZURE_IOT                                 nx_azure_iot;
 
+volatile bool bPropertyTIFound = false;
 volatile uint32_t AZ_telemetryInterval = AZ_TELEMETRYINTERVAL_DEFAULT;
 volatile uint32_t AZ_systemRebootTimer = 0;
 
+volatile bool bPropertyYLEDFound = false;
 /* External variables used by the application  */
 extern APP_CONNECT_STATUS appConnectStatus;
 extern APP_SENSORS_DATA APP_SENSORS_data;
@@ -234,15 +236,15 @@ static bool find_property_value(char*buf, const char* param, char*retStr )
  */
 static int parse_packet_data(char* packetData, char* responseProperty, int responseSize)
 {    
-    bool bPropertyFound = false;
+    
     char propertyValue[30];
     char tempStr[60];
     int responseLength = 0;
     
     memset(responseProperty, 0, responseSize);
     responseProperty[0] = '{';
-    bPropertyFound = find_property_value(packetData, PROPERTY_TELEMETRY_INTERVAL, propertyValue);
-    if(bPropertyFound == true)
+    bPropertyTIFound = find_property_value(packetData, PROPERTY_TELEMETRY_INTERVAL, propertyValue);
+    if(bPropertyTIFound == true)
     {
         //printf("%s = %s\r\n", PROPERTY_TELEMETRY_INTERVAL, propertyValue);
         AZ_telemetryInterval = atoi(propertyValue);
@@ -251,8 +253,8 @@ static int parse_packet_data(char* packetData, char* responseProperty, int respo
         strcat(responseProperty, tempStr);            
     } 
     
-    bPropertyFound = find_property_value(packetData, PROPERTY_LEDY, propertyValue);
-    if(bPropertyFound == true)
+    bPropertyYLEDFound = find_property_value(packetData, PROPERTY_LEDY, propertyValue);
+    if(bPropertyYLEDFound == true)
     {
         if(responseLength>0)
         {
@@ -263,12 +265,64 @@ static int parse_packet_data(char* packetData, char* responseProperty, int respo
         sprintf(tempStr, "%s: %s", PROPERTY_LEDY, propertyValue);
         responseLength += strlen(tempStr);
         strcat(responseProperty, tempStr);            
-    } 
+    }
     
 
     strcat(responseProperty, "}");
     return strlen(responseProperty);
 }
+
+static VOID sample_send_integer_write_proterty_response(NX_AZURE_IOT_HUB_CLIENT *hub_client_ptr, 
+                                                        UCHAR* property_name_ptr, UINT property_name_len, int telemetryInterval,
+                                                        UINT status, ULONG version, UCHAR *description_ptr,
+                                                        UINT description_len)
+{
+    NX_AZURE_IOT_JSON_WRITER json_writer;
+    NX_PACKET *packet_ptr;
+    UINT response_status;
+    UINT request_id;
+
+    if (nx_azure_iot_hub_client_reported_properties_create(hub_client_ptr,
+                                                           &packet_ptr, NX_WAIT_FOREVER))
+    {
+        printf("Failed to build reported response\r\n");
+        return;
+    }
+
+    if (nx_azure_iot_json_writer_init(&json_writer, packet_ptr, NX_WAIT_FOREVER))
+    {
+        printf("Failed to build reported response\r\n");
+        nx_packet_release(packet_ptr);
+        return;
+    }
+
+    if (nx_azure_iot_json_writer_append_begin_object(&json_writer) ||
+        nx_azure_iot_hub_client_reported_properties_status_begin(hub_client_ptr, &json_writer, 
+                                                                 property_name_ptr,
+                                                                 property_name_len-1,
+                                                                 status, version,
+                                                                 description_ptr, description_len) ||
+        nx_azure_iot_json_writer_append_int32(&json_writer,
+                                               telemetryInterval) ||
+        nx_azure_iot_hub_client_reported_properties_status_end(hub_client_ptr, &json_writer) ||
+        nx_azure_iot_json_writer_append_end_object(&json_writer))
+    {
+        printf("Failed to build reported response\r\n");
+        nx_packet_release(packet_ptr);
+    }
+    else
+    {
+        if (nx_azure_iot_hub_client_reported_properties_send(hub_client_ptr,
+                                                             packet_ptr, &request_id,
+                                                             &response_status, NX_NULL,
+                                                             (5 * NX_IP_PERIODIC_RATE)))
+        {
+            printf("Failed to send reported response\r\n");
+            nx_packet_release(packet_ptr);
+        }
+    }
+}
+
 static void sample_reported_properties_send_action(NX_AZURE_IOT_HUB_CLIENT *hub_client_ptr)
 {
 UINT status = 0;
@@ -316,7 +370,7 @@ ULONG reported_property_version;
         nx_packet_release(packet_ptr);
         return;
     }
-
+ 
     if ((status = nx_azure_iot_hub_client_reported_properties_send(hub_client_ptr,
                                                                    packet_ptr,
                                                                    &request_id, &response_status,
@@ -983,7 +1037,8 @@ void sample_direct_method_thread_entry(ULONG parameter)
     VOID *context_ptr;
     char command[32];
     char payload[64];
-
+    char response[64];
+    int response_size;
     NX_PARAMETER_NOT_USED(parameter);
 
     /* Loop to receive direct method message.  */
@@ -1004,17 +1059,22 @@ void sample_direct_method_thread_entry(ULONG parameter)
         memset(command, 0, sizeof(command));
         memcpy(command, method_name_ptr, method_name_length);
 
+        strcpy(response, method_response_payload);
+        response_size = strlen(response);
         if (strcmp(command, "reboot") == 0)
         {  // if command is reboot, process payload to gather delay
             AZ_systemRebootTimer = reboot_command(payload);
+            sprintf(&response[response_size-1], ", \"delay\" :%d}", AZ_systemRebootTimer);
+            response_size = strlen(response);
+            printf("%s\r\n", response);
         }
         if (strcmp(command, "sendMsg") == 0)
         {  // if command is sendMsg, pull text from object and print to terminal
-            sendMsg_command(payload);
+            sendMsg_command(payload);       
         }
         if ((status = nx_azure_iot_hub_client_direct_method_message_response(&iothub_client, 200 /* method status */,
                                                                              context_ptr, context_length,
-                                                                             (UCHAR *)method_response_payload, sizeof(method_response_payload) - 1,
+                                                                             (UCHAR *)response, response_size,
                                                                              NX_WAIT_FOREVER)))
         {
             printf("Direct method response failed!: error code = 0x%08x\r\n", status);
@@ -1034,12 +1094,13 @@ void sample_device_twin_thread_entry(ULONG parameter)
     NX_PACKET *packet_ptr;
     UINT status = 0;
     UINT response_status;
-    UINT request_id;
+//     UINT request_id;
     ULONG reported_property_version;
     char responseProperty[120];
     int responsePropertyLen;
     char receivedProperties[180];
     char propertyValue[30];
+ //   NX_AZURE_IOT_JSON_WRITER json_writer;
     
     bool bPropertyFound;
 
@@ -1074,17 +1135,7 @@ void sample_device_twin_thread_entry(ULONG parameter)
     tx_thread_sleep(100);
     
     responsePropertyLen = parse_packet_data(receivedProperties, responseProperty, sizeof(responseProperty));
-//    bPropertyFound = find_property_value(receivedProperties, "\"telemetryInterval\"", propertyValue);
-//    if(bPropertyFound == true)
-//    {
-//        //printf("%s = %s\r\n", "\"telemetryInterval\"", propertyValue);
-//        AZ_telemetryInterval = atoi(propertyValue);        
-//    }
-//    else
-//    {
-//        printf("\"telemetryInterval\" not detected\r\n");
-//    }
-
+    
     nx_packet_release(packet_ptr);
 
     sample_reported_properties_send_action(&iothub_client);
@@ -1117,17 +1168,17 @@ void sample_device_twin_thread_entry(ULONG parameter)
         }
         printf("%s\r\n", responseProperty);
         nx_packet_release(packet_ptr);
-
-        if ((status = nx_azure_iot_hub_client_device_twin_reported_properties_send(&iothub_client,
-                                                                                   (UCHAR *)responseProperty, responsePropertyLen,
-                                                                                   &request_id, &response_status,
-                                                                                   &reported_property_version,
-                                                                                   NX_WAIT_FOREVER)))
+        
+        if(bPropertyTIFound)
         {
-            printf("Device twin reported properties failed!: error code = 0x%08x\r\n", status);
-            break;
+            sample_send_integer_write_proterty_response(&iothub_client, (UCHAR*)"telemetryInterval", (UINT)sizeof("telemetryInterval"), AZ_telemetryInterval,response_status,reported_property_version, NX_NULL,NX_NULL);
+            bPropertyTIFound = false;
         }
-
+        if(bPropertyYLEDFound)
+        {
+            sample_send_integer_write_proterty_response(&iothub_client, (UCHAR*)"led_y", (UINT)sizeof("led_y"), appLedCtrl[APP_LED_YELLOW].mode,response_status,reported_property_version, NX_NULL,NX_NULL);
+            bPropertyYLEDFound = false;
+        }
         if ((response_status < 200) || (response_status >= 300))
         {
             printf("device twin report properties failed with code : %d\r\n", response_status);
@@ -1145,7 +1196,10 @@ void send_button_event(ULONG parameter, UINT number, UINT count)
     NX_PARAMETER_NOT_USED(parameter);
        
     buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
-            "{\"button_event\":\"SW%u\", \"press_count\": %u}", number, count);
+            "{\"button_event\":{\"button_name\" : \"SW%u\", \"press_count\": %u}", number, count);
+    send_telemetry_message(parameter, (UCHAR *)buffer, buffer_length);
+    buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
+            "{\"press_count\": %.2f}", (double)count);
     send_telemetry_message(parameter, (UCHAR *)buffer, buffer_length);
 }
 
