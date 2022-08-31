@@ -1041,8 +1041,7 @@ void sendMsg_command(char* payload)
     bPropertyFound = find_property_value(payload, PROPERTY_MSG_TEXT, propertyValue);
     if(bPropertyFound == true)
     {
-        printf("Message received from cloud: %s\r\n", PROPERTY_MSG_TEXT, propertyValue);
-                    
+        printf("Message received from cloud: %s\r\n", propertyValue);
     }
     else
     {

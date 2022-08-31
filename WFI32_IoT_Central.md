@@ -131,9 +131,9 @@ IoT Central allows you to create an application dashboard to monitor the telemet
 
     <img src=".//media/image78b.png" style="width:2.0in;height:2.5in" alt="A screenshot of a cell phone Description automatically generated" />
 
-15.	Type in `Properties` for the `Form name`. Expand the `Properties` category and then check every box in the list. Hit the `Save` icon at the top of the page
+15.	Type in `Properties` for the `Form name`. Expand the `Properties` category and then check every box in the list. Towards the bottom of the page, click on the `Add section` button. Be sure to click on the `Save` icon at the top of the page
 
-    <img src=".//media/image78c.png" style="width:2.0in;height:3.0in" alt="A screenshot of a cell phone Description automatically generated" />
+    <img src=".//media/image78c.png" style="width:1.5in;height:3.05in" alt="A screenshot of a cell phone Description automatically generated" />
 
 16.	Hit the `Back` icon at the top of the page. Click on `Views` and then select `Generate default views`
 
@@ -145,7 +145,7 @@ IoT Central allows you to create an application dashboard to monitor the telemet
 
 18.	Click on the `Publish` icon at the top of the page.  A pop-up window should appear to confirm the latest changes to be made to the template - then click on the `Publish` button
 
-19.	Look up the `ID Scope` for your IoT Central application (navigate to your application's web page and using the left-hand navigation pane, select `Permissions` > `Device connection groups`)
+19.	Look up the `ID Scope` for your IoT Central application (using the left-hand navigation pane, select `Permissions` > `Device connection groups`)
 
     <img src=".//media/image84a.png" style="width:5.in;height:3.18982in" alt="A screenshot of a cell phone Description automatically generated" />
 
@@ -199,7 +199,7 @@ IoT Central allows you to create an application dashboard to monitor the telemet
 
     <img src=".//media/image90.png" style="width:5.in;height:1.48982in" alt="A screenshot of a cell phone Description automatically generated" />
 
-32. Click on the `Refresh` icon to display all messages received since the previous page refresh operation.  Confirm that periodic telemetry messages are being continuously received approximately every 5 seconds (which is the default interval value for the `telemetryInterval` property that dictates the telemetry reporting frequency)
+32. Click on the `Refresh` icon (in the top right area of the page) to display all messages received since the previous page refresh operation.  Confirm that periodic telemetry messages are being continuously received approximately every 5 seconds (which is the default interval value for the `telemetryInterval` property that dictates the telemetry reporting frequency)
 
     <img src=".//media/image91a.png" style="width:5.in;height:1.08982in" alt="A screenshot of a cell phone Description automatically generated" />
 
@@ -211,9 +211,11 @@ IoT Central allows you to create an application dashboard to monitor the telemet
 
 34. Note there are other views besides the `Raw data` tab. Click on the `About` and `Overview` tabs to view the property values and telemetry data of the device. If any of the Click boards are installed, you should see the telemetry being reported from the additional sensors (e.g. ULP_temperature, ULP_pressure, VAV_temperature, VAV_pressure)
 
-35. Click on the `Command` tab. Type a text message in the `String to send` box and then click on the `Run` button. Confirm that the message was received in the serial console window; e.g. Receive method call: sendMsg, with payload:{"sendMsgString":"Hello world!!!"}
+35. Click on the `Command` tab. Type a text message in the `String to send` box and then click on the `Run` button. Confirm that the message was received in the serial console window
 
-    <img src=".//media/image93b.png" style="width:5.0in;height:2.2in" alt="A screenshot of a cell phone Description automatically generated" />
+    <img src=".//media/image93b_01.png" style="width:5.0in;height:2.2in" alt="A screenshot of a cell phone Description automatically generated" />
+
+    <img src=".//media/image93b_02.png" style="width:5.0in;height:1.2in" alt="A screenshot of a cell phone Description automatically generated" />
 
 36. Click on the `command history` link and note the response that was received from the device
 
@@ -239,7 +241,7 @@ IoT Central allows you to create an application dashboard to monitor the telemet
 
     <img src=".//media/image101.png" style="width:5.in;height:0.38982in" alt="A screenshot of a cell phone Description automatically generated" />
 
-4. For **all** of the existing tiles named `Light` or `Temperature`, click on the upper right-hand corner of the tile to select `Configure`
+4. For **all** of the existing tiles named `Light` or `Temperature`, click on the upper right-hand corner of the tile to select `Edit` in the drop-down menu
 
     <img src=".//media/image102a.png" style="width:5.in;height:2.18982in" alt="A screenshot of a cell phone Description automatically generated" />
     <img src=".//media/image102b.png" style="width:5.in;height:2.18982in" alt="A screenshot of a cell phone Description automatically generated" />
@@ -248,7 +250,7 @@ IoT Central allows you to create an application dashboard to monitor the telemet
 
     <img src=".//media/image103a.png" style="width:5.in;height:2.08982in" alt="A screenshot of a cell phone Description automatically generated" />
 
-6. Under the `Telemetry` category, click on `+ Capability` and select the parameter pertaining to the title of the tile (e.g. `Brightness from Light Sensor` for each of the `Light` tiles or `Ambient Temperature` for each of the `Temperature` tiles)
+6. Under the `Telemetry` category, click on `+ Capability` and select the parameter pertaining to the title of the tile (e.g. `Brightness from Light Sensor (WFI32-IoT)` for each of the `Light` tiles or `Temperature (WFI32-IoT)` for each of the `Temperature` tiles)
 
     <img src=".//media/image104a.png" style="width:5.in;height:0.89082in" alt="A screenshot of a cell phone Description automatically generated" />
     <img src=".//media/image104b.png" style="width:5.in;height:2.18982in" alt="A screenshot of a cell phone Description automatically generated" />
@@ -269,6 +271,12 @@ IoT Central allows you to create an application dashboard to monitor the telemet
 10. To access your IoT Central application(s) in the future, go to [Azure IoT Central](https://apps.azureiotcentral.com) and click on `My apps`
 
     <img src=".//media/image108.png" style="width:5.in;height:1.98982in" alt="A screenshot of a cell phone Description automatically generated" />
+
+## WFI32-IoT Differential Pressure Sensors
+
+If you have one or both of the optional MikroElektronika "Ultra-Low Press" and/or "VAV Press" Click boards installed on the WFI32-IoT Board's mikroBUS socket, feel free to create a similar IoT Central application using an existing ["WFI32-IoT Differential Pressure Sensors" application template](https://apps.azureiotcentral.com/build/new/926fba4f-fc71-40c7-a129-f608458995c1) that contains a dashboard specifically for visualizing the differential pressure and temperature sensor telemetry from the Click board(s). You will need to edit the tiles in the existing dashboard to display the desired telemetry for your specific device(s) - and of course feel free to add different types of available tiles to the dashboard. 
+
+<img src=".//media/image109.png" style="width:6.0in;height:5.0in" alt="A screenshot of a cell phone Description automatically generated" />
 
 ## Expand the Dashboard with Additional Tiles
 
