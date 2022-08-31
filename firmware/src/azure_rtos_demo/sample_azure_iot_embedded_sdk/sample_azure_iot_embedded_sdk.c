@@ -274,7 +274,7 @@ static int parse_packet_data(char* packetData, char* responseProperty, int respo
 }
 
 static VOID sample_send_integer_write_proterty_response(NX_AZURE_IOT_HUB_CLIENT *hub_client_ptr, 
-                                                        UCHAR* property_name_ptr, UINT property_name_len, int telemetryInterval,
+                                                        UCHAR* property_name_ptr, UINT property_name_len, int propertyIntValue,
                                                         UINT status, ULONG version, UCHAR *description_ptr,
                                                         UINT description_len)
 {
@@ -304,7 +304,7 @@ static VOID sample_send_integer_write_proterty_response(NX_AZURE_IOT_HUB_CLIENT 
                                                                  status, version,
                                                                  description_ptr, description_len) ||
         nx_azure_iot_json_writer_append_int32(&json_writer,
-                                               telemetryInterval) ||
+                                               propertyIntValue) ||
         nx_azure_iot_hub_client_reported_properties_status_end(hub_client_ptr, &json_writer) ||
         nx_azure_iot_json_writer_append_end_object(&json_writer))
     {
@@ -1120,7 +1120,7 @@ void sample_device_twin_thread_entry(ULONG parameter)
     ULONG reported_property_version;
     char responseProperty[120];
     int responsePropertyLen;
-    char receivedProperties[180];
+    char receivedProperties[300];
     char propertyValue[30];
     
     bool bPropertyFound;
