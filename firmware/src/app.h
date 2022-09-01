@@ -53,7 +53,7 @@
 #define CLICK_ULTRALOWPRESS
 #define CLICK_VAVPRESS
 #define SEND_LED_PROPERTIES_WITH_TELEMETRY
-#define PNP_CERTIFICATION_TESTING
+//#define PNP_CERTIFICATION_TESTING
 
 // *****************************************************************************
 // *****************************************************************************
