@@ -38,9 +38,17 @@ As a solution builder, you can use IoT Central to develop a cloud-hosted IoT sol
 
     <img src=".//media/image41.png" style="width:5.in;height:3.18982in" alt="A screenshot of a cell phone Description automatically generated" />
 
-5. Verify the project properties are set correctly before building the project. Right-click the project `WFI32-IoT_Azure` &gt; select `Properties` &gt; select "WFI32-IoT Board-SN" for `Connected Hardware Tool` &gt; select the latest `PIC32MZ-W_DFP` version &gt; select the latest XC32 version for `Compiler Toolchain`. If any changes were made in the project properties window, the `Apply` button should become enabled.  Make sure to hit the `Apply` button before hitting `OK`
+5. Verify the project properties are set correctly before building the project by executing the following steps:
 
-6. Right-click the `WFI32-IoT_Azure` project and select `Make and Program Device`.  This operation will automatically clean and build the project before attempting to program the target device. After the `BUILD SUCCESSFUL` message appears in the Output window, the application HEX file will be programmed onto the WFI32-IoT Board. Once programming has finished, the board will automatically reset and start running its application code
+    - right-click on the `WFI32-IoT_Azure` project
+    - select `Properties`
+    - select "WFI32-IoT Board-SN" for `Connected Hardware Tool`
+    - select the latest `PIC32MZ-W_DFP` version
+    - select the latest XC32 version for `Compiler Toolchain`
+
+    If any changes were made in the project properties window, the `Apply` button should become enabled.  Make sure to hit the `Apply` button before hitting `OK`
+
+6. Right-click on the `WFI32-IoT_Azure` project and select `Clean`. Right-click the project again and select `Make and Program Device`. This operation will automatically build the project before attempting to program the target device. After the `BUILD SUCCESSFUL` message appears in the Output window, the application HEX file will be programmed onto the WFI32-IoT Board. Once programming has finished, the board will automatically reset and start running its application code
 
 7. Set up a Command Line Interface (CLI) to the board. Open a serial terminal (e.g. PuTTY, TeraTerm, etc.) and connect to the COM port corresponding to your board at `115200 baud` (e.g. open PuTTY Configuration window &gt; choose `session` &gt; choose `Serial`&gt; enter/select the right COMx port). You can find the right COM port number by opening your PC’s `Device Manager` &gt; expand `Ports(COM & LPT)` &gt; take note of `USB Serial Device (COMx)`
 
@@ -58,6 +66,23 @@ As a solution builder, you can use IoT Central to develop a cloud-hosted IoT sol
     ```bash
     CMD:SEND_UART=wifi my_SSID,my_PSWD,2
     ```
+
+    The '2' used in the existing default command corresponds to a network which uses the Wi-Fi Protected Access 2 (WPA2) security standard. If your network is configured for a different Wi-Fi security standard, edit the command based on one of the following:
+
+    - Open (Unsecured):
+        ```bash
+        CMD:SEND_UART=wifi my_SSID,NO_KEY,1
+        ```
+    - Wired Equivalent Privacy (WEP):
+        ```bash
+        CMD:SEND_UART=wifi my_SSID,my_PSWD,3
+        ```
+    - Wi-Fi Protected Access 3 (WPA3):
+        ```bash
+        CMD:SEND_UART=wifi my_SSID,my_PSWD,4
+        ```
+
+    As an alternative, you can go to the [Microchip IoT Wi-Fi configuration page](http://microchip.iot.com) to generate the correct contents of the `WIFI.CFG` file based on your credentials.
 
 11. Enter in the `reset` command on the CLI. Within a few seconds, you should see the Blue LED on the WFI32-IoT Board stay constantly on - signifying that the board has successfuly connected to Wi-Fi
 

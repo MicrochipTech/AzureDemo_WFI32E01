@@ -54,12 +54,6 @@ This high-level architecture description summarizes the interactions between the
 
 On successful authentication, the WFI32-IoT board will be provisioned to the correct IoT Hub that is pre-linked to DPS during the setup process. We can then leverage Azure IoT Central's application platform services (easy-to-use, highly intuitive web-based graphical tools used for interacting with and testing your IoT devices at scale).
 
-### Azure RTOS
-
-This is the high-level view of the Embedded C SDK (which is included within Azure RTOS) that translates the application code into Azure-friendly logic that can be easily understood by Azure IoT Hub. Note that Microsoft is only responsible for the logic in the green box; it is up to the IoT Developer to provide the remaining layers of application code, Transport Client, TLS, and Socket. In the provided demo project, Microchip provides the layers in blue. Please reference the [Azure SDK for Embedded C](https://github.com/Azure/azure-sdk-for-c/tree/78a280b7160201cf10a106e8499e03eec88ea582) document for more details.
-
-<img src=".//media/image7.png" style="width:4in;height:4in"/>
-
 ### TLS connection
 
 The TLS connection performs both authentication and encryption.

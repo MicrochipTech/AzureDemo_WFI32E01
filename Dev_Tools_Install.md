@@ -10,9 +10,9 @@ Please install the following software in the exact order listed:
 
     - [MPLAB XC32 Compiler](https://www.microchip.com/en-us/development-tools-tools-and-software/mplab-xc-compilers#tabs)
 
-        NOTE: The last known XC32 compiler version which successfully builds this demonstration project was version `4.10`.  If the currently available download version is greater than this last known version and does not successfully build the provided demo project, download the last known working XC32 version from the [MPLAB Development Ecosystem Downloads Archive](https://www.microchip.com/en-us/tools-resources/archives/mplab-ecosystem)
+        NOTE: This demonstration project was tested successfully with XC32 v4.10, and in general should work with later versions of the compiler as they become available. If you encounter issues building the project, it is recommended to download XC32 v4.10 from the [MPLAB Development Ecosystem Downloads Archive](https://www.microchip.com/en-us/tools-resources/archives/mplab-ecosystem) (to fall back to the version Microchip successfully tested prior to release). 
 
-    - [MPLAB Harmony Software Framework](https://microchipdeveloper.com/harmony3:mhc-overview)
+     - [MPLAB Harmony Software Framework](https://microchipdeveloper.com/harmony3:mhc-overview)
 
 2. Install [Git](https://git-scm.com) (a free and open source distributed version control system) by executing the following steps:
 
@@ -52,26 +52,3 @@ Please install the following software in the exact order listed:
         ```shell
         pyazureutils -v debug
         ```
-## Verify the Device Certificate is in PEM Format
-
- The device certificate for your WFI32-IoT Board should already be pre-programmed in the `WFI32-IOT` Mass Storage Device. However, the certificate file needs to be in the text-based Privacy Enhanced Mail (PEM) format.
-
- 1. Connect the board to PC, then make sure a device named `WFI32-IOT` shows up as a Mass Storage Device on the `Desktop` or in a `File Explorer` window
-
- 2. Using a `File Explorer` window, access the `WFI32-IOT` Mass Storage Device and look for a file with an extention of `CER`. Most likely, the default name of the device certificate file is the unique serial number of your device (e.g. sn012319AAC99CF42A01). If this file exists, then your device certificate is already in the correct format (PEM). If the file has the `DER` file extention, the certificate file is in binary format and needs to be converted to the text-based format, so please proceed with the next steps...
-
- 3. Make a copy of the `DER` file and put it into any convenient folder on your hard drive
-
- 4. Using a command line window such as `PowerShell` or `Command Prompt`, navigate to the folder where the `DER` file was copied to and then execute the following command line
-
-     ```bash
-     openssl x509 -inform der -in <device_certificate_name>.der -out <device_certificate_name>.pem
-     ```
-
- 5. Rename the <`device_certificate_name`>.PEM file to <`device_certificate_name`>.CER
-
- 6. Make a copy of the <`device_certificate_name`>.CER file and put it into the `WFI32-IOT` Mass Storage Device
-
- 7. Confirm that the `WFI32-IOT` Mass Storage Device now contains both `CER` & `DER` files. Both files contain the same device certificate information but in 2 different formats
-
-     <img src=".//media/image20.png">
