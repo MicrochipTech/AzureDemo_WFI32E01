@@ -69,9 +69,9 @@ As a solution builder, you can use IoT Central to develop a cloud-hosted IoT sol
 
     The '2' used in the existing default command corresponds to a network which uses the Wi-Fi Protected Access 2 (WPA2) security standard. If your network is configured for a different Wi-Fi security standard, edit the command based on one of the following:
 
-    - Open (Unsecured):
+    - Open Unsecured Network (no password protection):
         ```bash
-        CMD:SEND_UART=wifi my_SSID,NO_KEY,1
+        CMD:SEND_UART=wifi my_SSID,,1
         ```
     - Wired Equivalent Privacy (WEP):
         ```bash
@@ -82,13 +82,25 @@ As a solution builder, you can use IoT Central to develop a cloud-hosted IoT sol
         CMD:SEND_UART=wifi my_SSID,my_PSWD,4
         ```
 
-    As an alternative, you can go to the [Microchip IoT Wi-Fi configuration page](http://microchip.iot.com) to generate the correct contents of the `WIFI.CFG` file based on your credentials.
+    As an alternative, you can go to the [PIC32MZ "W1" Wi-Fi MCU IoT Board](https://iot.microchip.com/pic32mzw1) configuration page to generate the correct contents of the `WIFI.CFG` file based on your Wi-Fi network credentials by following the steps shown
 
-11. Enter in the `reset` command on the CLI. Within a few seconds, you should see the Blue LED on the WFI32-IoT Board stay constantly on - signifying that the board has successfuly connected to Wi-Fi
+    <img src=".//media/image45a.png" style="width:5.in;height:1.58982in" alt="A screenshot of a cell phone Description automatically generated" />
+
+11. Enter in the `reset` command on the serial terminal CLI. Within a few seconds, you should see the Blue LED on the WFI32-IoT Board stay constantly on - signifying that the board has successfuly connected to your Wi-Fi network
 
     NOTE: Do not proceed until the WFI32-IoT Board has established a successful connection to Wi-Fi - the Blue LED needs to be always on!
 
-## C. Create an IoT Central Application for your Device
+## C. Access the Root, Signer, and Device Certificates
+
+The `WFI32-IOT` Mass Storage Device (MSD) contains the 3 certificates saved in Privacy Enhanced Format (PEM) which is a Base64 encoded binary format. PEM certificates are frequently used for web servers as they can easily be translated into readable data using a simple text editor. Generally when a PEM encoded file is opened in a text editor, it contains very distinct headers and footers.
+
+Whenever the demo application is reset, it will check for the presence of all 3 files on the `WFI32-IOT` drive. Each file has the *.PEM suffix and is named to distinguish between the root, signer, and device certificates; e.g.
+
+<img src=".//media/image46.png">
+
+If any of the files do not exist when the demo application is reset, the missing file(s) will be automatically generated. In case any of these files are accidentally edited, simply delete the certificate(s) from the `WFI32-IOT` drive and reset the application so that they will be automatically regenerated.
+
+## D. Create an IoT Central Application for your Device
 
 IoT Central allows you to create an application dashboard to monitor the telemetry and take appropriate actions based on customized rules.
 
@@ -118,13 +130,15 @@ IoT Central allows you to create an application dashboard to monitor the telemet
 
     <img src=".//media/image108.png" style="width:5.in;height:1.98982in" alt="A screenshot of a cell phone Description automatically generated" />
 
-## D. Create the Device Template for the IoT Central Application
+## E. Create the Device Template for the IoT Central Application
 
 1.	Create the device template that your IoT Central application will use for the WFI32-IoT Board. This template defines the capabilities (telemetry, properties, commands) of the device model. You could manually create and add the device template to your IoT Central application, but why not import the device model from a JSON file that has already been created for the WFI32-IoT Board? Using the navigation pane on the left-hand side of the application, select `Connect` &gt; `Device templates`
 
+    <img src=".//media/image69.png" style="width:5.0in;height:3.00833in" alt="A screenshot of a cell phone Description automatically generated" />
+
 2.	If there is no existing device template that corresponds to "WFI32_IoT_WM", click on the `+ New` button at the top of the page
 
-    <img src=".//media/image70.png" style="width:5.0in;height:2.00833in" alt="A screenshot of a cell phone Description automatically generated" />
+    <img src=".//media/image70.png" style="width:5.0in;height:3.00833in" alt="A screenshot of a cell phone Description automatically generated" />
 
 3.	Click on the `IoT device` tile to import an existing capability model, then scroll down to the bottom of the page and select `Next: Customize`
 
@@ -176,7 +190,7 @@ IoT Central allows you to create an application dashboard to monitor the telemet
 
 15.	Click on the `Publish` icon at the top of the page.  A pop-up window should appear to confirm the latest changes to be made to the template - then click on the `Publish` button
 
-## E. Connect your Device to the IoT Central Application
+## F. Connect your Device to the IoT Central Application
 
 1.	Look up the `ID Scope` for your IoT Central application (using the left-hand navigation pane, select `Permissions` &gt; `Device connection groups`)
 
@@ -260,7 +274,7 @@ IoT Central allows you to create an application dashboard to monitor the telemet
 
     <img src=".//media/image94.png" style="width:5.0in;height:4.18982in" alt="A screenshot of a cell phone Description automatically generated" />
 
-## F. Connect your Device to the Dashboard for Data Visualization
+## G. Connect your Device to the Dashboard for Data Visualization
 
 1. Navigate to the left-hand vertical toolbar and click on the `Dashboards` icon
 
@@ -305,23 +319,30 @@ IoT Central allows you to create an application dashboard to monitor the telemet
 
     <img src=".//media/image108.png" style="width:5.in;height:1.98982in" alt="A screenshot of a cell phone Description automatically generated" />
 
-## G. WFI32-IoT Differential Pressure Sensors
+## H. WFI32-IoT Differential Pressure Sensors
 
 If you have one or both of the optional MikroElektronika "Ultra-Low Press" and/or "VAV Press" Click boards installed on the WFI32-IoT Board's mikroBUS™ socket, feel free to create a similar IoT Central application using an existing ["WFI32-IoT Differential Pressure Sensors" application template](https://apps.azureiotcentral.com/build/new/926fba4f-fc71-40c7-a129-f608458995c1) that contains a single dashboard specifically for visualizing the differential pressure and temperature sensor telemetry from the Click board(s). Once a new IoT Central application has been created, execute the following steps:
 
-1. Repeat the procedure outlined in Section E ("Connect your Device to the IoT Central Application") to confirm that your device has been properly registered/added to the new application
+1. Repeat the procedure outlined in the previous section titled "Connect your Device to the IoT Central Application" to confirm that your device has been properly registered/added to the new application
 
 2. Using the left-hand navigation pane, select `Analyze` &gt; `Dashboards`
 
 3. Click on the `Edit` icon
 
-4. For each of the tiles used to display device data (and does not currently show any data), configure each tile by adding your device to the tile (click `Edit` icon &gt; select `WFI32_IoT_WM` for `Device group` &gt; click `Select All` for `Devices` &gt; click `Update` button)
+4. For each of the tiles used to display device data (and does not currently show any data), configure each tile by adding your device to the tile by executing the following steps:
+
+    - click `Edit` icon
+    - select `WFI32_IoT_WM` for `Device group`
+    - click `Select All` for `Devices`
+    - click the `Update` button
+
+    NOTE: Whenever a device group has been reselected, the tile may inadvertently drop the telemetry parameters that were selected previously - so you may have to add those telemetry parameters back into the tile before clicking on the `Update` button
 
 5. Click on the `Save` icon
 
-<img src=".//media/image109.png" style="width:6.0in;height:5.0in" alt="A screenshot of a cell phone Description automatically generated" />
+    <img src=".//media/image109.png" style="width:6.0in;height:5.0in" alt="A screenshot of a cell phone Description automatically generated" />
 
-## H. Expand the Dashboard with Additional Tiles
+## I. Expand the Dashboard with Additional Tiles
 
 To create additional tiles for your IoT Central dashboard, refer to [Configure the IoT Central application dashboard](https://docs.microsoft.com/en-us/azure/iot-central/core/howto-add-tiles-to-your-dashboard). The below screen captures show additional possibilities of dashboard components that can highlight the telemetry data and properties facilitated by the `Plug and Play` interface.  Note that multiple devices can be selected for each tile to allow groups of devices to be visualized within a single tile. 
 
