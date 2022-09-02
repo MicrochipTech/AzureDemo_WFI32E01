@@ -54,10 +54,6 @@ firmware/WFI32-IoT_Azure.X/debug/
 firmware/WFI32-IoT_Azure.X/dist/
 firmware/WFI32-IoT_Azure.X/.generated_files
 
-# MPLAB X auto generated make files
-**/nbproject/private
-**/nbproject/Makefile-*
-**/nbproject/Package-*
- 
+
 
 
