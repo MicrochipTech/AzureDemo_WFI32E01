@@ -62,35 +62,38 @@ As a solution builder, you can use IoT Central to develop a cloud-hosted IoT sol
 
     <img src=".//media/image45.png" style="width:5.in;height:1.58982in" alt="A screenshot of a cell phone Description automatically generated" />
 
-10. Configure the WFI32-IoT Board's internal Wi-Fi settings with your wireless router’s SSID and password by editing the `WIFI.CFG` file located in the `WFI32-IOT` disk drive. Using the text editor of your choice, modify the one existing line in the file so that `my_SSID` and `my_PSWD` reflect the correct authentication settings for the wireless router you'd like the WFI32-IoT Board to connect with. Save the changes to the file and then re-open the file to confirm that your changes were correctly saved. To be on the safe side, there should be no spaces used in the SSID and password
-    ```bash
-    CMD:SEND_UART=wifi my_SSID,my_PSWD,2
-    ```
+10. Configure the WFI32-IoT Board's device settings with your wireless router’s SSID and password. To be on the safe side, there should be no spaces used in the SSID and password for your network, and the Wi-Fi Access Point should be operating in the 2.4 GHz frequency band.
 
-    The '2' used in the existing default command corresponds to a network which uses the Wi-Fi Protected Access 2 (WPA2) security standard. If your network is configured for a different Wi-Fi security standard, edit the command based on one of the following:
-
-    - Open Unsecured Network (no password protection):
-        ```bash
-        CMD:SEND_UART=wifi my_SSID,,1
-        ```
-    - Wired Equivalent Privacy (WEP):
-        ```bash
-        CMD:SEND_UART=wifi my_SSID,my_PSWD,3
-        ```
-    - Wi-Fi Protected Access 3 (WPA3):
-        ```bash
-        CMD:SEND_UART=wifi my_SSID,my_PSWD,4
-        ```
-
-    As an alternative, you can go to the [PIC32MZ "W1" Wi-Fi MCU IoT Board](https://iot.microchip.com/pic32mzw1) configuration page to generate the correct contents of the `WIFI.CFG` file based on your Wi-Fi network credentials by following the steps shown
+    The easiest way to configure the device's Wi-Fi settings is to open the `WFI32-IOT` Mass Storage Device and double-click on the `clickme.html` file - then follow the steps shown on the resulting web page
 
     <img src=".//media/image45a.png" style="width:5.in;height:1.58982in" alt="A screenshot of a cell phone Description automatically generated" />
 
-11. Enter in the `reset` command on the serial terminal CLI. Within a few seconds, you should see the Blue LED on the WFI32-IoT Board stay constantly on - signifying that the board has successfuly connected to your Wi-Fi network
+    If for some reason this method does not work, you can also go to [Microchip IoT WiFi Configuration](https://iot.microchip.com/wificfg). As a last resort, you can always manually edit the `WIFI.CFG` file located in the `WFI32-IOT` Mass Storage Device as the network credentials are saved to this file.
+    
+    You can use the text editor of your choice to confirm that the authentication settings for your Wi-Fi network were correctly saved to the `WIFI.CFG` file. Based on your Wi-Fi network's security standard, the one line in the `WIFI.CFG` file should look like one of the following examples: 
 
-    NOTE: Do not proceed until the WFI32-IoT Board has established a successful connection to Wi-Fi - the Blue LED needs to be always on!
+    - Open Unsecured Network (no password protection)
+        ```bash
+        CMD:SEND_UART=wifi MY_SSID,,1
+        ```
+    - Wi-Fi Protected Access 2 (WPA2)
+        ```bash
+        CMD:SEND_UART=wifi MY_SSID,MY_PSWD,2
+        ```
+    - Wired Equivalent Privacy (WEP)
+        ```bash
+        CMD:SEND_UART=wifi MY_SSID,MY_PSWD,3
+        ```
+    - Wi-Fi Protected Access 3 (WPA3)
+        ```bash
+        CMD:SEND_UART=wifi MY_SSID,MY_PSWD,4
+        ```
 
-## C. Access the Root, Signer, and Device Certificates
+11. Type the `reset` command on the serial terminal CLI. Within a few seconds, you should see the Blue LED on the WFI32-IoT Board stay constantly on - signifying that the board has successfuly connected to your Wi-Fi network using the settings stored in the `WIFI.CFG` file
+
+    NOTE: Do not proceed until the WFI32-IoT Board has established a successful connection to your Wi-Fi network - the Blue LED needs to be always on!
+
+## C. Confirm Access to the Root, Signer, and Device Certificates
 
 The `WFI32-IOT` Mass Storage Device (MSD) contains the 3 certificates saved in Privacy Enhanced Format (PEM) which is a Base64 encoded binary format. PEM certificates are frequently used for web servers as they can easily be translated into readable data using a simple text editor. Generally when a PEM encoded file is opened in a text editor, it contains very distinct headers and footers.
 
