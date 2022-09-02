@@ -12,8 +12,6 @@
 - [Background Knowledge](#background-knowledge)
   - [WFI32-IoT Board Overview & Features](#wfi32-iot-board-overview--features-smart--connected--secure)
   - [Microchip “Provisioning” vs. Microsoft “Provisioning”](#microchip-provisioning-vs-microsoft-provisioning)
-  - [High Level Architecture between the Client (WFI32-IoT) and the Cloud (Azure)](#high-level-architecture-between-the-client-wfi32-iot-and-the-cloud-azure)
-  - [Azure RTOS](#azure-rtos)
   - [TLS Connection](#tls-connection)
   - [MQTT Connection](#mqtt-connection)
 - [Create an Azure Account and Subscription](#create-an-azure-account-and-subscription)
