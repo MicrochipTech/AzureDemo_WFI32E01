@@ -52,7 +52,7 @@ dkms.conf
 firmware/WFI32-IoT_Azure.X/build/
 firmware/WFI32-IoT_Azure.X/debug/
 firmware/WFI32-IoT_Azure.X/dist/
-firmware/WFI32-IoT_Azure.X/.generated_file
+firmware/WFI32-IoT_Azure.X/.generated_files
 **/nbproject/private
 **/nbproject/Makefile-*
 **/nbproject/Package-*
