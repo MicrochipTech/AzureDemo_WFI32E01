@@ -1,4 +1,4 @@
-# Connecting the WFI32-IoT Board (Part No. EV36W50A) to Azure IoT Central
+# Connecting the WFI32-IoT Board (Part No. EV36W50A) to Azure IoT Central using Symmetric Key Attestation
 
 NOTE: Should you encounter any issues/obstacles with the following procedure, check out the [FAQ section](./FAQ.md)
 
@@ -129,7 +129,9 @@ IoT Central allows you to create an application dashboard to monitor the telemet
         
 3. Click the `Create` button (the application will be automatically saved in your [IoT Central Portal](https://apps.azureiotcentral.com))
 
-4. To access your IoT Central application(s) in the future, go to [Azure IoT Central](https://apps.azureiotcentral.com) and click on `My apps` (or go directly to the custom URL defined for your application)
+4. Look up the settings for your application by using the left-hand navigation pane to select `Settings` &gt; `Application` &gt; `Management`
+
+5. To access your IoT Central application(s) in the future, go to [Azure IoT Central](https://apps.azureiotcentral.com) and click on `My apps` (or go directly to the custom URL defined for your application)
 
     <img src=".//media/image108.png" style="width:5.in;height:1.98982in" alt="A screenshot of a cell phone Description automatically generated" />
 
@@ -343,7 +345,7 @@ If you have one or both of the optional MikroElektronika "Ultra-Low Press" and/o
 
 5. Click on the `Save` icon
 
-    <img src=".//media/image109.png" style="width:6.0in;height:5.0in" alt="A screenshot of a cell phone Description automatically generated" />
+    <img src=".//media/image110.png" style="width:6.0in;height:5.0in" alt="A screenshot of a cell phone Description automatically generated" />
 
 ## I. Expand the Dashboard with Additional Tiles
 

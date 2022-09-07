@@ -124,7 +124,7 @@ Azure IoT technologies and services provide you with options to create a wide va
 
 The web UI lets you quickly connect devices, monitor device conditions, create rules, and manage millions of devices and their data throughout their life cycle. Furthermore, it enables you to act on device insights by extending IoT intelligence into line-of-business applications.
 
-Click this link for the WFI32-IoT Board provisioning procedure: [Connecting the WFI32-IoT Board to Azure IoT Central](./WFI32_IoT_Central.md)
+Click this link for the WFI32-IoT Board provisioning procedure: [Connecting the WFI32-IoT Board to Azure IoT Central](./WFI32_IoT_Central_SAS.md)
 
 ## Frequently Asked Questions
 
