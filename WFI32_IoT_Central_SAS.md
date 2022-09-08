@@ -50,7 +50,7 @@ As a solution builder, you can use IoT Central to develop a cloud-hosted IoT sol
 
     If any changes were made in the project properties window, the `Apply` button should become enabled.  Make sure to hit the `Apply` button before hitting `OK`
 
-6. Right-click on the `WFI32-IoT_Azure` project and select `Clean`. Right-click the project again and select `Make and Program Device`. This operation will automatically build the project before attempting to program the target device. After the `BUILD SUCCESSFUL` message appears in the Output window, the application HEX file will be programmed onto the WFI32-IoT Board. Once programming has finished, the board will automatically reset and start running its application code
+6. Right-click on the `WFI32-IoT_Azure` project and select `Clean`. Right-click the project again and select `Make and Program Device`. This operation will automatically build the project before attempting to program the target device. After the `BUILD SUCCESSFUL` message appears in the Output window, the application HEX file will be programmed onto the WFI32-IoT Board. Once programming has finished, the board will automatically reset and start running its application code. The Mass Storage Device will reinitialize and take on the new name of `WFI32-IOT`
 
 7. Quit the MPLAB X IDE by selecting `MPLAB X IDE` &gt; `Quit MPLAB X IDE` from the main toolbar. Please confirm the application has actually been closed before proceeding...
 
@@ -105,17 +105,17 @@ Whenever the demo application is reset, it will check for the presence of all 3 
 
 <img src=".//media/image46.png">
 
-If any of the files do not exist when the demo application is reset, the missing file(s) will be automatically generated. In case any of these files are accidentally edited, simply delete the certificate(s) from the `WFI32-IOT` drive and reset the application so that they will be automatically regenerated.
+If any of the files do not exist when the demo application is reset, the missing file(s) will be automatically generated. In case any of these files are accidentally edited, simply delete the certificate(s) from the `WFI32-IOT` MSD and reset the application so that they will be automatically regenerated.
 
 ## Create an IoT Central Application
 
 IoT Central allows you to create an application dashboard to monitor the telemetry and take appropriate actions based on customized rules.
 
-1. Create a custom IoT Central application by starting with an existing [Microchip WFI32-IoT Board Template](https://apps.azureiotcentral.com/build/new/db598a83-644a-4e2c-b4e1-f3e52978d006) (if there is a problem with loading the template, refer to the [Create an application](https://docs.microsoft.com/en-us/azure/iot-central/core/quick-deploy-iot-central) section to create your IoT Central application from scratch). If you are not currently logged into your [Microsoft account](https://account.microsoft.com/account), you will be prompted to sign in with your credentials to proceed. If you do not have an existing Microsoft account, go ahead and create one now by clicking on the `Create one!` link
+1. Create a custom IoT Central application by accessing (clicking on) the existing [Microchip WFI32-IoT Application Template](https://apps.azureiotcentral.com/build/new/db598a83-644a-4e2c-b4e1-f3e52978d006) (if there is a problem with loading the template, refer to the [Create an application](https://docs.microsoft.com/en-us/azure/iot-central/core/quick-deploy-iot-central) section to create your IoT Central application from scratch). If you are not currently logged into your [Microsoft account](https://account.microsoft.com/account), you will be prompted to sign in with your credentials to proceed. If you do not have an existing Microsoft account, go ahead and create one now by clicking on the `Create one!` link
 
 2. Azure IoT Builder will guide you through the process of creating your application. Review and select the various settings for your IoT Central application (if needed, refer to [Create an application](https://docs.microsoft.com/en-us/azure/iot-central/core/quick-deploy-iot-central) for additional guidance on selecting the settings for your application). Do not click the `Create` button just yet - only after reviewing and taking into consideration the following recommendations:
   
-    - Choose a unique `Application name` (which will result in a unique `URL`) for accessing your application. Azure IoT Builder will populate a suggested unique `Application name` which can/should be leveraged, resulting in a unique `URL` shown on the screen. Take note of the unique/customizable portion of the `URL` (e.g. "custom-1pfphmras2b" like shown in the below screen shot) as it will be needed in a future step (suggest copy/pasting the exact text into a text editor doc file as temporary storage for the name)
+    - Choose a unique `Application name` (which will result in a unique `URL`) for accessing your application. Azure IoT Builder will populate a suggested unique `Application name` which can/should be leveraged, resulting in a unique `URL` which can be used to access this specific application in the future
 
         <img src=".//media/image80a.png">
 
@@ -133,9 +133,9 @@ IoT Central allows you to create an application dashboard to monitor the telemet
         
 3. Click the `Create` button (the application will be automatically saved in your [IoT Central Portal](https://apps.azureiotcentral.com))
 
-4. Look up the settings for your application by using the left-hand navigation pane to select `Settings` &gt; `Application` &gt; `Management`
+4. [FYI] Look up the settings for your application by using the left-hand navigation pane to select `Settings` &gt; `Application` &gt; `Management`
 
-5. To access your IoT Central application(s) in the future, go to [Azure IoT Central](https://apps.azureiotcentral.com) and click on `My apps` (or go directly to the custom URL defined for your application)
+5. [FYI] To access your IoT Central application(s) in the future, log into the [Azure IoT Central Portal](https://apps.azureiotcentral.com) and click on `My apps` (or go directly to the custom URL defined for your application)
 
     <img src=".//media/image108.png" style="width:5.in;height:1.98982in" alt="A screenshot of a cell phone Description automatically generated" />
 
@@ -160,7 +160,7 @@ IoT Central allows you to create an application dashboard to monitor the telemet
 
     <img src=".//media/image86.png">
 
-6. In the `Create a new device` window, it is suggested to accept the default device name and ID that are randomly-generated (but can be changed to more meaningful names if you like). Select `WFI32_IoT_WM;1` for the device template. Click on the `Create` button
+6. In the `Create a new device` window, it is suggested to accept the default device name and ID that are randomly-generated (but can be changed to more meaningful names if you like). Select `WFI32_IoT_WM;2` for the device template. Click on the `Create` button
 
     <img src=".//media/image87.png" style="width:5.in;height:3.68982in" alt="A screenshot of a cell phone Description automatically generated" />
 
@@ -229,7 +229,7 @@ IoT Central allows you to create an application dashboard to monitor the telemet
 
     <img src=".//media/image100.png" style="width:5.in;height:0.98982in" alt="A screenshot of a cell phone Description automatically generated" />
 
-2. Towards the top of the web page, click on the dashboard selector and change the view to `Microchip IoT Light and Temperature Sensors`
+2. Towards the top of the web page, click on the dashboard selector and change the view to `WFI32-IoT Light and Temperature Sensors`
 
     <img src=".//media/image100a.png">
 
@@ -264,17 +264,19 @@ IoT Central allows you to create an application dashboard to monitor the telemet
 
     <img src=".//media/image107.png" style="width:5.in;height:2.58982in" alt="A screenshot of a cell phone Description automatically generated" />
 
-10. To access your IoT Central application(s) in the future, go to [Azure IoT Central](https://apps.azureiotcentral.com) and click on `My apps` (or go directly to the custom URL defined for your application)
+10. [FYI] To access your IoT Central application(s) in the future, log into the [Azure IoT Central Portal](https://apps.azureiotcentral.com) and click on `My apps` (or go directly to the custom URL defined for your application)
 
     <img src=".//media/image108.png" style="width:5.in;height:1.98982in" alt="A screenshot of a cell phone Description automatically generated" />
 
 ## WFI32-IoT Differential Pressure Sensors
 
-If you have one or both of the optional MikroElektronika "Ultra-Low Press" and/or "VAV Press" Click boards installed on the WFI32-IoT Board's mikroBUS™ socket, feel free to create a similar IoT Central application using an existing ["WFI32-IoT Differential Pressure Sensors" application template](https://apps.azureiotcentral.com/build/new/926fba4f-fc71-40c7-a129-f608458995c1) that contains a single dashboard specifically for visualizing the differential pressure and temperature sensor telemetry from the Click board(s). Once a new IoT Central application has been created, execute the following steps:
+If you have one or both of the optional MikroElektronika "Ultra-Low Press" and/or "VAV Press" Click boards installed on the WFI32-IoT Board's mikroBUS™ socket, use the pre-configured example dashboard for visualizing the differential pressure and temperature sensor telemetry from the Click board(s).
 
-1. Repeat the procedure outlined in the previous section titled "Connect your Device to the IoT Central Application" to confirm that your device has been properly registered/added to the new application
+1. Using the left-hand navigation pane, select `Analyze` &gt; `Dashboards`
 
-2. Using the left-hand navigation pane, select `Analyze` &gt; `Dashboards`
+2. Towards the top of the web page, click on the dashboard selector and change the view to `WFI32-IoT Differential Pressure Sensors`
+
+    <img src=".//media/image109.png">
 
 3. Click on the `Edit` icon
 
@@ -289,7 +291,7 @@ If you have one or both of the optional MikroElektronika "Ultra-Low Press" and/o
 
 5. Click on the `Save` icon
 
-    <img src=".//media/image109.png" style="width:6.0in;height:5.0in" alt="A screenshot of a cell phone Description automatically generated" />
+    <img src=".//media/image110.png" style="width:6.0in;height:5.0in" alt="A screenshot of a cell phone Description automatically generated" />
 
 ## Expand the Dashboard with Additional Tiles
 
