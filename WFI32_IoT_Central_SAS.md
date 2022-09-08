@@ -2,7 +2,7 @@
 
 NOTE: Should you encounter any issues/obstacles with the following procedure, check out the [FAQ section](./FAQ.md)
 
-## A. Introduction
+## Introduction
 
 [Azure IoT Central](https://docs.microsoft.com/en-us/azure/iot-central/core/overview-iot-central) is an IoT application platform that reduces the burden and cost of developing, managing, and maintaining enterprise-grade IoT solutions. Choosing to build with IoT Central gives you the opportunity to focus time, money, and energy on transforming your business with IoT data, rather than just maintaining and updating a complex and continually evolving IoT infrastructure.
 
@@ -18,7 +18,7 @@ The web UI lets you quickly connect devices, monitor device conditions, create r
 
 As a solution builder, you can use IoT Central to develop a cloud-hosted IoT solution that uses IoT Plug and Play devices. IoT Plug and Play devices connect directly to an IoT Central application where you can use customizable dashboards to monitor and control your devices. You can also use device templates in the IoT Central web UI to create and edit [Device Twins Definition Language (DTDL)](https://github.com/Azure/opendigitaltwins-dtdl) models.
 
-## B. Program the Plug and Play Demo
+## Program the Plug and Play Demo
 
 1. Clone/download the MPLAB X demo project by issuing the following commands in a `Command Prompt` or `PowerShell` window
 
@@ -26,7 +26,7 @@ As a solution builder, you can use IoT Central to develop a cloud-hosted IoT sol
     git clone <Demo_URL>
     ```
 
-2. Connect the board to PC, then make sure a device named `WFI32-IOT` shows up as a disk drive (i.e. Mass Storage Device) on the `Desktop` or in a `File Explorer` window
+2. Connect the board to PC, then make sure a device named `CURIOSITY` shows up as a disk drive (i.e. Mass Storage Device) on the `Desktop` or in a `File Explorer` window
 
 3. Launch the MPLAB X IDE and navigate to the main toolbar's `File` > `Open Project` operation to load the demo project folder (\*.X) located at `[your_path]\Microchip-WFI32-IoT\firmware\WFI32-IoT_Azure.X`
 
@@ -42,27 +42,31 @@ As a solution builder, you can use IoT Central to develop a cloud-hosted IoT sol
 
     - right-click on the `WFI32-IoT_Azure` project
     - select `Properties`
-    - select "WFI32-IoT Board-SN" for `Connected Hardware Tool`
+    - select "Curiosity/Starter Kits (PKOB4)-SN" for `Connected Hardware Tool`
     - select the latest `PIC32MZ-W_DFP` version
     - select the latest XC32 version for `Compiler Toolchain`
+
+        <img src=".//media/image42.png" style="width:5.in;height:3.18982in" alt="A screenshot of a cell phone Description automatically generated" />
 
     If any changes were made in the project properties window, the `Apply` button should become enabled.  Make sure to hit the `Apply` button before hitting `OK`
 
 6. Right-click on the `WFI32-IoT_Azure` project and select `Clean`. Right-click the project again and select `Make and Program Device`. This operation will automatically build the project before attempting to program the target device. After the `BUILD SUCCESSFUL` message appears in the Output window, the application HEX file will be programmed onto the WFI32-IoT Board. Once programming has finished, the board will automatically reset and start running its application code
 
-7. Set up a Command Line Interface (CLI) to the board. Open a serial terminal (e.g. PuTTY, TeraTerm, etc.) and connect to the COM port corresponding to your board at `115200 baud` (e.g. open PuTTY Configuration window &gt; choose `session` &gt; choose `Serial`&gt; enter/select the right COMx port). You can find the right COM port number by opening your PC’s `Device Manager` &gt; expand `Ports(COM & LPT)` &gt; take note of `USB Serial Device (COMx)`
+7. Quit the MPLAB X IDE by selecting `MPLAB X IDE` &gt; `Quit MPLAB X IDE` from the main toolbar. Please confirm the application has actually been closed before proceeding...
+
+8. Set up a Command Line Interface (CLI) to the board. Open a serial terminal (e.g. PuTTY, TeraTerm, etc.) and connect to the COM port corresponding to your board at `115200 baud` (e.g. open PuTTY Configuration window &gt; choose `session` &gt; choose `Serial`&gt; enter/select the right COMx port). You can find the right COM port number by opening your PC’s `Device Manager` &gt; expand `Ports(COM & LPT)` &gt; take note of `USB Serial Device (COMx)`
 
     <img src=".//media/image43.png"/>
 
- 8. Before typing anything in the terminal emulator window, **disable** the local echo feature in the terminal settings for best results.  In the terminal window, hit `[RETURN]` to bring up the Command Line Interface prompt (which is simply the `>` character). Type `help` and then hit `[RETURN]` to get the list of available commands for the CLI.  The Command Line Interface allows you to send simple ASCII-string commands to set or get the user-configurable operating parameters of the application while it is running
+9. Before typing anything in the terminal emulator window, **disable** the local echo feature in the terminal settings for best results.  In the terminal window, hit `[RETURN]` to bring up the Command Line Interface prompt (which is simply the `>` character). Type `help` and then hit `[RETURN]` to get the list of available commands for the CLI.  The Command Line Interface allows you to send simple ASCII-string commands to set or get the user-configurable operating parameters of the application while it is running
 
     <img src=".//media/image44.png" style="width:5.in;height:2.68982in" alt="A screenshot of a cell phone Description automatically generated" />
 
-9. Enter in the `wifi` command on the CLI. You should see that the WFI32-IoT Board replies with a message that it is *not* currently connected to Wi-Fi
+10. Enter in the `wifi` command on the CLI. You should see that the WFI32-IoT Board replies with a message that it is *not* currently connected to Wi-Fi
 
     <img src=".//media/image45.png" style="width:5.in;height:1.58982in" alt="A screenshot of a cell phone Description automatically generated" />
 
-10. Configure the WFI32-IoT Board's device settings with your wireless router’s SSID and password. To be on the safe side, there should be no spaces used in the SSID and password for your network, and the Wi-Fi Access Point should be operating in the 2.4 GHz frequency band.
+11. Configure the WFI32-IoT Board's device settings with your wireless router’s SSID and password. To be on the safe side, there should be no spaces used in the SSID and password for your network, and the Wi-Fi Access Point should be operating in the 2.4 GHz frequency band.
 
     The easiest way to configure the device's Wi-Fi settings is to open the `WFI32-IOT` Mass Storage Device and double-click on the `clickme.html` file - then follow the steps shown on the resulting web page
 
@@ -89,11 +93,11 @@ As a solution builder, you can use IoT Central to develop a cloud-hosted IoT sol
         CMD:SEND_UART=wifi MY_SSID,MY_PSWD,4
         ```
 
-11. Type the `reset` command on the serial terminal CLI. Within a few seconds, you should see the Blue LED on the WFI32-IoT Board stay constantly on - signifying that the board has successfuly connected to your Wi-Fi network using the settings stored in the `WIFI.CFG` file
+12. Type the `reset` command on the serial terminal CLI. Within a few seconds, you should see the Blue LED on the WFI32-IoT Board stay constantly on - signifying that the board has successfuly connected to your Wi-Fi network using the settings stored in the `WIFI.CFG` file
 
     NOTE: Do not proceed until the WFI32-IoT Board has established a successful connection to your Wi-Fi network - the Blue LED needs to be always on!
 
-## C. Confirm Access to the Root, Signer, and Device Certificates
+## Confirm Access to the Root, Signer, and Device Certificates
 
 The `WFI32-IOT` Mass Storage Device (MSD) contains the 3 certificates saved in Privacy Enhanced Format (PEM) which is a Base64 encoded binary format. PEM certificates are frequently used for web servers as they can easily be translated into readable data using a simple text editor. Generally when a PEM encoded file is opened in a text editor, it contains very distinct headers and footers.
 
@@ -103,11 +107,11 @@ Whenever the demo application is reset, it will check for the presence of all 3 
 
 If any of the files do not exist when the demo application is reset, the missing file(s) will be automatically generated. In case any of these files are accidentally edited, simply delete the certificate(s) from the `WFI32-IOT` drive and reset the application so that they will be automatically regenerated.
 
-## D. Create an IoT Central Application for your Device
+## Create an IoT Central Application
 
 IoT Central allows you to create an application dashboard to monitor the telemetry and take appropriate actions based on customized rules.
 
-1. Create a custom IoT Central application by starting with an existing [Microchip IoT Development Board Template](https://apps.azureiotcentral.com/build/new/e54c7769-30ed-4223-979f-2667013845fd) (if there is a problem with loading the template, refer to the [Create an application](https://docs.microsoft.com/en-us/azure/iot-central/core/quick-deploy-iot-central) section to create your IoT Central application from scratch). If you are not currently logged into your [Microsoft account](https://account.microsoft.com/account), you will be prompted to sign in with your credentials to proceed. If you do not have an existing Microsoft account, go ahead and create one now by clicking on the `Create one!` link
+1. Create a custom IoT Central application by starting with an existing [Microchip WFI32-IoT Board Template](https://apps.azureiotcentral.com/build/new/db598a83-644a-4e2c-b4e1-f3e52978d006) (if there is a problem with loading the template, refer to the [Create an application](https://docs.microsoft.com/en-us/azure/iot-central/core/quick-deploy-iot-central) section to create your IoT Central application from scratch). If you are not currently logged into your [Microsoft account](https://account.microsoft.com/account), you will be prompted to sign in with your credentials to proceed. If you do not have an existing Microsoft account, go ahead and create one now by clicking on the `Create one!` link
 
 2. Azure IoT Builder will guide you through the process of creating your application. Review and select the various settings for your IoT Central application (if needed, refer to [Create an application](https://docs.microsoft.com/en-us/azure/iot-central/core/quick-deploy-iot-central) for additional guidance on selecting the settings for your application). Do not click the `Create` button just yet - only after reviewing and taking into consideration the following recommendations:
   
@@ -135,67 +139,7 @@ IoT Central allows you to create an application dashboard to monitor the telemet
 
     <img src=".//media/image108.png" style="width:5.in;height:1.98982in" alt="A screenshot of a cell phone Description automatically generated" />
 
-## E. Create the Device Template for the IoT Central Application
-
-1.	Create the device template that your IoT Central application will use for the WFI32-IoT Board. This template defines the capabilities (telemetry, properties, commands) of the device model. You could manually create and add the device template to your IoT Central application, but why not import the device model from a JSON file that has already been created for the WFI32-IoT Board? Using the navigation pane on the left-hand side of the application, select `Connect` &gt; `Device templates`
-
-    <img src=".//media/image69.png" style="width:5.0in;height:3.00833in" alt="A screenshot of a cell phone Description automatically generated" />
-
-2.	If there is no existing device template that corresponds to "WFI32_IoT_WM", click on the `+ New` button at the top of the page
-
-    <img src=".//media/image70.png" style="width:5.0in;height:3.00833in" alt="A screenshot of a cell phone Description automatically generated" />
-
-3.	Click on the `IoT device` tile to import an existing capability model, then scroll down to the bottom of the page and select `Next: Customize`
-
-    <img src=".//media/image71.png" style="width:5.in;height:2.68982in" alt="A screenshot of a cell phone Description automatically generated" />
-
-4.	Type `WFI32_IoT_WM;2` in the `Device template name` field and click on the `Next: Review` button
-
-    <img src=".//media/image72.png" style="width:5.in;height:1.68982in" alt="A screenshot of a cell phone Description automatically generated" />
-
-5.	Confirm that the information listed under `Basic info` is correct and click on the `Create` button
-
-    <img src=".//media/image73.png" style="width:3.5in;height:0.0432in" alt="A screenshot of a cell phone Description automatically generated" />
-
-6.	Click on the `Import a model` tile which will allow you to upload an existing device model file into the IoT Central application
-
-    <img src=".//media/image74.png" style="width:5.in;height:2.68982in" alt="A screenshot of a cell phone Description automatically generated" />
-
-7.	Navigate to the `device_model` folder (located in the demo top-level main folder) and select the latest device model file to upload (e.g. `wfi32_iot_wm-2.json`)
-
-    <img src=".//media/image77.png">
-
-    NOTE: All IoT Plug and Play certified devices have their device models published in the Azure [Device Models Repository](https://devicemodels.azure.com/). The complete set of device models for all of Microchip's certified devices can be found at https://github.com/Azure/iot-plugandplay-models/tree/main/dtmi/com/microchip
-
-8.	Note all the capabilities that were imported from the JSON file and then click on the `Publish` icon at the top of the page.  A pop-up window should appear to confirm the details for the new template to be added - then click on the `Publish` button
-
-9.	Using the navigation pane on the left-hand side of the application, select `Connect` &gt; `Device templates` and confirm that the new device template has been created/published
-
-    <img src=".//media/image78.png">
-
-10.	Click on the template name (e.g. WFI32_IoT_WM;2), then click on `Views`
-
-    <img src=".//media/image78a.png">
-
-11.	Click on `Editing device and cloud data`
-
-    <img src=".//media/image78b.png" style="width:2.0in;height:2.5in" alt="A screenshot of a cell phone Description automatically generated" />
-
-12.	Type in `Properties` for the `Form name`. Expand the `Properties` category and then check every box in the list. Towards the bottom of the page, click on the `Add section` button. Be sure to click on the `Save` icon at the top of the page
-
-    <img src=".//media/image78c.png" style="width:1.5in;height:3.05in" alt="A screenshot of a cell phone Description automatically generated" />
-
-13.	Hit the `Back` icon at the top of the page. Click on `Views` and then select `Generate default views`
-
-    <img src=".//media/image78d.png" style="width:2.0in;height:2.2in" alt="A screenshot of a cell phone Description automatically generated" />
-
-14.	Click on the `Generate default dashboard view(s)` button
-
-    <img src=".//media/image78e.png" style="width:5.0in;height:2.5in" alt="A screenshot of a cell phone Description automatically generated" />
-
-15.	Click on the `Publish` icon at the top of the page.  A pop-up window should appear to confirm the latest changes to be made to the template - then click on the `Publish` button
-
-## F. Connect your Device to the IoT Central Application
+## Connect and Test the WFI32-IoT Device
 
 1.	Look up the `ID Scope` for your IoT Central application (using the left-hand navigation pane, select `Permissions` &gt; `Device connection groups`)
 
@@ -279,7 +223,7 @@ IoT Central allows you to create an application dashboard to monitor the telemet
 
     <img src=".//media/image94.png" style="width:5.0in;height:4.18982in" alt="A screenshot of a cell phone Description automatically generated" />
 
-## G. Connect your Device to the Dashboard for Data Visualization
+## Configure the Dashboard for Data Visualization
 
 1. Navigate to the left-hand vertical toolbar and click on the `Dashboards` icon
 
@@ -298,7 +242,7 @@ IoT Central allows you to create an application dashboard to monitor the telemet
     <img src=".//media/image102a.png" style="width:5.in;height:2.18982in" alt="A screenshot of a cell phone Description automatically generated" />
     <img src=".//media/image102b.png" style="width:5.in;height:2.18982in" alt="A screenshot of a cell phone Description automatically generated" />
 
-5. Select `Device Group` > `WFI32-IoT WM;1 - All devices` and then check the box for your specific device name for `Devices`
+5. Select `Device Group` > `WFI32-IoT WM;2 - All devices` and then check the box for your specific device name for `Devices`
 
     <img src=".//media/image103a.png" style="width:5.in;height:2.08982in" alt="A screenshot of a cell phone Description automatically generated" />
 
@@ -324,7 +268,7 @@ IoT Central allows you to create an application dashboard to monitor the telemet
 
     <img src=".//media/image108.png" style="width:5.in;height:1.98982in" alt="A screenshot of a cell phone Description automatically generated" />
 
-## H. WFI32-IoT Differential Pressure Sensors
+## WFI32-IoT Differential Pressure Sensors
 
 If you have one or both of the optional MikroElektronika "Ultra-Low Press" and/or "VAV Press" Click boards installed on the WFI32-IoT Board's mikroBUS™ socket, feel free to create a similar IoT Central application using an existing ["WFI32-IoT Differential Pressure Sensors" application template](https://apps.azureiotcentral.com/build/new/926fba4f-fc71-40c7-a129-f608458995c1) that contains a single dashboard specifically for visualizing the differential pressure and temperature sensor telemetry from the Click board(s). Once a new IoT Central application has been created, execute the following steps:
 
@@ -345,9 +289,9 @@ If you have one or both of the optional MikroElektronika "Ultra-Low Press" and/o
 
 5. Click on the `Save` icon
 
-    <img src=".//media/image110.png" style="width:6.0in;height:5.0in" alt="A screenshot of a cell phone Description automatically generated" />
+    <img src=".//media/image109.png" style="width:6.0in;height:5.0in" alt="A screenshot of a cell phone Description automatically generated" />
 
-## I. Expand the Dashboard with Additional Tiles
+## Expand the Dashboard with Additional Tiles
 
 To create additional tiles for your IoT Central dashboard, refer to [Configure the IoT Central application dashboard](https://docs.microsoft.com/en-us/azure/iot-central/core/howto-add-tiles-to-your-dashboard). The below screen captures show additional possibilities of dashboard components that can highlight the telemetry data and properties facilitated by the `Plug and Play` interface.  Note that multiple devices can be selected for each tile to allow groups of devices to be visualized within a single tile. 
 
