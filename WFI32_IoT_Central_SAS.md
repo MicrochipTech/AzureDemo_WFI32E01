@@ -160,7 +160,7 @@ IoT Central allows you to create an application dashboard to monitor the telemet
 
     <img src=".//media/image86.png">
 
-6. In the `Create a new device` window, it is suggested to accept the default device name and ID that are randomly-generated (but can be changed to more meaningful names if you like). Select `WFI32_IoT_WM;2` for the device template. Click on the `Create` button
+6. In the `Create a new device` window, it is suggested to accept the default device name and ID that are randomly-generated (but can be changed to more meaningful names if you like). Select `WFI32_IoT_WM;x` for the device template. Click on the `Create` button
 
     <img src=".//media/image87.png" style="width:5.in;height:3.68982in" alt="A screenshot of a cell phone Description automatically generated" />
 
@@ -242,7 +242,7 @@ IoT Central allows you to create an application dashboard to monitor the telemet
     <img src=".//media/image102a.png" style="width:5.in;height:2.18982in" alt="A screenshot of a cell phone Description automatically generated" />
     <img src=".//media/image102b.png" style="width:5.in;height:2.18982in" alt="A screenshot of a cell phone Description automatically generated" />
 
-5. Select `Device Group` > `WFI32-IoT WM;2 - All devices` and then check the box for your specific device name for `Devices`
+5. Select `Device Group` > `WFI32-IoT WM;x - All devices` and then check the box for your specific device name for `Devices`
 
     <img src=".//media/image103a.png" style="width:5.in;height:2.08982in" alt="A screenshot of a cell phone Description automatically generated" />
 
@@ -283,7 +283,7 @@ If you have one or both of the optional MikroElektronika "Ultra-Low Press" and/o
 4. For each of the tiles used to display device data (and does not currently show any data), configure each tile by adding your device to the tile by executing the following steps:
 
     - click `Edit` icon
-    - select `WFI32_IoT_WM` for `Device group`
+    - select `WFI32_IoT_WM;x` for `Device group`
     - click `Select All` for `Devices`
     - click the `Update` button
 
