@@ -8973,13 +8973,13 @@ files:
   security: NON_SECURE
   type: SOURCE
   userChecksum: FB421C58234CB2C2B3C3304EFDE45C1C
-- generatedChecksum: 7A62C291CFEEA6DCCA57EFF1A90CB2D4
+- generatedChecksum: 060738C13795B8569C33764E12B07154
   logicalPath: config/pic32mz_w1/peripheral/gpio
   name: plib_gpio.c
   physicalPath: peripheral/gpio
   security: NON_SECURE
   type: SOURCE
-  userChecksum: 7A62C291CFEEA6DCCA57EFF1A90CB2D4
+  userChecksum: 03FA650CC6058E04D731EAEFFC548CA8
 - generatedChecksum: B86A610558E91708244B4D958BE1DB48
   logicalPath: config/pic32mz_w1/peripheral/i2c/master
   name: plib_i2c1_master.c
@@ -9105,7 +9105,7 @@ files:
   physicalPath: system/command/src
   security: NON_SECURE
   type: SOURCE
-  userChecksum: 75C83AA1697B5EFAA25930859E6BB836
+  userChecksum: 5FB0588D07713038038181F141368D39
 - generatedChecksum: 20C22A19D5DC74DEBFC4CCCA83B6F603
   logicalPath: config/pic32mz_w1/system/console
   name: sys_console.c
@@ -13018,7 +13018,7 @@ files:
   physicalPath: ../../azure_rtos_demo/sample_azure_iot_embedded_sdk
   security: NON_SECURE
   type: HEADER
-  userChecksum: 5423E1B68F276BAAE9E8FF40DB2F2D62
+  userChecksum: B8E964B02F01F3E1391F2F68870CBF09
 - generatedChecksum: 9E71D345C6F5A276C502502C87316EA5
   logicalPath: config/pic32mz_w1/usb
   name: scsi.h

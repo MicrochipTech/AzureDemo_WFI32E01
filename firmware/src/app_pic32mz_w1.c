@@ -169,6 +169,8 @@ static void wifiConnectCallback(DRV_HANDLE handle, WDRV_PIC32MZW_ASSOC_HANDLE as
         case WDRV_PIC32MZW_CONN_STATE_CONNECTED:
             appConnectStatus.wifi = true;
             LED_BLUE_On();
+            GPIO_RA14_Clear();
+            GPIO_RA13_Set();
             SYS_CONSOLE_MESSAGE("WiFi Connected\r\n");
             break;
         case WDRV_PIC32MZW_CONN_STATE_FAILED:

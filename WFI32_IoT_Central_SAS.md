@@ -1,4 +1,4 @@
-# Connecting the WFI32-IoT Board (Part No. EV36W50A) to Azure IoT Central using Symmetric Key Attestation
+# Connecting the WFI32-IoT Development Board (Part No. EV36W50A) to Azure IoT Central using Symmetric Key Attestation
 
 NOTE: Should you encounter any issues/obstacles with the following procedure, check out the [FAQ section](./FAQ.md)
 
@@ -50,7 +50,7 @@ As a solution builder, you can use IoT Central to develop a cloud-hosted IoT sol
 
     If any changes were made in the project properties window, the `Apply` button should become enabled.  Make sure to hit the `Apply` button before hitting `OK`
 
-6. Right-click on the `WFI32-IoT_Azure` project and select `Clean`. Right-click the project again and select `Make and Program Device`. This operation will automatically build the project before attempting to program the target device. After the `BUILD SUCCESSFUL` message appears in the Output window, the application HEX file will be programmed onto the WFI32-IoT Board. Once programming has finished, the board will automatically reset and start running its application code. The Mass Storage Device will reinitialize and take on the new name of `WFI32-IOT`
+6. Right-click on the `WFI32-IoT_Azure` project and select `Clean`. Right-click the project again and select `Make and Program Device`. This operation will automatically build the project before attempting to program the target device. After the `BUILD SUCCESSFUL` message appears in the Output window, the application HEX file will be programmed onto the WFI32-IoT Development Board. Once programming has finished, the board will automatically reset and start running its application code. The Mass Storage Device will reinitialize and take on the new name of `WFI32-IOT`
 
 7. Quit the MPLAB X IDE by selecting `MPLAB X IDE` &gt; `Quit MPLAB X IDE` from the main toolbar. Please confirm the application has actually been closed before proceeding...
 
@@ -62,11 +62,11 @@ As a solution builder, you can use IoT Central to develop a cloud-hosted IoT sol
 
     <img src=".//media/image44.png" style="width:5.in;height:2.68982in" alt="A screenshot of a cell phone Description automatically generated" />
 
-10. Enter in the `wifi` command on the CLI. You should see that the WFI32-IoT Board replies with a message that it is *not* currently connected to Wi-Fi
+10. Enter in the `wifi` command on the CLI. You should see that the WFI32-IoT Development Board replies with a message that it is *not* currently connected to Wi-Fi
 
     <img src=".//media/image45.png" style="width:5.in;height:1.58982in" alt="A screenshot of a cell phone Description automatically generated" />
 
-11. Configure the WFI32-IoT Board's device settings with your wireless router’s SSID and password. To be on the safe side, there should be no spaces used in the SSID and password for your network, and the Wi-Fi Access Point should be operating in the 2.4 GHz frequency band.
+11. Configure the WFI32-IoT Development Board's device settings with your wireless router’s SSID and password. To be on the safe side, there should be no spaces used in the SSID and password for your network, and the Wi-Fi Access Point should be operating in the 2.4 GHz frequency band.
 
     The easiest way to configure the device's Wi-Fi settings is to open the `WFI32-IOT` Mass Storage Device and double-click on the `clickme.html` file - then follow the steps shown on the resulting web page
 
@@ -93,9 +93,9 @@ As a solution builder, you can use IoT Central to develop a cloud-hosted IoT sol
         CMD:SEND_UART=wifi MY_SSID,MY_PSWD,4
         ```
 
-12. Type the `reset` command on the serial terminal CLI. Within a few seconds, you should see the Blue LED on the WFI32-IoT Board stay constantly on - signifying that the board has successfuly connected to your Wi-Fi network using the settings stored in the `WIFI.CFG` file
+12. Type the `reset` command on the serial terminal CLI. Within a few seconds, you should see the Blue LED on the WFI32-IoT Development Board stay constantly on - signifying that the board has successfuly connected to your Wi-Fi network using the settings stored in the `WIFI.CFG` file
 
-    NOTE: Do not proceed until the WFI32-IoT Board has established a successful connection to your Wi-Fi network - the Blue LED needs to be always on!
+    NOTE: Do not proceed until the WFI32-IoT Development Board has established a successful connection to your Wi-Fi network - the Blue LED needs to be always on!
 
 ## Confirm Access to the Root, Signer, and Device Certificates
 
@@ -145,11 +145,11 @@ IoT Central allows you to create an application dashboard to monitor the telemet
 
     <img src=".//media/image84a.png" style="width:5.in;height:3.18982in" alt="A screenshot of a cell phone Description automatically generated" />
 
-2. Enter in the `cloud` command on the CLI. You should see that the WFI32-IoT Board replies with a message that it is *not* currently connected to the Cloud
+2. Enter in the `cloud` command on the CLI. You should see that the WFI32-IoT Development Board replies with a message that it is *not* currently connected to the Cloud
 
     <img src=".//media/image85.png" style="width:5.in;height:2.18982in" alt="A screenshot of a cell phone Description automatically generated" />
 
-3. Set the ID Scope value in the WFI32-IoT Board by editing the `CLOUD.CFG` file which is accessed via the `WFI32-IOT` disk drive. The unique ID Scope value will be used by the WFI32-IoT Board to connect to the built-in DPS used by your IoT Central application. Using the text editor of your choice, modify the existing line in the file so that the ID_SCOPE string is set to the value assigned to your IoT Central application, for example
+3. Set the ID Scope value in the WFI32-IoT Development Board by editing the `CLOUD.CFG` file which is accessed via the `WFI32-IOT` disk drive. The unique ID Scope value will be used by the WFI32-IoT Development Board to connect to the built-in DPS used by your IoT Central application. Using the text editor of your choice, modify the existing line in the file so that the ID_SCOPE string is set to the value assigned to your IoT Central application, for example
     ```bash
     "ID_SCOPE":	"0ne0041E397",
     ```
@@ -179,7 +179,7 @@ IoT Central allows you to create an application dashboard to monitor the telemet
     ```
     <img src=".//media/image89a.png" style="width:5.in;height:2.68982in" alt="A screenshot of a cell phone Description automatically generated" />
 
-10. Enter in the `reset` command on the CLI (or hit the `RESET` button on the WFI32-IoT Board)
+10. Enter in the `reset` command on the CLI (or hit the `RESET` button on the WFI32-IoT Development Board)
 
     <img src=".//media/image89b.png" style="width:5.in;height:1.58982in" alt="A screenshot of a cell phone Description automatically generated" />
 
@@ -187,7 +187,7 @@ IoT Central allows you to create an application dashboard to monitor the telemet
 
     <img src=".//media/image89c.png"/>
 
-12. Press each of the `SW1` & `SW2` user buttons on the WFI32-IoT Board a few times. The Red LED should blink on each user button press that is detected
+12. Press each of the `SW1` & `SW2` user buttons on the WFI32-IoT Development Board a few times. The Red LED should blink on each user button press that is detected
 
     <img src=".//media/image89d.png" style="width:5.in;height:2.08982in" alt="A screenshot of a cell phone Description automatically generated" />
 
@@ -270,7 +270,7 @@ IoT Central allows you to create an application dashboard to monitor the telemet
 
 ## WFI32-IoT Differential Pressure Sensors
 
-If you have one or both of the optional MikroElektronika "Ultra-Low Press" and/or "VAV Press" Click boards installed on the WFI32-IoT Board's mikroBUS™ socket, use the pre-configured example dashboard for visualizing the differential pressure and temperature sensor telemetry from the Click board(s).
+If you have one or both of the optional MikroElektronika "Ultra-Low Press" and/or "VAV Press" Click boards installed on the WFI32-IoT Development Board's mikroBUS™ socket, use the pre-configured example dashboard for visualizing the differential pressure and temperature sensor telemetry from the Click board(s).
 
 1. Using the left-hand navigation pane, select `Analyze` &gt; `Dashboards`
 
@@ -291,8 +291,20 @@ If you have one or both of the optional MikroElektronika "Ultra-Low Press" and/o
 
 5. Click on the `Save` icon
 
-    <img src=".//media/image110.png" style="width:6.0in;height:5.0in" alt="A screenshot of a cell phone Description automatically generated" />
+    <img src=".//media/image110.png" style="width:7.0in;height:6.0in" alt="A screenshot of a cell phone Description automatically generated" />
 
+6. The demo application uses two of the WFI32 module's pins as GPIO's to convey the status of the board. Pins 1 & 15 of the mikroBUS™ connector can be read simultaneously as a 2-bit value representing 4 possible states ('0' = Logic LOW, '1' = Logic HIGH)
+
+    <img src=".//media/image111.png" style="width:5.0in;height:1.5in" alt="A screenshot of a cell phone Description automatically generated" />
+
+    NOTE: An alarm condition is triggered whenever the differential pressure reading of either sensor has exceeded a pre-set value which can be easily changed in the `app.h` header file of the project
+
+    ```bash
+    #define ALARM_PRESSURE_PA 25.0
+    ```
+
+    <img src=".//media/image112.png" style="width:2.5in;height:2.7in" alt="A screenshot of a cell phone Description automatically generated" />
+ 
 ## Expand the Dashboard with Additional Tiles
 
 To create additional tiles for your IoT Central dashboard, refer to [Configure the IoT Central application dashboard](https://docs.microsoft.com/en-us/azure/iot-central/core/howto-add-tiles-to-your-dashboard). The below screen captures show additional possibilities of dashboard components that can highlight the telemetry data and properties facilitated by the `Plug and Play` interface.  Note that multiple devices can be selected for each tile to allow groups of devices to be visualized within a single tile. 

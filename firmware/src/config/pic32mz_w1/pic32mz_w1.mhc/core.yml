@@ -82,6 +82,13 @@ children:
       - type: User
         attributes: {value: INT0}
   - type: String
+    attributes: {id: BSP_PIN_113_DIR}
+    children:
+    - type: Values
+      children:
+      - type: User
+        attributes: {value: Out}
+  - type: String
     attributes: {id: BSP_PIN_113_FUNCTION_NAME}
     children:
     - type: Values
@@ -2271,7 +2278,7 @@ children:
     - type: Values
       children:
       - type: Dynamic
-        attributes: {id: core, value: '8194'}
+        attributes: {id: core, value: '24578'}
   - type: Hex
     attributes: {id: SYS_PORT_B_ANSEL}
     children:
