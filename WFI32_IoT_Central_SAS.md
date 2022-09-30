@@ -20,29 +20,45 @@ As a solution builder, you can use IoT Central to develop a cloud-hosted IoT sol
 
 ## Program the Plug and Play Demo
 
-1. Clone/download the MPLAB X demo project by issuing the following commands in a `Command Prompt` or `PowerShell` window
+1. Clone/download the MPLAB X demo project by issuing the following commands in a `Command Prompt` or `PowerShell` window. This operation will create a new folder in the directory where this command has been executed
 
     ```bash
     git clone <Demo_URL>
+    
+    (e.g. <Demo_URL> =  https://github.com/MicrochipTech/WFI32-IoT_Azure_PnP_Demo)
     ```
 
 2. Connect the board to PC, then make sure a device named `CURIOSITY` shows up as a disk drive (i.e. Mass Storage Device) on the `Desktop` or in a `File Explorer` window
 
-3. Launch the MPLAB X IDE and navigate to the main toolbar's `File` > `Open Project` operation to load the demo project folder (\*.X) located at `[your_path]\Microchip-WFI32-IoT\firmware\WFI32-IoT_Azure.X`
+    <img src=".//media/image17a.png" />
+
+3. Launch the `MPLAB X` IDE (this tool should have been previously installed and most likely resides in the \Program Files\Microchip\ folder)
+
+    <img src=".//media/image18a.png" style="width:2.0in;height:4.0833in" alt="A screenshot of a cell phone Description automatically generated" />
+
+    Once the MPLAB X IDE has finished its initialization routines, you should notice the "Kit Window" that acknowledges an active connection to the WFI32-IoT Development Board
+
+    <img src=".//media/image18b.png"  />
+
+4. Navigate to the main toolbar's `File` > `Open Project` operation to load the demo project folder (\*.X) located at `[your_path]\Microchip-WFI32-IoT\firmware\WFI32-IoT_Azure.X`
+
+    <img src=".//media/image19a.png" style="width:3.0in;height:2.0833in" alt="A screenshot of a cell phone Description automatically generated" />
+
+    <img src=".//media/image19b.png" style="width:4.0in;height:2.23in" alt="A screenshot of a cell phone Description automatically generated" />
 
    If the `load error` message in red appears in the `Output` window, click on the `Resolve DFP for configuration: default` link
 
     <img src=".//media/image21.png" style="width:6.5in;height:1.00833in" alt="A screenshot of a cell phone Description automatically generated" />
 
-4. Set the `WFI32-IoT_Azure` project as the main (currently focused/active) project by right-clicking on it and selecting `Set as Main Project`
+5. Set the `WFI32-IoT_Azure` project as the main (currently focused/active) project by right-clicking on it and selecting `Set as Main Project`
 
     <img src=".//media/image41.png" style="width:5.in;height:3.18982in" alt="A screenshot of a cell phone Description automatically generated" />
 
-5. Verify the project properties are set correctly before building the project by executing the following steps:
+6. Verify the project properties are set correctly before building the project by executing the following steps:
 
     - right-click on the `WFI32-IoT_Azure` project
     - select `Properties`
-    - select "Curiosity/Starter Kits (PKOB4)-SN" for `Connected Hardware Tool`
+    - under `Connected Hardware Tool`, select the name which has been pre-assigned to your specific board (e.g. "Curiosity/Starter Kits (PKOB4)", "WFI32-IoT Board-SN", etc.)
     - select the latest `PIC32MZ-W_DFP` version
     - select the latest XC32 version for `Compiler Toolchain`
 
@@ -50,23 +66,23 @@ As a solution builder, you can use IoT Central to develop a cloud-hosted IoT sol
 
     If any changes were made in the project properties window, the `Apply` button should become enabled.  Make sure to hit the `Apply` button before hitting `OK`
 
-6. Right-click on the `WFI32-IoT_Azure` project and select `Clean`. Right-click the project again and select `Make and Program Device`. This operation will automatically build the project before attempting to program the target device. After the `BUILD SUCCESSFUL` message appears in the Output window, the application HEX file will be programmed onto the WFI32-IoT Development Board. Once programming has finished, the board will automatically reset and start running its application code. The Mass Storage Device will reinitialize and take on the new name of `WFI32-IOT`
+7. Right-click on the `WFI32-IoT_Azure` project and select `Clean`. Right-click the project again and select `Make and Program Device`. This operation will automatically build the project before attempting to program the target device. After the `BUILD SUCCESSFUL` message appears in the Output window, the application HEX file will be programmed onto the WFI32-IoT Development Board. Once programming has finished, the board will automatically reset and start running its application code. The Mass Storage Device will reinitialize and take on the new name of `WFI32-IOT`
 
-7. Quit the MPLAB X IDE by selecting `MPLAB X IDE` &gt; `Quit MPLAB X IDE` from the main toolbar. Please confirm the application has actually been closed before proceeding...
+8. Quit the MPLAB X IDE by selecting `MPLAB X IDE` &gt; `Quit MPLAB X IDE` from the main toolbar. Please confirm the application has actually been closed before proceeding...
 
-8. Set up a Command Line Interface (CLI) to the board. Open a serial terminal (e.g. PuTTY, TeraTerm, etc.) and connect to the COM port corresponding to your board at `115200 baud` (e.g. open PuTTY Configuration window &gt; choose `session` &gt; choose `Serial`&gt; enter/select the right COMx port). You can find the right COM port number by opening your PC’s `Device Manager` &gt; expand `Ports(COM & LPT)` &gt; take note of `USB Serial Device (COMx)`
+9. Set up a Command Line Interface (CLI) to the board. Open a serial terminal (e.g. PuTTY, TeraTerm, etc.) and connect to the COM port corresponding to your board at `115200 baud` (e.g. open PuTTY Configuration window &gt; choose `session` &gt; choose `Serial`&gt; enter/select the right COMx port). You can find the right COM port number by opening your PC’s `Device Manager` &gt; expand `Ports(COM & LPT)` &gt; take note of `USB Serial Device (COMx)`
 
     <img src=".//media/image43.png"/>
 
-9. Before typing anything in the terminal emulator window, **disable** the local echo feature in the terminal settings for best results.  In the terminal window, hit `[RETURN]` to bring up the Command Line Interface prompt (which is simply the `>` character). Type `help` and then hit `[RETURN]` to get the list of available commands for the CLI.  The Command Line Interface allows you to send simple ASCII-string commands to set or get the user-configurable operating parameters of the application while it is running
+10. Before typing anything in the terminal emulator window, **disable** the local echo feature in the terminal settings for best results.  In the terminal window, hit `[RETURN]` to bring up the Command Line Interface prompt (which is simply the `>` character). Type `help` and then hit `[RETURN]` to get the list of available commands for the CLI.  The Command Line Interface allows you to send simple ASCII-string commands to set or get the user-configurable operating parameters of the application while it is running
 
     <img src=".//media/image44.png" style="width:5.in;height:2.68982in" alt="A screenshot of a cell phone Description automatically generated" />
 
-10. Enter in the `wifi` command on the CLI. You should see that the WFI32-IoT Development Board replies with a message that it is *not* currently connected to Wi-Fi
+11. Enter in the `wifi` command on the CLI. You should see that the WFI32-IoT Development Board replies with a message that it is *not* currently connected to Wi-Fi
 
     <img src=".//media/image45.png" style="width:5.in;height:1.58982in" alt="A screenshot of a cell phone Description automatically generated" />
 
-11. Configure the WFI32-IoT Development Board's device settings with your wireless router’s SSID and password. To be on the safe side, there should be no spaces used in the SSID and password for your network, and the Wi-Fi Access Point should be operating in the 2.4 GHz frequency band.
+12. Configure the WFI32-IoT Development Board's device settings with your wireless router’s SSID and password. To be on the safe side, there should be no spaces used in the SSID and password for your network, and the Wi-Fi Access Point should be operating in the 2.4 GHz frequency band.
 
     The easiest way to configure the device's Wi-Fi settings is to open the `WFI32-IOT` Mass Storage Device and double-click on the `clickme.html` file - then follow the steps shown on the resulting web page
 
@@ -93,7 +109,7 @@ As a solution builder, you can use IoT Central to develop a cloud-hosted IoT sol
         CMD:SEND_UART=wifi MY_SSID,MY_PSWD,4
         ```
 
-12. Type the `reset` command on the serial terminal CLI. Within a few seconds, you should see the Blue LED on the WFI32-IoT Development Board stay constantly on - signifying that the board has successfuly connected to your Wi-Fi network using the settings stored in the `WIFI.CFG` file
+13. Type the `reset` command on the serial terminal CLI. Within a few seconds, you should see the Blue LED on the WFI32-IoT Development Board stay constantly on - signifying that the board has successfuly connected to your Wi-Fi network using the settings stored in the `WIFI.CFG` file
 
     NOTE: Do not proceed until the WFI32-IoT Development Board has established a successful connection to your Wi-Fi network - the Blue LED needs to be always on!
 
