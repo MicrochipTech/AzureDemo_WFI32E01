@@ -1,8 +1,8 @@
-# Provisioning the Microchip WFI32-IoT Board (Part No. EV36W50A) for Azure IoT Central
+# Provisioning the Microchip WFI32-IoT Development Board (Part No. EV36W50A) for Azure IoT Central
 
 ## Introduction
 
- This document describes how to connect the WFI32-IoT Board (featuring the fully certified, highly integrated WFI32E01PC wireless module) to Azure IoT Central which leverages Microsoft’s Azure RTOS to enable better experiences of embedded firmware development for Cloud applications.
+ This document describes how to connect the WFI32-IoT Development Board (featuring the fully certified, highly integrated WFI32E01PC wireless module) to Azure IoT Central which leverages Microsoft’s Azure RTOS to enable better experiences of embedded firmware development for Cloud applications.
 
 <img src=".//media/image1.png" />
 
@@ -10,13 +10,13 @@
 
 - [Introduction](#introduction)
 - [Background Knowledge](#background-knowledge)
-  - [WFI32-IoT Board Overview & Features](#wfi32-iot-board-overview--features-smart--connected--secure)
+  - [WFI32-IoT Development Board Overview & Features](#wfi32-iot-development-board-overview--features-smart--connected--secure)
   - [Microchip “Provisioning” vs. Microsoft “Provisioning”](#microchip-provisioning-vs-microsoft-provisioning)
   - [TLS Connection](#tls-connection)
   - [MQTT Connection](#mqtt-connection)
 - [Create an Azure Account and Subscription](#create-an-azure-account-and-subscription)
 - [Adding Extra Sensors to the WFI32 IoT Board](#adding-extra-sensors-to-the-wfi32-iot-board)
-- [Program the WFI32-IoT Board](#program-the-wfi32-iot-board)
+- [Program the WFI32-IoT Development Board](#program-the-wfi32-iot-development-board)
   - [1. Install the Development Tools](#1-install-the-development-tools)
   - [2. Connect to Azure IoT Central](#2-connect-to-azure-iot-central)
  - [Frequently Asked Questions](#frequently-asked-questions)
@@ -25,11 +25,11 @@
 
 ## Background Knowledge
 
-### WFI32-IoT Board Overview & Features (SMART \| CONNECTED \| SECURE)
+### WFI32-IoT Development Board Overview & Features (SMART \| CONNECTED \| SECURE)
 
 <img src=".//media/image2.png"/>
 
- Download the [WFI32-IoT Board User Guide](https://www.microchip.com/content/dam/mchp/documents/WSG/ProductDocuments/UserGuides/EV36W50A-WFI32-IoT-Board-Users-Guide-DS50003262.pdf) for more details
+ Download the [WFI32-IoT Development Board User Guide](https://www.microchip.com/content/dam/mchp/documents/WSG/ProductDocuments/UserGuides/EV36W50A-WFI32-IoT-Board-Users-Guide-DS50003262.pdf) for more details including the schematics for the board (but do not follow the setup procedure in the document)
 
 ### Microchip “Provisioning” vs. Microsoft “Provisioning”
 
@@ -38,7 +38,7 @@ allows the hardware to be provisioned securely to the right IoT Hub.
 
 ### High Level Architecture between the Client (Microchip WFI32-IoT) and the Cloud (Microsoft Azure)
 
-This high-level architecture description summarizes the interactions between the WFI32-IoT Board and Azure. These are the major puzzle pieces that make up this enablement work of connecting WFI32-IoT Board to Azure through DPS using the most secure authentication:
+This high-level architecture description summarizes the interactions between the WFI32-IoT Development Board and Azure. These are the major puzzle pieces that make up this enablement work of connecting WFI32-IoT Development Board to Azure through DPS using the most secure authentication:
 
 - [Trust&GO Platform](https://www.microchip.com/en-us/products/security/trust-platform/trust-and-go): Microchip-provided implementation for secure authentication.  Each Trust&GO secure element comes with a pre-established locked configuration for thumbprint authentication and keys, streamlining the process of enabling network authentication using the [ATECC608B](https://www.microchip.com/en-us/product/ATECC608B) secure elements. 
 
@@ -50,7 +50,7 @@ This high-level architecture description summarizes the interactions between the
 
 - [Device Provisioning Service (DPS)](https://docs.microsoft.com/en-us/azure/iot-dps/): a helper service for IoT Hub that enables zero-touch, just-in-time provisioning to the right IoT Hub without requiring human intervention, allowing customers to automatically provision millions of devices in a secure and scalable manner
 
-On successful authentication, the WFI32-IoT board will be provisioned to the correct IoT Hub that is pre-linked to DPS during the setup process. We can then leverage Azure IoT Central's application platform services (easy-to-use, highly intuitive web-based graphical tools used for interacting with and testing your IoT devices at scale).
+On successful authentication, the WFI32-IoT Development Board will be provisioned to the correct IoT Hub that is pre-linked to DPS during the setup process. We can then leverage Azure IoT Central's application platform services (easy-to-use, highly intuitive web-based graphical tools used for interacting with and testing your IoT devices at scale).
 
 ### TLS connection
 
@@ -80,9 +80,9 @@ Should you encounter any issues with your account or subscription, [submit a tec
 
 ## Adding Extra Sensors to the WFI32 IoT Board
 
-Even though the WFI32-IoT Board has its own on-board light and temperature sensors, additional sensors can optionally be added relatively quickly using existing off-the-shelf hardware.
+Even though the WFI32-IoT Development Board has its own on-board light and temperature sensors, additional sensors can optionally be added relatively quickly using existing off-the-shelf hardware.
 
-The WFI32-IoT Board, like many Microchip development boards, features a 16-pin (2 rows x 8 pins) expansion socket which conforms to the [mikroBUS™ specification](https://download.mikroe.com/documents/standards/mikrobus/mikroBUS-standard.pdf). The mikroBUS™ standard defines mainboard sockets used for interfacing microcontrollers or microprocessors (mainboards) with integrated circuits and peripheral modules (add-on boards).
+The WFI32-IoT Development Board, like many Microchip development boards, features a 16-pin (2 rows x 8 pins) expansion socket which conforms to the [mikroBUS™ specification](https://download.mikroe.com/documents/standards/mikrobus/mikroBUS-standard.pdf). The mikroBUS™ standard defines mainboard sockets used for interfacing microcontrollers or microprocessors (mainboards) with integrated circuits and peripheral modules (add-on boards).
 
 The standard specifies the physical layout of the mikroBUS™ pinout, the communication and power supply pins used, the positioning of the mikroBUS™ socket on the mainboard, and finally, the silkscreen marking conventions for both the sockets. The purpose of mikroBUS™ is to enable easy hardware expandability with a large number of standardized compact add-on boards, each one carrying a single sensor, transceiver, display, encoder, motor driver, connection port, or any other electronic module or integrated circuit. Created by [MikroElektronika](https://www.mikroe.com), mikroBUS™ is an open standard — anyone can implement mikroBUS™ in their hardware design.
 
@@ -102,17 +102,17 @@ This compact add-on board contains a board-mount pressure sensor. This board fea
 
 <img src=".//media/image9b.png" style="width:2in;height:3.5in"/>
 
-Both ULP & VAV Click boards can be connected to the WFI32-IoT Board at the same time using the MikroElektronika [Shuttle Bundle](https://www.mikroe.com/mikrobus-shuttle-bundle) accessory kit. The bundle features the [Shuttle click](https://www.mikroe.com/shuttle-click) 4-socket expansion board, which provides an easy and elegant solution for stacking up to four Click boards™ onto a single mikroBUS™ socket. It is a perfect solution for expanding the capacity of the development system with additional mikroBUS™ sockets when there is a demand for using more Click boards™ than the used development system is able to support.
+Both ULP & VAV Click boards can be connected to the WFI32-IoT Development Board at the same time using the MikroElektronika [Shuttle Bundle](https://www.mikroe.com/mikrobus-shuttle-bundle) accessory kit. The bundle features the [Shuttle click](https://www.mikroe.com/shuttle-click) 4-socket expansion board, which provides an easy and elegant solution for stacking up to four Click boards™ onto a single mikroBUS™ socket. It is a perfect solution for expanding the capacity of the development system with additional mikroBUS™ sockets when there is a demand for using more Click boards™ than the used development system is able to support.
 
 <img src=".//media/image10a.png">
 
 <img src=".//media/image10b.png">
 
-## Program the WFI32-IoT Board
+## Program the WFI32-IoT Development Board
 
 ### 1. Install the Development Tools
 
-Embedded software development tools from Microchip need to be pre-installed in order to properly program the WFI32-IoT Board and provision it for use with Microsoft Azure IoT services.
+Embedded software development tools from Microchip need to be pre-installed in order to properly program the WFI32-IoT Development Board and provision it for use with Microsoft Azure IoT services.
 
 Click this link for the setup procedure (when completed, return to this page): [Development Tools Installation](./Dev_Tools_Install.md)
 
@@ -124,7 +124,7 @@ Azure IoT technologies and services provide you with options to create a wide va
 
 The web UI lets you quickly connect devices, monitor device conditions, create rules, and manage millions of devices and their data throughout their life cycle. Furthermore, it enables you to act on device insights by extending IoT intelligence into line-of-business applications.
 
-Click this link for the WFI32-IoT Board provisioning procedure: [Connecting the WFI32-IoT Board to Azure IoT Central](./WFI32_IoT_Central_SAS.md)
+Click this link for the WFI32-IoT Development Board provisioning procedure: [Connecting the WFI32-IoT Development Board to Azure IoT Central](./WFI32_IoT_Central_SAS.md)
 
 ## Frequently Asked Questions
 

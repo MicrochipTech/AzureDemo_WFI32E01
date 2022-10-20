@@ -72,7 +72,8 @@ typedef struct
 typedef struct
 {
     bool wifi;
-    bool cloud;    
+    bool cloud;
+    bool alarm;
 } APP_CONNECT_STATUS;
 
 // *****************************************************************************

@@ -874,7 +874,9 @@ void sample_telemetry_thread_entry(ULONG parameter)
     UINT buffer_length;
     UCHAR loop = NX_TRUE;
     uint32_t SM8436_serialNumber;
-    float temperature, pressure;    
+    float ULP_temperature, VAV_temperature;
+    float ULP_pressure = 0.0;
+    float VAV_pressure = 0.0;    
     NX_PARAMETER_NOT_USED(parameter);
 
     APP_SENSORS_init();
@@ -946,14 +948,18 @@ void sample_telemetry_thread_entry(ULONG parameter)
             {
                 //printf("\r\n<ULP Click> STATUS [ %x ] ", APP_SENSORS_data.i2c.rxBuffer[0]);
                 ULTRALOWPRESS_clearStatus();
-                temperature = ULTRALOWPRESS_getTemperature();
+                ULP_temperature = ULTRALOWPRESS_getTemperature();
                 //printf("DSP_T [ %x ] ", APP_SENSORS_data.i2c.rxBuffer[0]);
-                pressure = ULTRALOWPRESS_getPressure();     
+                ULP_pressure = ULTRALOWPRESS_getPressure();     
                 //printf("DSP_S [ %x ]\r\n", APP_SENSORS_data.i2c.rxBuffer[0]);
                 buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
                         "{\"ULP_temperature\": %.2f, \"ULP_pressure\": %.2f}",
-                        temperature, pressure );                
+                        ULP_temperature, ULP_pressure );                
                 send_telemetry_message(parameter, (UCHAR *)buffer, buffer_length);
+                if (ULP_pressure > ALARM_PRESSURE_PA)
+                {
+                    appConnectStatus.alarm = true;
+                }
             }
             else
             {
@@ -965,7 +971,7 @@ void sample_telemetry_thread_entry(ULONG parameter)
 #ifdef CLICK_VAVPRESS
         if (VAVPRESS_status == VAVPRESS_OK)
         {
-            if (VAVPRESS_getSensorReadings(&VAVPRESS_param_data, &pressure, &temperature) == VAVPRESS_OK)
+            if (VAVPRESS_getSensorReadings(&VAVPRESS_param_data, &VAV_pressure, &VAV_temperature) == VAVPRESS_OK)
             {
                 //printf("\r\n<VAV Click> Extended data readout ( pressure | temperature ) = [ %x (%i) | %x (%i) ]\r\n",
                         //APP_SENSORS_data.i2c.rxBuffer[0], VAVPRESS_2sCompToDecimal(APP_SENSORS_data.i2c.rxBuffer[0]),
@@ -974,14 +980,23 @@ void sample_telemetry_thread_entry(ULONG parameter)
                 //tx_thread_sleep(500);
                 buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
                         "{\"VAV_temperature\": %.2f, \"VAV_pressure\": %.2f}",
-                        temperature, pressure);              
-                send_telemetry_message(parameter, (UCHAR *)buffer, buffer_length);      
+                        VAV_temperature, VAV_pressure);              
+                send_telemetry_message(parameter, (UCHAR *)buffer, buffer_length);
+                if (VAV_pressure > ALARM_PRESSURE_PA)
+                {
+                    appConnectStatus.alarm = true;
+                }
             }
         }
 #endif /* CLICK_VAVPRESS */
 #ifdef SEND_LED_PROPERTIES_WITH_TELEMETRY
         sample_reported_properties_send_action(&iothub_client);
 #endif /* SEND_LED_PROPERTIES_WITH_TELEMETRY */
+    if ( (ULP_pressure < ALARM_PRESSURE_PA) &&
+         (VAV_pressure < ALARM_PRESSURE_PA) )
+    {
+        appConnectStatus.alarm = false; 
+    }
 #ifdef PNP_CERTIFICATION_TESTING
         send_button_event(parameter, 1, button_press_data.sw1_press_count);
 #endif /* PNP_CERTIFICATION_TESTING */
@@ -1245,6 +1260,7 @@ void sample_app_ctrl_thread_entry(ULONG parameter)
     while (loop)
     {
         APP_LED_refresh();
+        APP_STATUS_update();
 
         if (button_press_data.flag.sw1 == true)
         {
