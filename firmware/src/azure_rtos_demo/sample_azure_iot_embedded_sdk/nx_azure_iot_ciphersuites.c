@@ -9,10 +9,8 @@
 /*                                                                        */
 /**************************************************************************/
 
+#include "sample_config.h"
 #include "nx_azure_iot_ciphersuites.h"
-#ifdef ENABLE_ATECC608B
-extern NX_CRYPTO_METHOD crypto_method_ecdsa_pkcs11_atca;
-#endif
 
 #if (!NX_SECURE_TLS_TLS_1_2_ENABLED)
 #error "TLS 1.2 must be enabled."
@@ -30,10 +28,17 @@ extern NX_CRYPTO_METHOD crypto_method_sha256;
 extern NX_CRYPTO_METHOD crypto_method_sha384;
 extern NX_CRYPTO_METHOD crypto_method_aes_cbc_128;
 extern NX_CRYPTO_METHOD crypto_method_rsa;
+
 #ifdef NX_SECURE_ENABLE_ECC_CIPHERSUITE
-extern NX_CRYPTO_METHOD crypto_method_ecdhe;
+
+#ifdef USE_X509_WITH_ECC608
+extern NX_CRYPTO_METHOD crypto_method_ecdsa_pkcs11_atca;
+#else
 extern NX_CRYPTO_METHOD crypto_method_ecdsa;
 extern NX_CRYPTO_METHOD crypto_method_ec_secp384;
+#endif
+extern NX_CRYPTO_METHOD crypto_method_ec_secp256;
+extern NX_CRYPTO_METHOD crypto_method_ecdhe;
 #endif /* NX_SECURE_ENABLE_ECC_CIPHERSUITE */ 
 
 const NX_CRYPTO_METHOD *_nx_azure_iot_tls_supported_crypto[] =
@@ -47,8 +52,13 @@ const NX_CRYPTO_METHOD *_nx_azure_iot_tls_supported_crypto[] =
     &crypto_method_rsa,
 #ifdef NX_SECURE_ENABLE_ECC_CIPHERSUITE
     &crypto_method_ecdhe,
+#ifdef USE_X509_WITH_ECC608
+    &crypto_method_ecdsa_pkcs11_atca,
+#else
     &crypto_method_ecdsa,
-    &crypto_method_ec_secp384,    
+    &crypto_method_ec_secp384,
+#endif    
+    &crypto_method_ec_secp256,    
 #endif /* NX_SECURE_ENABLE_ECC_CIPHERSUITE */
 };
 

@@ -57,3 +57,5 @@ firmware/WFI32-IoT_Azure.X/.generated_files
 **/nbproject/Makefile-*
 **/nbproject/Package-*
  
+# Backup files
+*.bak

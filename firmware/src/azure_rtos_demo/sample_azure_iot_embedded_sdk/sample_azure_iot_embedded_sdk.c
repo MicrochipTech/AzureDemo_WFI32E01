@@ -50,6 +50,7 @@ extern APP_LED_CTRL appLedCtrl[APP_LED_TOTAL];
 #define SAMPLE_PNP_MODEL_ID         "dtmi:com:Microchip:WFI32_IoT_WM;2"
 #define SAMPLE_PNP_DPS_PAYLOAD      "{\"modelId\":\"" SAMPLE_PNP_MODEL_ID "\"}"
 
+extern APP_PIC32MZ_W1_DATA app_pic32mz_w1Data;
 /* Generally, IoTHub Client and DPS Client do not run at the same time, user can use union as below to
    share the memory between IoTHub Client and DPS Client.
 
@@ -79,6 +80,8 @@ extern const UINT sample_device_cert_len;
 extern const UCHAR sample_device_private_key_ptr[];
 extern const UINT sample_device_private_key_len;
 NX_SECURE_X509_CERT device_certificate;
+extern UCHAR g_registration_id[];
+extern UINT g_registration_id_length;
 #endif /* USE_DEVICE_CERTIFICATE */
 
 /* Define buffer for IoTHub info.  */
@@ -478,8 +481,9 @@ UINT iothub_device_id_length = sizeof(DEVICE_ID) - 1;
 #if (USE_DEVICE_CERTIFICATE == 1)
 
     /* Initialize the device certificate.  */
+    // TODO: how to handle private key that is on ECC608? set to NULL?
     else if ((status = nx_secure_x509_certificate_initialize(&device_certificate,
-                                                             (UCHAR *)sample_device_cert_ptr, (USHORT)sample_device_cert_len,
+                                                             (UCHAR *)app_pic32mz_w1Data.ecc608DeviceCert, (USHORT)app_pic32mz_w1Data.certSize,
                                                              NX_NULL, 0,
                                                              (UCHAR *)sample_device_private_key_ptr, (USHORT)sample_device_private_key_len,
                                                              DEVICE_KEY_TYPE)))
@@ -698,6 +702,19 @@ UINT status;
     printf("Start Provisioning Client...\r\n");
   
     /* Initialize IoT provisioning client.  */
+#ifdef USE_X509_WITH_ECC608
+    if ((status = nx_azure_iot_provisioning_client_initialize(&prov_client, &nx_azure_iot,
+                                                              (UCHAR *)ENDPOINT, sizeof(ENDPOINT) - 1,
+                                                              (UCHAR *)ID_SCOPE, strlen(ID_SCOPE),
+                                                              g_registration_id, g_registration_id_length,
+                                                              _nx_azure_iot_tls_supported_crypto,
+                                                              _nx_azure_iot_tls_supported_crypto_size,
+                                                              _nx_azure_iot_tls_ciphersuite_map,
+                                                              _nx_azure_iot_tls_ciphersuite_map_size,
+                                                              nx_azure_iot_tls_metadata_buffer,
+                                                              sizeof(nx_azure_iot_tls_metadata_buffer),
+                                                              &root_ca_cert)))
+#else
     if ((status = nx_azure_iot_provisioning_client_initialize(&prov_client, &nx_azure_iot,
                                                               (UCHAR *)ENDPOINT, sizeof(ENDPOINT) - 1,
                                                               (UCHAR *)ID_SCOPE, strlen(ID_SCOPE),
@@ -709,6 +726,7 @@ UINT status;
                                                               nx_azure_iot_tls_metadata_buffer,
                                                               sizeof(nx_azure_iot_tls_metadata_buffer),
                                                               &root_ca_cert)))
+#endif
     {
         printf("Failed on nx_azure_iot_provisioning_client_initialize!: error code = 0x%08x\r\n", status);
         return(status);
@@ -731,7 +749,7 @@ UINT status;
 #if (USE_DEVICE_CERTIFICATE == 1)
 
     /* Initialize the device certificate.  */
-    else if ((status = nx_secure_x509_certificate_initialize(&device_certificate, (UCHAR *)sample_device_cert_ptr, (USHORT)sample_device_cert_len, NX_NULL, 0,
+    else if ((status = nx_secure_x509_certificate_initialize(&device_certificate, (UCHAR *)app_pic32mz_w1Data.ecc608DeviceCert, (USHORT)app_pic32mz_w1Data.certSize, NX_NULL, 0,
                                                              (UCHAR *)sample_device_private_key_ptr, (USHORT)sample_device_private_key_len, DEVICE_KEY_TYPE)))
     {
         printf("Failed on nx_secure_x509_certificate_initialize!: error code = 0x%08x\r\n", status);

@@ -90,19 +90,29 @@ void hal_rtos_delay_ms(uint32_t delay)
 
 ATCA_STATUS hal_create_mutex(void ** ppMutex, char* pName)
 {
-    (void)pName;
-    
     if (!ppMutex)
     {
         return ATCA_BAD_PARAM;
     }
 
-    if (tx_mutex_create((TX_MUTEX *)*ppMutex, pName, TX_INHERIT) != TX_SUCCESS)
+    if ((*ppMutex) == NULL)
     {
+        *ppMutex = malloc(sizeof(TX_MUTEX));
+        if ((*ppMutex) == NULL)
+        {
+            return ATCA_FUNC_FAIL;
+        }
+    }
+    uint8_t status = tx_mutex_create(*ppMutex, pName, TX_NO_INHERIT);
+    if (status)
+    {
+        free(*ppMutex);
         return ATCA_FUNC_FAIL;
-    }    
-
-    return ATCA_SUCCESS;
+    }
+    else
+    {
+        return ATCA_SUCCESS;
+    }
 }
 
 ATCA_STATUS hal_destroy_mutex(void * pMutex)
@@ -111,9 +121,8 @@ ATCA_STATUS hal_destroy_mutex(void * pMutex)
     {
         return ATCA_BAD_PARAM;
     }
-
-    tx_mutex_delete((TX_MUTEX*)pMutex);
-
+    tx_mutex_delete(pMutex);
+    free(pMutex);
     return ATCA_SUCCESS;
 }
 
@@ -123,10 +132,11 @@ ATCA_STATUS hal_lock_mutex(void * pMutex)
     {
         return ATCA_BAD_PARAM;
     }
-
-    if (tx_mutex_get((TX_MUTEX*)pMutex, ATCA_MUTEX_TIMEOUT) != TX_SUCCESS)
+    
+    uint8_t status = tx_mutex_get(pMutex, TX_WAIT_FOREVER);
+    if (status)
     {
-        return ATCA_GEN_FAIL;
+        return ATCA_FUNC_FAIL;
     }
     else
     {
@@ -140,10 +150,11 @@ ATCA_STATUS hal_unlock_mutex(void * pMutex)
     {
         return ATCA_BAD_PARAM;
     }
-
-    if (tx_mutex_put((TX_MUTEX*)pMutex) != TX_SUCCESS)
+    
+    uint8_t status = tx_mutex_put(pMutex);
+    if (status)
     {
-        return ATCA_GEN_FAIL;
+        return ATCA_FUNC_FAIL;
     }
     else
     {

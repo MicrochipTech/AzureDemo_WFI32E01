@@ -38,6 +38,13 @@ extern   "C" {
 
 #define AZ_TELEMETRYINTERVAL_DEFAULT           5
 
+/* Use certificate-based authentication with PKCS#11/ECC608 */
+/* Comment out 3 lines below to go back to SAS tokens authentication */    
+    
+#define USE_X509_WITH_ECC608
+#define USE_DEVICE_CERTIFICATE 1
+#define DEVICE_KEY_TYPE NX_SECURE_X509_KEY_TYPE_HARDWARE
+    
 #ifdef __cplusplus
 }
 #endif

@@ -75,8 +75,8 @@ extern "C" {
 #define PEM_HEADER "-----BEGIN CERTIFICATE-----\n"
 #define PEM_FOOTER "\n-----END CERTIFICATE-----\n"
 
-/* TODO: max size? */    
-#define CERT_MAX_SIZE 1000
+// TODO: how many bytes is the max size?
+#define CERT_MAX_SIZE 600
     
 extern char default_id_scope[];
 extern char default_registration_id[];
@@ -145,8 +145,10 @@ typedef struct
     
     /* Serial number in hex string format; 9 bytes binary */
     char ecc608SerialNum[27];
+
+    char ecc608DeviceCert[CERT_MAX_SIZE];
+    size_t certSize;
     
-    char ecc608DeviceCert[1024];
 } APP_PIC32MZ_W1_DATA;
 
 // *****************************************************************************

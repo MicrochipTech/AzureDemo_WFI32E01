@@ -7,6 +7,9 @@
       <logicalFolder name="azure_rtos_demo"
                      displayName="azure_rtos_demo"
                      projectFiles="true">
+        <logicalFolder name="f1" displayName="ecc_ciphersuites" projectFiles="true">
+          <itemPath>../src/azure_rtos_demo/ecc608_ciphersuites/nx_crypto_ecdsa_pkcs11_atca.h</itemPath>
+        </logicalFolder>
         <logicalFolder name="sample_azure_iot_embedded_sdk"
                        displayName="sample_azure_iot_embedded_sdk"
                        projectFiles="true">
@@ -902,6 +905,10 @@
       <logicalFolder name="azure_rtos_demo"
                      displayName="azure_rtos_demo"
                      projectFiles="true">
+        <logicalFolder name="f1" displayName="ecc608_ciphersuites" projectFiles="true">
+          <itemPath>../src/azure_rtos_demo/ecc608_ciphersuites/nx_crypto_atca_ciphersuites.c</itemPath>
+          <itemPath>../src/azure_rtos_demo/ecc608_ciphersuites/nx_crypto_ecdsa_atca.c</itemPath>
+        </logicalFolder>
         <logicalFolder name="sample_azure_iot_embedded_sdk"
                        displayName="sample_azure_iot_embedded_sdk"
                        projectFiles="true">
@@ -971,6 +978,11 @@
           </logicalFolder>
           <logicalFolder name="f3" displayName="library" projectFiles="true">
             <logicalFolder name="f1" displayName="cryptoauthlib" projectFiles="true">
+              <logicalFolder name="f9" displayName="app" projectFiles="true">
+                <logicalFolder name="f1" displayName="pkcs11" projectFiles="true">
+                  <itemPath>../src/config/pic32mz_w1/library/cryptoauthlib/app/pkcs11/trust_pkcs11_config.c</itemPath>
+                </logicalFolder>
+              </logicalFolder>
               <logicalFolder name="f5" displayName="atcacert" projectFiles="true">
                 <itemPath>../src/config/pic32mz_w1/library/cryptoauthlib/atcacert/atcacert.h</itemPath>
                 <itemPath>../src/config/pic32mz_w1/library/cryptoauthlib/atcacert/atcacert_client.c</itemPath>
@@ -1064,6 +1076,27 @@
               <logicalFolder name="f4" displayName="jwt" projectFiles="true">
                 <itemPath>../src/config/pic32mz_w1/library/cryptoauthlib/jwt/atca_jwt.c</itemPath>
                 <itemPath>../src/config/pic32mz_w1/library/cryptoauthlib/jwt/atca_jwt.h</itemPath>
+              </logicalFolder>
+              <logicalFolder name="f8" displayName="pkcs11" projectFiles="true">
+                <itemPath>../src/config/pic32mz_w1/library/cryptoauthlib/pkcs11/pkcs11_attrib.c</itemPath>
+                <itemPath>../src/config/pic32mz_w1/library/cryptoauthlib/pkcs11/pkcs11_cert.c</itemPath>
+                <itemPath>../src/config/pic32mz_w1/library/cryptoauthlib/pkcs11/pkcs11_config.c</itemPath>
+                <itemPath>../src/config/pic32mz_w1/library/cryptoauthlib/pkcs11/pkcs11_debug.c</itemPath>
+                <itemPath>../src/config/pic32mz_w1/library/cryptoauthlib/pkcs11/pkcs11_digest.c</itemPath>
+                <itemPath>../src/config/pic32mz_w1/library/cryptoauthlib/pkcs11/pkcs11_encrypt.c</itemPath>
+                <itemPath>../src/config/pic32mz_w1/library/cryptoauthlib/pkcs11/pkcs11_find.c</itemPath>
+                <itemPath>../src/config/pic32mz_w1/library/cryptoauthlib/pkcs11/pkcs11_info.c</itemPath>
+                <itemPath>../src/config/pic32mz_w1/library/cryptoauthlib/pkcs11/pkcs11_init.c</itemPath>
+                <itemPath>../src/config/pic32mz_w1/library/cryptoauthlib/pkcs11/pkcs11_key.c</itemPath>
+                <itemPath>../src/config/pic32mz_w1/library/cryptoauthlib/pkcs11/pkcs11_main.c</itemPath>
+                <itemPath>../src/config/pic32mz_w1/library/cryptoauthlib/pkcs11/pkcs11_mech.c</itemPath>
+                <itemPath>../src/config/pic32mz_w1/library/cryptoauthlib/pkcs11/pkcs11_object.c</itemPath>
+                <itemPath>../src/config/pic32mz_w1/library/cryptoauthlib/pkcs11/pkcs11_os.c</itemPath>
+                <itemPath>../src/config/pic32mz_w1/library/cryptoauthlib/pkcs11/pkcs11_session.c</itemPath>
+                <itemPath>../src/config/pic32mz_w1/library/cryptoauthlib/pkcs11/pkcs11_signature.c</itemPath>
+                <itemPath>../src/config/pic32mz_w1/library/cryptoauthlib/pkcs11/pkcs11_slot.c</itemPath>
+                <itemPath>../src/config/pic32mz_w1/library/cryptoauthlib/pkcs11/pkcs11_token.c</itemPath>
+                <itemPath>../src/config/pic32mz_w1/library/cryptoauthlib/pkcs11/pkcs11_util.c</itemPath>
               </logicalFolder>
               <logicalFolder name="f1" displayName="tng" projectFiles="true">
                 <itemPath>../src/config/pic32mz_w1/library/cryptoauthlib/tng/tflxtls_cert_def_4_device.c</itemPath>
@@ -2735,7 +2768,7 @@
         <platformTool>pkob4hybrid</platformTool>
         <languageToolchain>XC32</languageToolchain>
         <languageToolchainVersion>4.10</languageToolchainVersion>
-        <platform>4</platform>
+        <platform>3</platform>
       </toolsSet>
       <packs>
         <pack name="PIC32MZ-W_DFP" vendor="Microchip" version="1.6.220"/>
@@ -2768,6 +2801,24 @@
         <makeCustomizationEnableLongLines>false</makeCustomizationEnableLongLines>
         <makeCustomizationNormalizeHexFile>false</makeCustomizationNormalizeHexFile>
       </makeCustomizationType>
+      <item path="../src/azure_rtos_demo/ecc608_ciphersuites/nx_crypto_atca_ciphersuites.c"
+            ex="false"
+            overriding="false">
+        <C32>
+        </C32>
+        <C32-AR>
+        </C32-AR>
+        <C32-AS>
+        </C32-AS>
+        <C32-CO>
+        </C32-CO>
+        <C32-LD>
+        </C32-LD>
+        <C32CPP>
+        </C32CPP>
+        <C32Global>
+        </C32Global>
+      </item>
       <item path="../src/clicks/ultralowpress.c" ex="false" overriding="false">
         <C32>
         </C32>

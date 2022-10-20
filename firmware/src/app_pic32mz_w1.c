@@ -39,6 +39,10 @@
 #include "driver/wifi/pic32mzw1/include/drv_pic32mzw1_crypto.h"
 #include "config/pic32mz_w1/bsp/bsp.h"
 
+#include "nx_crypto.h"
+#include "nx_crypto_ec.h"
+#include "nx_secure_x509.h"
+
 #include "atca_basic.h"
 #include "tng_atcacert_client.h"
 #include "app_pic32mz_w1.h"
@@ -85,6 +89,14 @@ wifiCred wifi;
 
 #define SET_WIFI_CREDENTIALS(val)   app_pic32mz_w1Data.validCrednetials = val
 #define CHECK_WIFI_CREDENTIALS()     app_pic32mz_w1Data.validCrednetials
+
+#define REGISTRATION_ID_MAX_LEN 64
+UCHAR g_registration_id[REGISTRATION_ID_MAX_LEN];
+UINT g_registration_id_length;
+
+extern UCHAR sample_device_private_key_ptr[];
+extern UINT sample_device_private_key_len;
+
 // *****************************************************************************
 /* Application Data
 
@@ -280,6 +292,8 @@ static bool parseCloudConfig(char *configBuffer)
     sprintf((char *)default_primary_key, "%s", primary_key_ep->valuestring);
     
     cJSON_Delete(messageJson);
+    SYS_CONSOLE_PRINT(
+            "Data parsed from cloud.cfg - registration id will be overwritten with data extracted from certificate if X.509 authentication method is used\r\n");
     SYS_CONSOLE_PRINT("id_scope:%s - registration_id:%s - primary_key:%s \r\n", 
                                         default_id_scope, 
                                         default_registration_id, 
@@ -469,24 +483,30 @@ void APP_PIC32MZ_W1_Tasks ( void )
                 SYS_CONSOLE_PRINT("Serial Number of the Device: %s\r\n", app_pic32mz_w1Data.ecc608SerialNum);
                                 
             
-                /* Read the device certificate from ECC608 and store it to filesystem in PEM format */
-                sprintf(certFileName, "sn%s_device.pem", app_pic32mz_w1Data.ecc608SerialNum);                
-                if(SYS_FS_FileStat(certFileName, &app_pic32mz_w1Data.fileStatus) != SYS_FS_RES_SUCCESS)            
-                {                               
-                    status = tng_atcacert_max_device_cert_size(&certificateSize);
-                    if (ATCA_SUCCESS != status) {
-                        SYS_CONSOLE_PRINT("tng_atcacert_max_device_cert_size Failed \r\n");                     
-                    }
-                    if (certificateSize > CERT_MAX_SIZE) {
-                        /* TODO: */
-                        app_pic32mz_w1Data.appPic32mzW1State = APP_PIC32MZ_W1_STATE_ERROR;
-                    }
-                    status = tng_atcacert_read_device_cert((uint8_t*) &certificate, &certificateSize, NULL);
-                    if (ATCA_SUCCESS != status) {
-                        SYS_CONSOLE_PRINT("tng_atcacert_read_device_cert Failed (%x) \r\n", status);                        
-                    }
-                    else
-                    {                                                      
+                /* Read the device certificate from ECC608 and store it to 
+                 * 1) app_pic32mz_w1Data struct in binary, and if needed,
+                 * 2) filesystem in PEM format 
+                 */
+                
+                status = tng_atcacert_max_device_cert_size(&certificateSize);
+                if (ATCA_SUCCESS != status) {
+                    SYS_CONSOLE_PRINT("tng_atcacert_max_device_cert_size Failed \r\n");
+                }
+                if (certificateSize > CERT_MAX_SIZE) {
+                    SYS_CONSOLE_PRINT("Certificate size (%d) exceeds the maximum (%d)\r\n", certificateSize, CERT_MAX_SIZE);
+                    app_pic32mz_w1Data.appPic32mzW1State = APP_PIC32MZ_W1_STATE_ERROR;
+                }
+                status = tng_atcacert_read_device_cert((uint8_t*) & certificate, &certificateSize, NULL);
+                if (ATCA_SUCCESS != status) {
+                    SYS_CONSOLE_PRINT("tng_atcacert_read_device_cert Failed (%x) \r\n", status);
+                }
+                else {
+                    /* Store device cert for later use */
+                    app_pic32mz_w1Data.certSize = certificateSize;
+                    memcpy(app_pic32mz_w1Data.ecc608DeviceCert, certificate, certificateSize);
+                    sprintf(certFileName, "sn%s_device.pem", app_pic32mz_w1Data.ecc608SerialNum);
+                    if (SYS_FS_FileStat(certFileName, &app_pic32mz_w1Data.fileStatus) != SYS_FS_RES_SUCCESS) {
+                
                         app_pic32mz_w1Data.fileHandle = SYS_FS_FileOpen(certFileName, SYS_FS_FILE_OPEN_WRITE);
                         if (app_pic32mz_w1Data.fileHandle != SYS_FS_HANDLE_INVALID) {
                             
@@ -621,6 +641,37 @@ void APP_PIC32MZ_W1_Tasks ( void )
                         } 
                     }
                 }
+                
+                /* Use temporary cert struct for now as we need to extract the common name;
+                 * this will be done again later, but we need the common name for registration ID 
+                 * before that. With standard TNG devices the common name is always "snX", where 
+                 * X is the serial number, but can we trust it's always the case? 
+                 
+                 * The private keys don't matter at this point 
+                 */
+                        
+                NX_SECURE_X509_CERT device_certificate;
+                
+                
+                nx_secure_x509_certificate_initialize(&device_certificate,
+                                                            (UCHAR *)app_pic32mz_w1Data.ecc608DeviceCert, (USHORT)app_pic32mz_w1Data.certSize,
+                                                            NX_NULL, 0,
+                                                            NULL, 0,
+                                                            NX_SECURE_X509_KEY_TYPE_HARDWARE);
+                
+                g_registration_id_length = device_certificate.nx_secure_x509_distinguished_name.nx_secure_x509_common_name_length;
+                if (g_registration_id_length < REGISTRATION_ID_MAX_LEN) {
+                    memcpy(g_registration_id, device_certificate.nx_secure_x509_distinguished_name.nx_secure_x509_common_name, g_registration_id_length);
+                    SYS_CONSOLE_PRINT("Device Certificate Subject Common Name (used as a registration ID in DPS) is \r\n %.*s, length is %u\r\n\n",
+                            g_registration_id_length,
+                            g_registration_id,
+                            g_registration_id_length);
+                    
+                } else {
+                   SYS_CONSOLE_PRINT("Error in getting the common name!\r\n");
+                   app_pic32mz_w1Data.appPic32mzW1State = APP_PIC32MZ_W1_STATE_ERROR;
+                }
+
               
                 atcab_release();             
             }
