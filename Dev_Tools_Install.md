@@ -4,9 +4,9 @@
 
 1. Microchip `MPLAB X` tool chain for embedded code development on 32-bit architecture MCU/MPU platforms (made up of 3 major components)
 
-    - [MPLAB X IDE](https://www.microchip.com/mplab/mplab-x-ide)
+    - [MPLAB X IDE (minimum v6.00)](https://www.microchip.com/mplab/mplab-x-ide)
 
-    - [MPLAB XC32 Compiler](https://www.microchip.com/en-us/development-tools-tools-and-software/mplab-xc-compilers#tabs)
+    - [MPLAB XC32 Compiler (minimum v4.10)](https://www.microchip.com/en-us/development-tools-tools-and-software/mplab-xc-compilers#tabs)
 
         NOTE: This demonstration project was tested successfully with XC32 v4.10, and in general should work with later versions of the compiler as they become available. If you encounter issues building the project, it is recommended to download XC32 v4.10 from the [MPLAB Development Ecosystem Downloads Archive](https://www.microchip.com/en-us/tools-resources/archives/mplab-ecosystem) (to fall back to the version Microchip successfully tested prior to release). 
 

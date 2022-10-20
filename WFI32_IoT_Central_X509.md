@@ -1,4 +1,4 @@
-# Connecting the WFI32-IoT Development Board (Part No. EV36W50A) to Azure IoT Central using Symmetric Key Attestation
+# Connecting the WFI32-IoT Development Board (Part No. EV36W50A) to Azure IoT Central using X.509 Certificate Attestation
 
 NOTE: Should you encounter any issues/obstacles with the following procedure, check out the [FAQ section](./FAQ.md)
 
@@ -54,11 +54,11 @@ As a solution builder, you can use IoT Central to develop a cloud-hosted IoT sol
 
     <img src=".//media/image40.png" style="width:5.in;height:3.18982in" alt="A screenshot of a cell phone Description automatically generated" />
 
-6. In the `Projects` window, open the `sample_config.h` header file and modify the below lines of code so that the three compiler definitions are **disabled** (commented out)
+6. In the `Projects` window, open the `sample_config.h` header file and confirm that the below three compiler definitions are active
 
     <img src=".//media/image41a.png" style="width:5.in;height:3.18982in" alt="A screenshot of a cell phone Description automatically generated" />
 
-    <img src=".//media/image41c.png" style="width:5.in;height:1.0in" alt="A screenshot of a cell phone Description automatically generated" />
+    <img src=".//media/image41b.png" style="width:5.in;height:1.0in" alt="A screenshot of a cell phone Description automatically generated" />
 
 7. Verify the project properties are set correctly before building the project by executing the following steps:
 
@@ -180,70 +180,73 @@ IoT Central allows you to create an application dashboard to monitor the telemet
 
 4. Save the changes to the `CLOUD.CFG` file and then re-open the file to confirm that your changes were correctly saved for the `ID_SCOPE` value
 
-5. Go back to your web browser to access the Azure IoT Central application.  Use the left-hand side pane and select `Connect` > `Devices`. Click `+ New` at the top to add a new device to your application (a one-time individual enrollment)
+## Create an Enrollment Group
 
-    <img src=".//media/image86.png">
+An enrollment group is an entry for a group of devices that share a common attestation mechanism (e.g. device certificates all derived from a common root and/or signer certificate(s)). Using an enrollment group is recommended for a large number of devices that share an initial configuration and/or for devices that all go to the same tenant. Create an X.509 enrollment group for your IoT Central application so that hundreds, thousands, or even millions/billions of devices can automatically connect to your cloud application without any human intervention.
 
-6. In the `Create a new device` window, it is suggested to accept the default device name and ID that are randomly-generated (but can be changed to more meaningful names if you like). Select `WFI32_IoT_WM;x` for the device template. Click on the `Create` button
+1. Using the left-hand side navigation pane of your IoT Central application, under `Security` select `Permissions` &gt; `Device connection groups`
 
-    <img src=".//media/image87.png" style="width:5.in;height:3.68982in" alt="A screenshot of a cell phone Description automatically generated" />
+   <img src=".//media/image81a.png" style="width:6.5.in;height:3.63506in" />
 
-7. Confirm that the new device is listed as `Registered` and that `Simulated = No`
+2. Click on the `+ New` button and create a new enrollment group using any name (with Group type = `IoT devices` and attestation type = `Certificates (X.509)`).  Hit the `Save` icon when finished
 
-    <img src=".//media/image88.png">
+   <img src=".//media/image81b.png" style="width:6.5.in;height:3.63506in" />
 
-8. Click on the `Device name` instance and then click on `Connect` at the top of the device's page
+3. Now that the new enrollment group has been created, click on `Manage Primary`
 
-    <img src=".//media/image89.png" style="width:5.in;height:1.28982in" alt="A screenshot of a cell phone Description automatically generated" />
+   <img src=".//media/image82.png" style="width:5.5.in;height:2.53506in" />
 
-9. The `Device connection groups` pop-up window should appear. Confirm that `Authentication type` is set to `Shared access signature (SAS)`. Edit the `CLOUD.CFG` file one final time by updating the `REGISTRATION_ID` string with the Device ID and then `PRIMARY_KEY` string with the Primary key values that are shown on the Device connection groups pop-up window. Click on each of the "Copy to clipboard" icons and paste the corresponding text into the `CLOUD.CFG` file. Close the pop-up window when finished and make sure to save this last set of changes to the `CLOUD.CFG` file
-    ```bash
-    "REGISTRATION_ID":	"2ep4cjs1gka",
-    "PRIMARY_KEY": "d59fA5UptJ6bh+Il6YgOIZTjly6hN0h0p5REcUm7osk="
-    ```
-    <img src=".//media/image89a.png" style="width:5.in;height:2.68982in" alt="A screenshot of a cell phone Description automatically generated" />
+4. Click on `+ Add certificate` and browse to the **signer** certificate file (which should be located in the `WFI32-IOT` Mass Storage Device). Click the `Upload` button (then click on `Close` when the certificate has been accepted)
 
-10. Enter in the `reset` command on the CLI (or hit the `RESET` button on the WFI32-IoT Development Board)
+   <img src=".//media/image75.png" style="width:5.5.in;height:2.13506in" />
+
+5. Click on the `Save` icon at the top of the page, and note the ID Scope which was created for the enrollment group. The X.509 enrollment group has been successfully created and should be ready to go!
+
+    <img src=".//media/image83.png" style="width:5.in;height:2.18982in" alt="A screenshot of a cell phone Description automatically generated" />
+
+6. Enter in the `reset` command on the CLI (or hit the `RESET` button on the WFI32-IoT Development Board)
 
     <img src=".//media/image89b.png" style="width:5.in;height:1.58982in" alt="A screenshot of a cell phone Description automatically generated" />
 
-11. View the diagnostic messages output to the serial terminal program to confirm that the demo application is going through its startup sequence. When the "Connected to Azure IoT Hub" message appears, both Blue (Wi-Fi) and Green (Cloud) LEDs should stay constantly on. By default, the temperature and light sensor readings should be sent to your IoT Central application every 5 seconds. The Yellow LED (Data) should be toggling approximately once per second
+7. View the diagnostic messages output to the serial terminal program to confirm that the demo application is going through its startup sequence. When the "Connected to Azure IoT Hub" message appears, both Blue (Wi-Fi) and Green (Cloud) LEDs should stay constantly on. By default, the temperature and light sensor readings should be sent to your IoT Central application every 5 seconds. The Yellow LED (Data) should be toggling approximately once per second
 
     <img src=".//media/image89c.png"/>
 
-12. Press each of the `SW1` & `SW2` user buttons on the WFI32-IoT Development Board a few times. The Red LED should blink on each user button press that is detected
+## Test Device Interaction with the Cloud
+
+1. Press each of the `SW1` & `SW2` user buttons on the WFI32-IoT Development Board a few times. The Red LED should blink on each user button press that is detected
 
     <img src=".//media/image89d.png" style="width:5.in;height:2.08982in" alt="A screenshot of a cell phone Description automatically generated" />
 
-13. Click on the `Raw data` tab and confirm that the button press telemetry messages were received (scroll the web page to the right to view the `Button Press Count` & `Button Push Event` columns)
+2. Click on the `Raw data` tab and confirm that the button press telemetry messages were received (scroll the web page to the right to view the `Button Press Count` & `Button Push Event` columns)
 
     <img src=".//media/image90.png" style="width:5.in;height:1.48982in" alt="A screenshot of a cell phone Description automatically generated" />
 
-14. Click on the `Refresh` icon (in the top right area of the page) to display all messages received since the previous page refresh operation.  Confirm that periodic telemetry messages are being continuously received approximately every 5 seconds (which is the default interval value for the `telemetryInterval` property that dictates the telemetry reporting frequency)
+3. Click on the `Refresh` icon (in the top right area of the page) to display all messages received since the previous page refresh operation.  Confirm that periodic telemetry messages are being continuously received approximately every 5 seconds (which is the default interval value for the `telemetryInterval` property that dictates the telemetry reporting frequency)
 
     <img src=".//media/image91a.png" style="width:5.in;height:1.08982in" alt="A screenshot of a cell phone Description automatically generated" />
 
     <img src=".//media/image92a.png"/>
 
-15. Increase the ambient light source shining on top of the board. Wait approximately 10-15 seconds.  Click on the `Refresh` icon to confirm that the light sensor value has increased
+4. Increase the ambient light source shining on top of the board. Wait approximately 10-15 seconds.  Click on the `Refresh` icon to confirm that the light sensor value has increased
 
     <img src=".//media/image93a.png" style="width:5.in;height:2.18982in" alt="A screenshot of a cell phone Description automatically generated" />
 
-16. Note there are other views besides the `Raw data` tab. Click on the `About` and `Overview` tabs to view the property values and telemetry data of the device. If any of the Click boards are installed, you should see the telemetry being reported from the additional sensors (e.g. ULP_temperature, ULP_pressure, VAV_temperature, VAV_pressure)
+5. Note there are other views besides the `Raw data` tab. Click on the `About` and `Overview` tabs to view the property values and telemetry data of the device. If any of the Click boards are installed, you should see the telemetry being reported from the additional sensors (e.g. ULP_temperature, ULP_pressure, VAV_temperature, VAV_pressure)
 
-17. Click on the `Command` tab. Type a text message in the `String to send` box and then click on the `Run` button. Confirm that the message was received in the serial console window
+6. Click on the `Command` tab. Type a text message in the `String to send` box and then click on the `Run` button. Confirm that the message was received in the serial console window
 
     <img src=".//media/image93b_01.png" style="width:5.0in;height:2.2in" alt="A screenshot of a cell phone Description automatically generated" />
 
     <img src=".//media/image93b_02.png" style="width:5.0in;height:1.2in" alt="A screenshot of a cell phone Description automatically generated" />
 
-18. Click on the `command history` link and note the response that was received from the device
+7. Click on the `command history` link and note the response that was received from the device
 
     <img src=".//media/image93c.png" style="width:3.0in;height:0.7in" alt="A screenshot of a cell phone Description automatically generated" />
 
     <img src=".//media/image93d.png" style="width:4.0in;height:1.25in" alt="A screenshot of a cell phone Description automatically generated" />
 
-19. Click on the `Properties` tab. This view allows you to change the state of the Yellow LED and update the telemetry reporting interval since these are properties that have been defined as writable by the cloud. The remaining LEDs are used as status indicators so they are not writable from the cloud. Feel free to change the Yellow LED's state between On, Off, and Blinking and visually confirm if the Yellow LED physically changes its state. Change the telemetry interval and verify if the telemetry is being updated more or less frequently based on your selection. For any property changes to actually take effect, the `Save` icon must be clicked after making your selections
+8. Click on the `Properties` tab. This view allows you to change the state of the Yellow LED and update the telemetry reporting interval since these are properties that have been defined as writable by the cloud. The remaining LEDs are used as status indicators so they are not writable from the cloud. Feel free to change the Yellow LED's state between On, Off, and Blinking and visually confirm if the Yellow LED physically changes its state. Change the telemetry interval and verify if the telemetry is being updated more or less frequently based on your selection. For any property changes to actually take effect, the `Save` icon must be clicked after making your selections
 
     <img src=".//media/image94.png" style="width:5.0in;height:4.18982in" alt="A screenshot of a cell phone Description automatically generated" />
 

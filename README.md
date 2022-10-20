@@ -40,7 +40,7 @@ allows the hardware to be provisioned securely to the right IoT Hub.
 
 This high-level architecture description summarizes the interactions between the WFI32-IoT Development Board and Azure. These are the major puzzle pieces that make up this enablement work of connecting WFI32-IoT Development Board to Azure through DPS using the most secure authentication:
 
-- [Trust&GO Platform](https://www.microchip.com/en-us/products/security/trust-platform/trust-and-go): Microchip-provided implementation for secure authentication.  Each Trust&GO secure element comes with a pre-established locked configuration for thumbprint authentication and keys, streamlining the process of enabling network authentication using the [ATECC608B](https://www.microchip.com/en-us/product/ATECC608B) secure elements. 
+- [Trust&GO™ Platform](https://www.microchip.com/en-us/products/security/trust-platform/trust-and-go): Microchip-provided implementation for secure authentication.  Each Trust&GO secure element comes with a pre-established locked configuration for thumbprint authentication and keys, streamlining the process of enabling network authentication using the [ATECC608B](https://www.microchip.com/en-us/product/ATECC608B) secure elements. 
 
 - [Azure RTOS](https://azure.microsoft.com/en-us/services/rtos/): Microsoft-provided API designed to allow small, low-cost embedded IoT devices to communicate with Azure services, serving as translation logic between the application code and transport client
 
@@ -124,7 +124,9 @@ Azure IoT technologies and services provide you with options to create a wide va
 
 The web UI lets you quickly connect devices, monitor device conditions, create rules, and manage millions of devices and their data throughout their life cycle. Furthermore, it enables you to act on device insights by extending IoT intelligence into line-of-business applications.
 
-Click this link for the WFI32-IoT Development Board provisioning procedure: [Connecting the WFI32-IoT Development Board to Azure IoT Central](./WFI32_IoT_Central_SAS.md)
+This demonstration platform provides 2 different ways of programming the WFI32-IoT Development Board to authenticate itself with the Microsoft Azure Cloud service. It is strongly recommended to use X.509 certificate-based authentication to take full advantage of the [Trust&GO™](https://www.microchip.com/en-us/products/security/trust-platform/trust-and-go) secure element integrated into the WFI32 module.
+1. [X.509 CA-Signed Certificates](./WFI32_IoT_Central_X509.md)
+2. [Shared Access Signature (SAS Token)](./WFI32_IoT_Central_SAS.md)
 
 ## Frequently Asked Questions
 

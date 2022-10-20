@@ -99,8 +99,6 @@ extern ultralowpress_return_value_t ULTRALOWPRESS_status;
 extern vavpress_return_value_t VAVPRESS_status;
 extern vavpress_sensor_param_data_t VAVPRESS_param_data;
 extern vavpress_el_signature_data_t VAVPRESS_el_signature_data;
-//static float VAVPRESS_pressure;
-//static float VAVPRESS_temperature;
 #endif /* CLICK_VAVPRESS */
 static TX_THREAD sample_telemetry_thread;
 static ULONG sample_telemetry_thread_stack[SAMPLE_STACK_SIZE / sizeof(ULONG)];
