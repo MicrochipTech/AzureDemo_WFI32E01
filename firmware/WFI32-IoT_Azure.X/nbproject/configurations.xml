@@ -21,6 +21,7 @@
       <logicalFolder name="f4" displayName="clicks" projectFiles="true">
         <itemPath>../src/clicks/ultralowpress.h</itemPath>
         <itemPath>../src/clicks/vavpress.h</itemPath>
+        <itemPath>../src/clicks/altitude2.h</itemPath>
       </logicalFolder>
       <logicalFolder name="f1" displayName="config" projectFiles="true">
         <logicalFolder name="f1" displayName="pic32mz_w1" projectFiles="true">
@@ -924,6 +925,7 @@
       <logicalFolder name="f4" displayName="clicks" projectFiles="true">
         <itemPath>../src/clicks/ultralowpress.c</itemPath>
         <itemPath>../src/clicks/vavpress.c</itemPath>
+        <itemPath>../src/clicks/altitude2.c</itemPath>
       </logicalFolder>
       <logicalFolder name="f1" displayName="config" projectFiles="true">
         <logicalFolder name="f1" displayName="pic32mz_w1" projectFiles="true">
@@ -2769,7 +2771,7 @@
         <platformTool>pkob4hybrid</platformTool>
         <languageToolchain>XC32</languageToolchain>
         <languageToolchainVersion>4.10</languageToolchainVersion>
-        <platform>3</platform>
+        <platform>4</platform>
       </toolsSet>
       <packs>
         <pack name="PIC32MZ-W_DFP" vendor="Microchip" version="1.6.220"/>
@@ -2879,7 +2881,7 @@
         <property key="enable-unroll-loops" value="false"/>
         <property key="exclude-floating-point" value="false"/>
         <property key="extra-include-directories"
-                  value=" ../src/config/pic32mz_w1/third_party_adapter/azure_rtos/src/tcpip;../src;../src/config/pic32mz_w1;../src/config/pic32mz_w1/driver/wifi/pic32mzw1/include/;../src/config/pic32mz_w1/library/cryptoauthlib;../src/config/pic32mz_w1/library/cryptoauthlib/crypto;../src/config/pic32mz_w1/library/cryptoauthlib/pkcs11;../src/config/pic32mz_w1/library/cryptoauthlib/tng;../src/config/pic32mz_w1/system/fs/fat_fs/file_system;../src/config/pic32mz_w1/system/fs/fat_fs/hardware_access;../src/config/pic32mz_w1/third_party_adapter/azure_rtos;../src/config/pic32mz_w1/third_party_adapter/azure_rtos/src;../src/config/pic32mz_w1/third_party_adapter/azure_rtos/src/tcpip;../src/config/pic32mz_w1/threadx_config;../src/third_party/azure_rtos/filex/common/inc;../src/third_party/azure_rtos/filex/ports/mips/gnu/inc;../src/third_party/azure_rtos/netxduo;../src/third_party/azure_rtos/netxduo/addons;../src/third_party/azure_rtos/netxduo/addons/azure_iot;../src/third_party/azure_rtos/netxduo/addons/azure_iot/azure-sdk-for-c/sdk/inc;../src/third_party/azure_rtos/netxduo/addons/azure_iot/azure_iot_security_module;../src/third_party/azure_rtos/netxduo/addons/azure_iot/azure_iot_security_module/inc;../src/third_party/azure_rtos/netxduo/addons/azure_iot/azure_iot_security_module/inc/configs/RTOS_BASE_UT;../src/third_party/azure_rtos/netxduo/addons/azure_iot/azure_iot_security_module/iot-security-module-core/deps/flatcc/include;../src/third_party/azure_rtos/netxduo/addons/azure_iot/azure_iot_security_module/iot-security-module-core/inc;../src/third_party/azure_rtos/netxduo/addons/cloud;../src/third_party/azure_rtos/netxduo/addons/dhcp;../src/third_party/azure_rtos/netxduo/addons/dns;../src/third_party/azure_rtos/netxduo/addons/mqtt;../src/third_party/azure_rtos/netxduo/addons/sntp;../src/third_party/azure_rtos/netxduo/common/inc;../src/third_party/azure_rtos/netxduo/crypto_libraries/inc;../src/third_party/azure_rtos/netxduo/nx_secure/inc;../src/third_party/azure_rtos/netxduo/nx_secure/ports;../src/third_party/azure_rtos/netxduo/ports/mips/gnu/inc;../src/third_party/rtos/threadx/common/inc;../src/third_party/rtos/threadx/ports/pic32mz/mplabx/inc;..\src\azure_rtos_demo"/>
+                  value="../src/config/pic32mz_w1/third_party_adapter/azure_rtos/src/tcpip;../src;../src/config/pic32mz_w1;../src/config/pic32mz_w1/driver/wifi/pic32mzw1/include/;../src/config/pic32mz_w1/library/cryptoauthlib;../src/config/pic32mz_w1/library/cryptoauthlib/crypto;../src/config/pic32mz_w1/library/cryptoauthlib/pkcs11;../src/config/pic32mz_w1/library/cryptoauthlib/tng;../src/config/pic32mz_w1/system/fs/fat_fs/file_system;../src/config/pic32mz_w1/system/fs/fat_fs/hardware_access;../src/config/pic32mz_w1/third_party_adapter/azure_rtos;../src/config/pic32mz_w1/third_party_adapter/azure_rtos/src;../src/config/pic32mz_w1/third_party_adapter/azure_rtos/src/tcpip;../src/config/pic32mz_w1/threadx_config;../src/third_party/azure_rtos/filex/common/inc;../src/third_party/azure_rtos/filex/ports/mips/gnu/inc;../src/third_party/azure_rtos/netxduo;../src/third_party/azure_rtos/netxduo/addons;../src/third_party/azure_rtos/netxduo/addons/azure_iot;../src/third_party/azure_rtos/netxduo/addons/azure_iot/azure-sdk-for-c/sdk/inc;../src/third_party/azure_rtos/netxduo/addons/azure_iot/azure_iot_security_module;../src/third_party/azure_rtos/netxduo/addons/azure_iot/azure_iot_security_module/inc;../src/third_party/azure_rtos/netxduo/addons/azure_iot/azure_iot_security_module/inc/configs/RTOS_BASE_UT;../src/third_party/azure_rtos/netxduo/addons/azure_iot/azure_iot_security_module/iot-security-module-core/deps/flatcc/include;../src/third_party/azure_rtos/netxduo/addons/azure_iot/azure_iot_security_module/iot-security-module-core/inc;../src/third_party/azure_rtos/netxduo/addons/cloud;../src/third_party/azure_rtos/netxduo/addons/dhcp;../src/third_party/azure_rtos/netxduo/addons/dns;../src/third_party/azure_rtos/netxduo/addons/mqtt;../src/third_party/azure_rtos/netxduo/addons/sntp;../src/third_party/azure_rtos/netxduo/common/inc;../src/third_party/azure_rtos/netxduo/crypto_libraries/inc;../src/third_party/azure_rtos/netxduo/nx_secure/inc;../src/third_party/azure_rtos/netxduo/nx_secure/ports;../src/third_party/azure_rtos/netxduo/ports/mips/gnu/inc;../src/third_party/rtos/threadx/common/inc;../src/third_party/rtos/threadx/ports/pic32mz/mplabx/inc;..\src\azure_rtos_demo"/>
         <property key="generate-16-bit-code" value="false"/>
         <property key="generate-micro-compressed-code" value="false"/>
         <property key="isolate-each-function" value="true"/>

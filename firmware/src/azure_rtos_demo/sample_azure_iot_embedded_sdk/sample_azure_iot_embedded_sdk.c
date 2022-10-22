@@ -871,16 +871,31 @@ void sample_telemetry_thread_entry(ULONG parameter)
     CHAR buffer[TELEMETRY_MSGLEN_MAX];
     UINT buffer_length;
     UCHAR loop = NX_TRUE;
+#ifdef CLICK_ALTITUDE2 
+    static ALTITUDE2_Data altitude2;
+    float ALT2_temperature, ALT2_pressure, ALT2_altitude;
+#endif /* CLICK_ALTITUDE2 */
+#ifdef CLICK_ULTRALOWPRESS
     uint32_t SM8436_serialNumber;
-    float ULP_temperature, VAV_temperature;
+    float ULP_temperature;
     float ULP_pressure = 0.0;
-    float VAV_pressure = 0.0;    
+#endif /* CLICK_ULTRALOWPRESS */
+#ifdef CLICK_VAVPRESS
+    float VAV_temperature;
+    float VAV_pressure = 0.0;
+#endif /* CLICK_VAVPRESS */
     NX_PARAMETER_NOT_USED(parameter);
 
     APP_SENSORS_init();
     
     tx_thread_sleep(AZ_telemetryInterval * NX_IP_PERIODIC_RATE);
 
+#ifdef CLICK_ALTITUDE2
+    printf("<ALT2 Click> Initializing MS5607...\r\n");
+    ALTITUDE2_init(&altitude2);
+    tx_thread_sleep(100);
+#endif /* CLICK_ALTITUDE2 */
+    
 #ifdef CLICK_ULTRALOWPRESS
     printf("<ULP Click> Initializing SM8436...\r\n");
     SM8436_serialNumber = ULTRALOWPRESS_init();
@@ -939,6 +954,15 @@ void sample_telemetry_thread_entry(ULONG parameter)
                 APP_SENSORS_readTemperature(), APP_SENSORS_readLight() );
         send_telemetry_message(parameter, (UCHAR *)buffer, buffer_length);
 #endif /* WFI32IOT_SENSORS */
+        
+#ifdef CLICK_ALTITUDE2
+        ALTITUDE2_readData( &altitude2, &ALT2_temperature, &ALT2_pressure, &ALT2_altitude );
+        buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
+                "{\"ALT2_temperature\": %.2f, \"ALT2_pressure\": %.2f, \"ALT2_altitude\": %.2f}",
+                ALT2_temperature, ALT2_pressure, ALT2_altitude );                
+        send_telemetry_message(parameter, (UCHAR *)buffer, buffer_length);        
+#endif /* CLICK_ALTITUDE2 */
+                
 #ifdef CLICK_ULTRALOWPRESS
         if (ULTRALOWPRESS_status == ULTRALOWPRESS_OK)
         {
@@ -963,6 +987,10 @@ void sample_telemetry_thread_entry(ULONG parameter)
             {
                 //printf("\r\n<ULP Click> SM8436 is not ready...\r\n");
             }
+            if (ULP_pressure < ALARM_PRESSURE_PA)
+            {
+                appConnectStatus.alarm = false; 
+            }
             //tx_thread_sleep(500);
         }
 #endif /* CLICK_ULTRALOWPRESS */
@@ -984,6 +1012,10 @@ void sample_telemetry_thread_entry(ULONG parameter)
                 {
                     appConnectStatus.alarm = true;
                 }
+            }
+            if (VAV_pressure < ALARM_PRESSURE_PA)
+            {
+                appConnectStatus.alarm = false; 
             }
         }
 #endif /* CLICK_VAVPRESS */

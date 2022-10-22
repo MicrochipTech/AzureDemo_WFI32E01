@@ -50,6 +50,7 @@
 // *****************************************************************************
 // *****************************************************************************
 #define WFI32IOT_SENSORS
+#define CLICK_ALTITUDE2
 #define CLICK_ULTRALOWPRESS
 #define CLICK_VAVPRESS
 #define SEND_LED_PROPERTIES_WITH_TELEMETRY
@@ -72,9 +73,13 @@
 
 #include "app_led.h"
 #include "app_sensors.h"
+#include "app_status.h"
 #include "app_switch.h"
 #include "az_util.h"
 
+#ifdef CLICK_ALTITUDE2
+    #include "./clicks/altitude2.h"
+#endif /* CLICK_ALTITUDE2 */
 #ifdef CLICK_ULTRALOWPRESS
     #include "./clicks/ultralowpress.h"
 #endif /* CLICK_ULTRALOWPRESS */

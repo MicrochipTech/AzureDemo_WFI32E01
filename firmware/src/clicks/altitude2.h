@@ -35,11 +35,8 @@
 #ifndef ALTITUDE2_H
 #define ALTITUDE2_H
 
-#include "drv_digital_out.h"
-#include "drv_digital_in.h"
-#include "drv_i2c_master.h"
-#include "drv_spi_master.h"
-#include "math.h"
+#include <math.h>
+#include "definitions.h"
 
 // -------------------------------------------------------------- PUBLIC MACROS 
 /**
@@ -47,28 +44,6 @@
  * \{
  */
 
-/**
- * \defgroup map_mikrobus MikroBUS
- * \{
- */
-
-#define ALTITUDE2_MAP_MIKROBUS( cfg, mikrobus ) \
-   cfg.scl   = MIKROBUS( mikrobus, MIKROBUS_SCL ); \
-   cfg.sda   = MIKROBUS( mikrobus, MIKROBUS_SDA ); \
-   cfg.miso  = MIKROBUS( mikrobus, MIKROBUS_MISO ); \
-   cfg.mosi  = MIKROBUS( mikrobus, MIKROBUS_MOSI ); \
-   cfg.sck   = MIKROBUS( mikrobus, MIKROBUS_SCK ); \
-   cfg.cs    = MIKROBUS( mikrobus, MIKROBUS_CS )
-
-/** \} */
-
-/**
- * \defgroup communication Select communication
- * \{
- */
-#define ALTITUDE2_MASTER_I2C 0
-#define ALTITUDE2_MASTER_SPI 1
-/** \} */
 
 /**
  * \defgroup error_code Error Code
@@ -124,69 +99,17 @@
  * \{
  */
 
-/**
- * @brief Communication type.
- */
-typedef uint8_t  altitude2_select_t;
-
-/**
- * @brief Master Input/Output type.
- */
-typedef void ( *altitude2_master_io_t )( struct altitude2_s*, uint8_t, uint32_t*, uint8_t );
 
 /**
  * @brief Click ctx object definition.
  */
 typedef struct altitude2_s
 {
-
-   digital_out_t cs;
-
-   // Modules 
-
-   i2c_master_t i2c;
-   spi_master_t spi;
-
-   // ctx variable 
-
-   uint8_t slave_address;
-   pin_name_t chip_select;
-   altitude2_master_io_t  send_comm_f;
-   altitude2_master_io_t  send_comm_resp_f;
-   altitude2_select_t master_sel;
-
-   uint8_t select_driver;
    uint8_t ratio_temp;
    uint8_t ratio_press;
-   volatile uint32_t data_prom[ 6 ];
-    
-} altitude2_t;
+   volatile uint32_t data_prom[ 6 ];   
+} ALTITUDE2_Data;
 
-/**
- * @brief Click configuration structure definition.
- */
-typedef struct
-{
-    // Communication gpio pins 
-
-    pin_name_t scl;
-    pin_name_t sda;
-    pin_name_t miso;
-    pin_name_t mosi;
-    pin_name_t sck;
-    pin_name_t cs;
-    
-    // static variable 
-
-    uint32_t i2c_speed;
-    uint8_t  i2c_address;
-    uint32_t spi_speed;
-    spi_master_mode_t  spi_mode;
-    spi_master_chip_select_polarity_t cs_polarity;
-
-   altitude2_select_t sel;
-
-} altitude2_cfg_t;
 
 /** \} */ // End types group
 // ------------------------------------------------------------------ CONSTANTS
@@ -216,15 +139,6 @@ typedef struct
 extern "C"{
 #endif
 
-/**
- * @brief Config Object Initialization function.
- *
- * @param cfg  Click configuration structure.
- *
- * @description This function initializes click configuration structure to init state.
- * @note All used pins will be set to unconnected state.
- */
-void altitude2_cfg_setup ( altitude2_cfg_t *cfg );
 
 /**
  * @brief Initialization function.
@@ -233,7 +147,7 @@ void altitude2_cfg_setup ( altitude2_cfg_t *cfg );
  * 
  * @description This function initializes all necessary pins and peripherals used for this click.
  */
-ALTITUDE2_RETVAL altitude2_init ( altitude2_t *ctx, altitude2_cfg_t *cfg );
+ALTITUDE2_RETVAL ALTITUDE2_init ( ALTITUDE2_Data *ctx );
 
 /**
  * @brief Calibration data read function.
@@ -244,7 +158,7 @@ ALTITUDE2_RETVAL altitude2_init ( altitude2_t *ctx, altitude2_cfg_t *cfg );
  * @returns                      0-Ok, 1 - Wrong select_data parameter.
  * @description This function reads calibration data from PROM.
  */
-uint8_t altitude2_read_prom ( altitude2_t *ctx, uint8_t select_data, uint32_t *data_out );
+uint8_t altitude2_read_prom ( ALTITUDE2_Data *ctx, uint8_t select_data, uint32_t *data_out );
 
 /**
  * @brief Reset function.
@@ -252,7 +166,7 @@ uint8_t altitude2_read_prom ( altitude2_t *ctx, uint8_t select_data, uint32_t *d
  * 
  * @description This function resets the device and reads calibration coefficients after reset.
  */
-void altitude2_reset( altitude2_t *ctx );
+void altitude2_reset( ALTITUDE2_Data *ctx );
 
 
 /**
@@ -264,7 +178,7 @@ void altitude2_reset( altitude2_t *ctx );
  * @returns                      0-Ok, 1 - Wrong temp_ratio parameter, 2 - Wrong press_ratio parameter.
  * @description This function determines oversampling ratio for temperature and pressure measurement.
  */
-uint8_t altitude2_set_ratio( altitude2_t *ctx, uint8_t temp_ratio, uint8_t press_ratio );
+uint8_t altitude2_set_ratio( ALTITUDE2_Data *ctx, uint8_t temp_ratio, uint8_t press_ratio );
 
 
 /**
@@ -279,7 +193,7 @@ uint8_t altitude2_set_ratio( altitude2_t *ctx, uint8_t temp_ratio, uint8_t press
  * and calculates temperature data in celsius and pressure data in mbar. Depending
  * on the temperature and pressure data, function calculates altitude in meters.
  */
-void altitude2_read_data( altitude2_t *ctx, float *temp_data, float *press_data, float *altitude_data );
+void ALTITUDE2_readData( ALTITUDE2_Data *ctx, float *temp_data, float *press_data, float *altitude_data );
 
 
 #ifdef __cplusplus
