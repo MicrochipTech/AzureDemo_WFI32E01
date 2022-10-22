@@ -121,7 +121,7 @@ As a solution builder, you can use IoT Central to develop a cloud-hosted IoT sol
 
     NOTE: Do not proceed until the WFI32-IoT Development Board has established a successful connection to your Wi-Fi network - the Blue LED needs to be always on!
 
-## Confirm Access to the Root, Signer, and Device Certificates
+## Confirm Access to the Root CA, Signer CA, and Device Certificates
 
 The `WFI32-IOT` Mass Storage Device (MSD) contains the 3 certificates saved in Privacy Enhanced Format (PEM) which is a Base64 encoded binary format. PEM certificates are frequently used for web servers as they can easily be translated into readable data using a simple text editor. Generally when a PEM encoded file is opened in a text editor, it contains very distinct headers and footers.
 

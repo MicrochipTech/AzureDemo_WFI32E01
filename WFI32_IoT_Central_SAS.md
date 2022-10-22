@@ -121,16 +121,6 @@ As a solution builder, you can use IoT Central to develop a cloud-hosted IoT sol
 
     NOTE: Do not proceed until the WFI32-IoT Development Board has established a successful connection to your Wi-Fi network - the Blue LED needs to be always on!
 
-## Confirm Access to the Root, Signer, and Device Certificates
-
-The `WFI32-IOT` Mass Storage Device (MSD) contains the 3 certificates saved in Privacy Enhanced Format (PEM) which is a Base64 encoded binary format. PEM certificates are frequently used for web servers as they can easily be translated into readable data using a simple text editor. Generally when a PEM encoded file is opened in a text editor, it contains very distinct headers and footers.
-
-Whenever the demo application is reset, it will check for the presence of all 3 files on the `WFI32-IOT` drive. Each file has the *.PEM suffix and is named to distinguish between the root, signer, and device certificates; e.g.
-
-<img src=".//media/image46.png">
-
-If any of the files do not exist when the demo application is reset, the missing file(s) will be automatically generated. In case any of these files are accidentally edited, simply delete the certificate(s) from the `WFI32-IOT` MSD and reset the application so that they will be automatically regenerated.
-
 ## Create an IoT Central Application
 
 IoT Central allows you to create an application dashboard to monitor the telemetry and take appropriate actions based on customized rules.
