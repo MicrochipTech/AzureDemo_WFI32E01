@@ -1022,11 +1022,6 @@ void sample_telemetry_thread_entry(ULONG parameter)
 #ifdef SEND_LED_PROPERTIES_WITH_TELEMETRY
         sample_reported_properties_send_action(&iothub_client);
 #endif /* SEND_LED_PROPERTIES_WITH_TELEMETRY */
-    if ( (ULP_pressure < ALARM_PRESSURE_PA) &&
-         (VAV_pressure < ALARM_PRESSURE_PA) )
-    {
-        appConnectStatus.alarm = false; 
-    }
 #ifdef PNP_CERTIFICATION_TESTING
         send_button_event(parameter, 1, button_press_data.sw1_press_count);
 #endif /* PNP_CERTIFICATION_TESTING */

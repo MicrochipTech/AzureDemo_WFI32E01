@@ -29,6 +29,8 @@
 
 #include "altitude2.h"
 
+extern APP_SENSORS_DATA APP_SENSORS_data;
+
 // ---------------------------------------------- PRIVATE FUNCTION DECLARATIONS 
 
 static void altitude2_make_conv_comm ( ALTITUDE2_Data *ctx, uint8_t *comm_temp, uint8_t *comm_press );
@@ -137,9 +139,8 @@ void ALTITUDE2_readData( ALTITUDE2_Data *ctx, float *temp_data, float *press_dat
 
 static void altitude2_i2c_send_comm ( ALTITUDE2_Data *ctx, uint8_t comm_byte, uint32_t *input_data, uint8_t num_bytes )
 {
-    //i2c_master_write( &ctx->i2c, &comm_byte, 1 );
     APP_SENSORS_writeByte(ALTITUDE2_DEVICE_ADDR_1 , comm_byte);
-    //Delay_10ms( );
+    tx_thread_sleep(10);
 }
 
 static void altitude2_i2c_send_comm_resp ( ALTITUDE2_Data *ctx, uint8_t comm_byte, uint32_t *output_data, uint8_t num_bytes )
@@ -148,11 +149,11 @@ static void altitude2_i2c_send_comm_resp ( ALTITUDE2_Data *ctx, uint8_t comm_byt
     uint8_t cnt;
     uint32_t pom = 0;
 
-    //i2c_master_write_then_read( &ctx->i2c, &comm_byte, 1, tmp, num_bytes );
     APP_SENSORS_writeRead(ALTITUDE2_DEVICE_ADDR_1, comm_byte, num_bytes);
 
     for( cnt = 0; cnt < num_bytes; cnt++ )
     {
+        tmp[ cnt ] = APP_SENSORS_data.i2c.rxBuffer[ cnt ];
         pom = pom << 8;
         pom = pom | tmp[ cnt ];
         
