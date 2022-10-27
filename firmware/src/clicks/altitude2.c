@@ -31,6 +31,8 @@
 
 extern APP_SENSORS_DATA APP_SENSORS_data;
 
+ALTITUDE2_RETVAL ALTITUDE2_status;
+
 // ---------------------------------------------- PRIVATE FUNCTION DECLARATIONS 
 
 static void altitude2_make_conv_comm ( ALTITUDE2_Data *ctx, uint8_t *comm_temp, uint8_t *comm_press );
@@ -41,17 +43,31 @@ static void altitude2_i2c_send_comm_resp ( ALTITUDE2_Data *ctx, uint8_t comm_byt
 
 ALTITUDE2_RETVAL ALTITUDE2_init ( ALTITUDE2_Data *ctx )
 {
+    for (int index = 0; index < ALTITUDE2_COEFFS_MAX; index++)
+    {
+        APP_SENSORS_data.i2c.rxBuffer[0] = 0;
+    }
+    
     altitude2_reset( ctx );
     altitude2_set_ratio ( ctx, ALTITUDE2_RATIO_2048, ALTITUDE2_RATIO_2048 );
 
-    return ALTITUDE2_OK;
+    if ( (ctx->data_prom[0] == 0) && (ctx->data_prom[1] == 0) && (ctx->data_prom[2] == 0) &&
+         (ctx->data_prom[3] == 0) && (ctx->data_prom[4] == 0) && (ctx->data_prom[5] == 0)
+       )
+    {
+        return ALTITUDE2_INIT_ERROR;
+    }
+    else
+    {
+        return ALTITUDE2_OK;
+    }
 }
 
 uint8_t altitude2_read_prom( ALTITUDE2_Data *ctx, uint8_t select_data, uint32_t *data_out )
 {
     uint8_t tmp_data;
 
-    if( select_data > 7 )
+    if( select_data > (ALTITUDE2_COEFFS_MAX+1) )
     {
         return 1;
     }
@@ -69,7 +85,7 @@ void altitude2_reset( ALTITUDE2_Data *ctx )
 
     altitude2_i2c_send_comm( ctx, comm_data, 0, 0);
     
-    for( cnt = 1; cnt < 7; cnt++ )
+    for( cnt = 1; cnt < (ALTITUDE2_COEFFS_MAX+1); cnt++ )
     {
         altitude2_read_prom( ctx, cnt, &ctx->data_prom[ cnt - 1 ] );
     } 
@@ -98,7 +114,7 @@ void ALTITUDE2_readData( ALTITUDE2_Data *ctx, float *temp_data, float *press_dat
     uint8_t temp_comm;
     uint8_t press_comm;
     float res_data[ 4 ];
-    float  volatile tmp_var;
+    float  volatile /*tmp_var, */tmp_var1, tmp_var2;
         
     altitude2_make_conv_comm( ctx, &temp_comm, &press_comm );
     altitude2_i2c_send_comm( ctx, temp_comm, 0, 0 );
@@ -126,12 +142,15 @@ void ALTITUDE2_readData( ALTITUDE2_Data *ctx, float *temp_data, float *press_dat
     res_data[ 1 ] = res_data[ 1 ] / 100.0;
     *press_data = res_data[ 1 ];
     
-    tmp_var = 1013.25 / *press_data;
-    *altitude_data = pow( tmp_var, 0.19022256 );
-    *altitude_data = *altitude_data - 1;
-    tmp_var = *temp_data + 273.15;
-    *altitude_data = *altitude_data *  tmp_var;
-    *altitude_data = *altitude_data / 0.0065;
+    //tmp_var = 1013.25 / *press_data;
+    //*altitude_data = pow( tmp_var, 0.19022256 );
+    //*altitude_data = *altitude_data - 1;
+    //tmp_var = *temp_data + 273.15;
+    //*altitude_data = *altitude_data *  tmp_var;
+    //*altitude_data = *altitude_data / 0.0065;
+    tmp_var1 = (pow((1013.25 / *press_data), 0.19022256) - 1.0);
+    tmp_var2 = (*temp_data + 273.15);
+    *altitude_data = ((tmp_var1 * tmp_var2) / 0.0065);
 }
 
 
@@ -139,8 +158,7 @@ void ALTITUDE2_readData( ALTITUDE2_Data *ctx, float *temp_data, float *press_dat
 
 static void altitude2_i2c_send_comm ( ALTITUDE2_Data *ctx, uint8_t comm_byte, uint32_t *input_data, uint8_t num_bytes )
 {
-    APP_SENSORS_writeByte(ALTITUDE2_DEVICE_ADDR_1 , comm_byte);
-    tx_thread_sleep(10);
+    APP_SENSORS_writeByte(ALTITUDE2_DEVICE_ADDR_1, comm_byte);
 }
 
 static void altitude2_i2c_send_comm_resp ( ALTITUDE2_Data *ctx, uint8_t comm_byte, uint32_t *output_data, uint8_t num_bytes )
@@ -149,6 +167,7 @@ static void altitude2_i2c_send_comm_resp ( ALTITUDE2_Data *ctx, uint8_t comm_byt
     uint8_t cnt;
     uint32_t pom = 0;
 
+    tx_thread_sleep(10);
     APP_SENSORS_writeRead(ALTITUDE2_DEVICE_ADDR_1, comm_byte, num_bytes);
 
     for( cnt = 0; cnt < num_bytes; cnt++ )

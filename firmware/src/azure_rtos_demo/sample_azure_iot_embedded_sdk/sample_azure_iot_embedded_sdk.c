@@ -92,6 +92,9 @@ static UCHAR sample_iothub_device_id[SAMPLE_MAX_BUFFER];
 
 /* Define sample threads.  */
 #ifndef DISABLE_TELEMETRY_SAMPLE
+#ifdef CLICK_ALTITUDE2
+extern ALTITUDE2_RETVAL ALTITUDE2_status;
+#endif /* CLICK_ALTITUDE2 */
 #ifdef CLICK_ULTRALOWPRESS
 extern ultralowpress_return_value_t ULTRALOWPRESS_status;
 #endif /* CLICK_ULTRALOWPRESS */
@@ -872,6 +875,7 @@ void sample_telemetry_thread_entry(ULONG parameter)
     UINT buffer_length;
     UCHAR loop = NX_TRUE;
 #ifdef CLICK_ALTITUDE2 
+    UINT index;
     static ALTITUDE2_Data altitude2;
     float ALT2_temperature, ALT2_pressure, ALT2_altitude;
 #endif /* CLICK_ALTITUDE2 */
@@ -892,7 +896,19 @@ void sample_telemetry_thread_entry(ULONG parameter)
 
 #ifdef CLICK_ALTITUDE2
     printf("<ALT2 Click> Initializing MS5607...\r\n");
-    ALTITUDE2_init(&altitude2);
+    ALTITUDE2_status = ALTITUDE2_init(&altitude2);
+    if (ALTITUDE2_status == ALTITUDE2_OK)
+    {
+        for (index = 1; index < 7; index++)
+        {
+            printf("<ALT2 Click> [PROM] C%d = %d\r\n", index, altitude2.data_prom[index-1]);
+            tx_thread_sleep(100);
+        }
+    }
+    else
+    {
+        printf("<ALT2 Click> MS5607 was not detected\r\n");          
+    }    
     tx_thread_sleep(100);
 #endif /* CLICK_ALTITUDE2 */
     
@@ -954,15 +970,16 @@ void sample_telemetry_thread_entry(ULONG parameter)
                 APP_SENSORS_readTemperature(), APP_SENSORS_readLight() );
         send_telemetry_message(parameter, (UCHAR *)buffer, buffer_length);
 #endif /* WFI32IOT_SENSORS */
-        
 #ifdef CLICK_ALTITUDE2
-        ALTITUDE2_readData( &altitude2, &ALT2_temperature, &ALT2_pressure, &ALT2_altitude );
-        buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
-                "{\"ALT2_temperature\": %.2f, \"ALT2_pressure\": %.2f, \"ALT2_altitude\": %.2f}",
-                ALT2_temperature, ALT2_pressure, ALT2_altitude );                
-        send_telemetry_message(parameter, (UCHAR *)buffer, buffer_length);        
+        if (ALTITUDE2_status == ALTITUDE2_OK)
+        {
+            ALTITUDE2_readData( &altitude2, &ALT2_temperature, &ALT2_pressure, &ALT2_altitude );
+            buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
+                    "{\"ALT2_temperature\": %.2f, \"ALT2_pressure\": %.2f, \"ALT2_altitude\": %.2f}",
+                    ALT2_temperature, ALT2_pressure, ALT2_altitude );                
+            send_telemetry_message(parameter, (UCHAR *)buffer, buffer_length);
+        }
 #endif /* CLICK_ALTITUDE2 */
-                
 #ifdef CLICK_ULTRALOWPRESS
         if (ULTRALOWPRESS_status == ULTRALOWPRESS_OK)
         {

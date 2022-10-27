@@ -88,7 +88,8 @@
 #define ALTITUDE2_C5_TREF                             0x05 
 #define ALTITUDE2_C6_TEMPSENS                         0x06
 #define ALTITUDE2_CRC                                 0x07
-/** \} */ 
+#define ALTITUDE2_COEFFS_MAX                          6
+/** \} */
 
 
 

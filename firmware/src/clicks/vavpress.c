@@ -63,7 +63,11 @@ uint16_t VAVPRESS_reorderBytes(uint16_t word)
 void VAVPRESS_init(void)
 {
     vavpress_return_value_t error_code;
-    
+
+    for (int index = 0; index < EL_SIGNATURE_NUMBYTES; index++)
+    {
+        APP_SENSORS_data.i2c.rxBuffer[0] = 0;
+    }
     APP_SENSORS_writeByte(VAVPRESS_I2CADDR_0, VAVPRESS_SET_CMD_RESET_FIRMWARE);
     error_code = VAVPRESS_setDefaultConfig();
     if (error_code == VAVPRESS_OK)

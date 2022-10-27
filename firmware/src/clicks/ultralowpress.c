@@ -62,6 +62,9 @@ uint32_t ULTRALOWPRESS_init(void)
 {
     uint32_t serial_number = 0;
 
+    APP_SENSORS_data.i2c.rxBuffer[0] = 0;
+    APP_SENSORS_data.i2c.rxBuffer[1] = 0;
+    
     // Read the 32-bit serial number from the SM8436
     APP_SENSORS_writeRead(ULTRALOWPRESS_I2CADDR, ULTRALOWPRESS_REG_SERIAL_NUM_L, 4);
 

@@ -78,9 +78,9 @@ Sign up for a free Azure account for evaluation purposes by following the proces
 
 Should you encounter any issues with your account or subscription, [submit a technical support ticket](https://azure.microsoft.com/en-us/support/options/).
 
-## Adding Extra Sensors to the WFI32 IoT Board
+## Adding Extra Sensors to the WFI32-IoT Development Board
 
-Even though the WFI32-IoT Development Board has its own on-board light and temperature sensors, additional sensors can optionally be added relatively quickly using existing off-the-shelf hardware.
+Even though the WFI32-IoT Development Board has its own integrated/on-board light and temperature sensors, additional sensors can optionally be added relatively quickly using existing off-the-shelf hardware.
 
 The WFI32-IoT Development Board, like many Microchip development boards, features a 16-pin (2 rows x 8 pins) expansion socket which conforms to the [mikroBUS™ specification](https://download.mikroe.com/documents/standards/mikrobus/mikroBUS-standard.pdf). The mikroBUS™ standard defines mainboard sockets used for interfacing microcontrollers or microprocessors (mainboards) with integrated circuits and peripheral modules (add-on boards).
 
@@ -88,7 +88,7 @@ The standard specifies the physical layout of the mikroBUS™ pinout, the commun
 
 <img src=".//media/image8.png" style="width:4in;height:5in"/>
 
-MikroElektronika manufactures hundreds of ["Click" boards](https://www.mikroe.com/click) which conform to the mikroBUS™ standard. This demonstration supports the optional addition of up to 2 MikroElektronika Click boards which feature differential low pressure sensors manufactured by [TE Connectivity](https://www.te.com/usa-en/home.html):
+MikroElektronika manufactures hundreds of [Click boards™](https://www.mikroe.com/click) which conform to the mikroBUS™ standard. This demonstration supports the optional addition of multiple MikroElektronika Click boards™ which feature environmental sensors manufactured by [TE Connectivity](https://www.te.com/usa-en/home.html):
 
 •	[Ultra-Low Press Click board](https://www.mikroe.com/ultra-low-press-click)
 
@@ -102,7 +102,13 @@ This compact add-on board contains a board-mount pressure sensor. This board fea
 
 <img src=".//media/image9b.png" style="width:2in;height:3.5in"/>
 
-Both ULP & VAV Click boards can be connected to the WFI32-IoT Development Board at the same time using the MikroElektronika [Shuttle Bundle](https://www.mikroe.com/mikrobus-shuttle-bundle) accessory kit. The bundle features the [Shuttle click](https://www.mikroe.com/shuttle-click) 4-socket expansion board, which provides an easy and elegant solution for stacking up to four Click boards™ onto a single mikroBUS™ socket. It is a perfect solution for expanding the capacity of the development system with additional mikroBUS™ sockets when there is a demand for using more Click boards™ than the used development system is able to support.
+•	[Altitude2 Click board](https://www.mikroe.com/altitude-2-click)
+
+This compact add-on board contains the MS5607 which is a high-resolution barometric pressure sensor IC featuring a stainless steel cap. This sensor provides very accurate measurements of temperature and atmospheric pressure, which can be used to calculate the altitude with a very high resolution of 20cm per step. The device also includes features such as the ultra-low noise delta-sigma 24-bit ADC, low power consumption, fast conversion times, and pre-programmed unique compensation values. Low count of external components requirement, along with the simple interface which requires no extensive configuration programming, makes this sensor very attractive for building altitude or air pressure measuring applications.
+
+<img src=".//media/image9c.png" style="width:2in;height:3.5in"/>
+
+Any combination of these Click boards can be connected to the WFI32-IoT Development Board at the same time using the MikroElektronika [Shuttle Bundle](https://www.mikroe.com/mikrobus-shuttle-bundle) accessory kit. The bundle features the [Shuttle click](https://www.mikroe.com/shuttle-click) 4-socket expansion board, which provides an easy and elegant solution for stacking up to four Click boards™ onto a single mikroBUS™ socket. It is a perfect solution for expanding the capacity of the development system with additional mikroBUS™ sockets when there is a demand for using more Click boards™ than the used development system is able to support.
 
 <img src=".//media/image10a.png">
 
