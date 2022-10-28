@@ -182,7 +182,7 @@ static void altitude2_i2c_send_comm_resp ( ALTITUDE2_Data *ctx, uint8_t comm_byt
 
 static void altitude2_make_conv_comm( ALTITUDE2_Data *ctx, uint8_t *comm_temp, uint8_t *comm_press )
 {
-    uint8_t comm_byte = 0x50;
+    uint8_t comm_byte = ALTITUDE2_CMD_CONVERT_D2;
     uint8_t ratio_cnt = 0;
 
     while ( ctx->ratio_temp != ratio_cnt )
@@ -192,7 +192,7 @@ static void altitude2_make_conv_comm( ALTITUDE2_Data *ctx, uint8_t *comm_temp, u
     }
 
     *comm_temp = comm_byte;
-    comm_byte = 0x40;
+    comm_byte = ALTITUDE2_CMD_CONVERT_D1;
     ratio_cnt = 0;
     while ( ctx->ratio_press != ratio_cnt )
     {

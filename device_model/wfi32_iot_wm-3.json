@@ -71,6 +71,42 @@
     {
       "@type": [
         "Telemetry",
+        "Humidity"
+      ],
+      "displayName": {
+          "en": "Humidity (PHT Click)"
+        },
+      "name": "PHT_humidity",
+      "schema": "double",
+      "unit": "percentage"
+    },
+    {
+      "@type": [
+        "Telemetry",
+        "Pressure"
+      ],
+      "displayName": {
+          "en": "Pressure (PHT Click)"
+        },
+      "name": "PHT_pressure",
+      "schema": "double",
+      "unit": "mbar"
+    },
+    {
+      "@type": [
+        "Telemetry",
+        "Temperature"
+      ],
+      "displayName": {
+          "en": "Temperature (PHT Click)"
+        },
+      "name": "PHT_temperature",
+      "schema": "double",
+      "unit": "degreeCelsius"
+    },
+    {
+      "@type": [
+        "Telemetry",
         "Pressure"
       ],
       "displayName": {

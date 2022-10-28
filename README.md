@@ -108,6 +108,12 @@ This compact add-on board contains the MS5607 which is a high-resolution baromet
 
 <img src=".//media/image9c.png" style="width:2in;height:3.5in"/>
 
+•	[PHT Click board](https://www.mikroe.com/pht-click)
+
+This is a compact add-on board that contains a PHT combo sensor. This board features the MS8607, a digital combination sensor providing 3 environmental measurements all-in-one: pressure, humidity, and temperature. This sensor is based on leading MEMS technologies and provides factory-calibrated PHT data available over an I2C serial interface. The standout feature of the MS8607, alongside its very respectable low power consumption at as low as 0.78 µA, is also its ultra-low power consumption and high PHT accuracy. This Click board™ is appropriate for environmental monitoring, as well as PHT applications such as HVAC and weather stations.
+
+<img src=".//media/image9d.png" style="width:2in;height:2.5in"/>
+
 Any combination of these Click boards can be connected to the WFI32-IoT Development Board at the same time using the MikroElektronika [Shuttle Bundle](https://www.mikroe.com/mikrobus-shuttle-bundle) accessory kit. The bundle features the [Shuttle click](https://www.mikroe.com/shuttle-click) 4-socket expansion board, which provides an easy and elegant solution for stacking up to four Click boards™ onto a single mikroBUS™ socket. It is a perfect solution for expanding the capacity of the development system with additional mikroBUS™ sockets when there is a demand for using more Click boards™ than the used development system is able to support.
 
 <img src=".//media/image10a.png">

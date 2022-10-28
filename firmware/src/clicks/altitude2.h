@@ -91,7 +91,12 @@
 #define ALTITUDE2_COEFFS_MAX                          6
 /** \} */
 
-
+/**
+ * @brief PHT Command for pressure and temperature.
+ * @details Specified commands for pressure and temperature of PHT Click driver.
+ */
+#define ALTITUDE2_CMD_CONVERT_D1                                      0x40
+#define ALTITUDE2_CMD_CONVERT_D2                                      0x50    
 
 /** \} */ // End group macro 
 // --------------------------------------------------------------- PUBLIC TYPES

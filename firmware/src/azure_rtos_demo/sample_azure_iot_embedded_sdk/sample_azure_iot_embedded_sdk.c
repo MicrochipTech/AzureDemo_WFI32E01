@@ -95,6 +95,9 @@ static UCHAR sample_iothub_device_id[SAMPLE_MAX_BUFFER];
 #ifdef CLICK_ALTITUDE2
 extern ALTITUDE2_RETVAL ALTITUDE2_status;
 #endif /* CLICK_ALTITUDE2 */
+#ifdef CLICK_PHT
+extern PHT_RETVAL PHT_status;
+#endif /* CLICK_PHT */
 #ifdef CLICK_ULTRALOWPRESS
 extern ultralowpress_return_value_t ULTRALOWPRESS_status;
 #endif /* CLICK_ULTRALOWPRESS */
@@ -875,10 +878,15 @@ void sample_telemetry_thread_entry(ULONG parameter)
     UINT buffer_length;
     UCHAR loop = NX_TRUE;
 #ifdef CLICK_ALTITUDE2 
-    UINT index;
+    UINT index_a;
     static ALTITUDE2_Data altitude2;
     float ALT2_temperature, ALT2_pressure, ALT2_altitude;
 #endif /* CLICK_ALTITUDE2 */
+#ifdef CLICK_PHT 
+    UINT index_b;
+    static PHT_Data pht;
+    float PHT_temperature, PHT_pressure, PHT_humidity;
+#endif /* CLICK_PHT */
 #ifdef CLICK_ULTRALOWPRESS
     uint32_t SM8436_serialNumber;
     float ULP_temperature;
@@ -899,9 +907,9 @@ void sample_telemetry_thread_entry(ULONG parameter)
     ALTITUDE2_status = ALTITUDE2_init(&altitude2);
     if (ALTITUDE2_status == ALTITUDE2_OK)
     {
-        for (index = 1; index < 7; index++)
+        for (index_a = 1; index_a < (ALTITUDE2_COEFFS_MAX+1); index_a++)
         {
-            printf("<ALT2 Click> [PROM] C%d = %d\r\n", index, altitude2.data_prom[index-1]);
+            printf("<ALT2 Click> [PROM] C%d = %d\r\n", index_a, altitude2.data_prom[index_a-1]);
             tx_thread_sleep(100);
         }
     }
@@ -911,7 +919,23 @@ void sample_telemetry_thread_entry(ULONG parameter)
     }    
     tx_thread_sleep(100);
 #endif /* CLICK_ALTITUDE2 */
-    
+#ifdef CLICK_PHT
+    printf("<PHT Click> Initializing MS8607...\r\n");
+    PHT_status = PHT_init(&pht);
+    if (PHT_status == PHT_OK)
+    {
+        for (index_b = 1; index_b < (PHT_COEFFS_MAX+1); index_b++)
+        {
+            printf("<PHT Click> [PROM] C%d = %d\r\n", index_b, pht.data_prom[index_b-1]);
+            tx_thread_sleep(100);
+        }
+    }
+    else
+    {
+        printf("<PHT Click> MS8607 was not detected\r\n");          
+    }    
+    tx_thread_sleep(100);
+#endif /* CLICK_PHT */
 #ifdef CLICK_ULTRALOWPRESS
     printf("<ULP Click> Initializing SM8436...\r\n");
     SM8436_serialNumber = ULTRALOWPRESS_init();
@@ -925,7 +949,6 @@ void sample_telemetry_thread_entry(ULONG parameter)
     }
     tx_thread_sleep(100);
 #endif /* CLICK_ULTRALOWPRESS */
-
 #ifdef CLICK_VAVPRESS
     printf("<VAV Click> Initializing LMIS025B...\r\n");
     VAVPRESS_init();
@@ -973,13 +996,24 @@ void sample_telemetry_thread_entry(ULONG parameter)
 #ifdef CLICK_ALTITUDE2
         if (ALTITUDE2_status == ALTITUDE2_OK)
         {
-            ALTITUDE2_readData( &altitude2, &ALT2_temperature, &ALT2_pressure, &ALT2_altitude );
+            ALTITUDE2_readData(&altitude2, &ALT2_temperature, &ALT2_pressure, &ALT2_altitude);
             buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
                     "{\"ALT2_temperature\": %.2f, \"ALT2_pressure\": %.2f, \"ALT2_altitude\": %.2f}",
                     ALT2_temperature, ALT2_pressure, ALT2_altitude );                
             send_telemetry_message(parameter, (UCHAR *)buffer, buffer_length);
         }
 #endif /* CLICK_ALTITUDE2 */
+#ifdef CLICK_PHT
+        if (PHT_status == PHT_OK)
+        {
+            PHT_getTemperaturePressure(&pht, &PHT_temperature, &PHT_pressure);            
+            PHT_getRelativeHumidity(&PHT_humidity);
+            buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
+                    "{\"PHT_temperature\": %.2f, \"PHT_pressure\": %.2f, \"PHT_humidity\": %.2f}",
+                    PHT_temperature, PHT_pressure, PHT_humidity );                 
+            send_telemetry_message(parameter, (UCHAR *)buffer, buffer_length);
+        }
+#endif /* CLICK_PHT */
 #ifdef CLICK_ULTRALOWPRESS
         if (ULTRALOWPRESS_status == ULTRALOWPRESS_OK)
         {
