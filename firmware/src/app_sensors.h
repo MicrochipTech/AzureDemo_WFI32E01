@@ -80,7 +80,7 @@ extern "C" {
 typedef struct
 {
     DRV_HANDLE i2cHandle;
-    uint8_t  txBuffer[4];
+    uint8_t  txBuffer[64];
     uint16_t rxBuffer[64];
 } APP_SENSORS_I2C;
 
@@ -112,6 +112,7 @@ typedef struct
 
 void APP_SENSORS_init(void);
 void APP_SENSORS_writeByte(uint8_t addr, uint8_t val);
+void APP_SENSORS_write(uint8_t addr, uint8_t *buffer, uint8_t size);
 void APP_SENSORS_writeWord_MSB_b4_LSB(uint8_t addr, uint16_t reg, uint16_t val);
 void APP_SENSORS_writeWord_LSB_b4_MSB(uint8_t addr, uint16_t reg, uint16_t val);
 void APP_SENSORS_justRead(uint8_t addr, uint8_t size);

@@ -54,7 +54,7 @@ extern APP_PIC32MZ_W1_DATA app_pic32mz_w1Data;
 /* Generally, IoTHub Client and DPS Client do not run at the same time, user can use union as below to
    share the memory between IoTHub Client and DPS Client.
 
-   NOTE: If user can not make sure sharing memory is safe, IoTHub Client and DPS Client must be defined seperately.  */
+   NOTE: If user can not make sure sharing memory is safe, IoTHub Client and DPS Client must be defined separately.  */
 typedef union SAMPLE_CLIENT_UNION
 {
     NX_AZURE_IOT_HUB_CLIENT                         iothub_client;
@@ -98,6 +98,9 @@ extern ALTITUDE2_RETVAL ALTITUDE2_status;
 #ifdef CLICK_PHT
 extern PHT_RETVAL PHT_status;
 #endif /* CLICK_PHT */
+#ifdef CLICK_TEMPHUM14
+extern temphum14_return_value_t TEMPHUM14_status;
+#endif /* CLICK_TEMPHUM14 */
 #ifdef CLICK_ULTRALOWPRESS
 extern ultralowpress_return_value_t ULTRALOWPRESS_status;
 #endif /* CLICK_ULTRALOWPRESS */
@@ -887,6 +890,11 @@ void sample_telemetry_thread_entry(ULONG parameter)
     static PHT_Data pht;
     float PHT_temperature, PHT_pressure, PHT_humidity;
 #endif /* CLICK_PHT */
+#ifdef CLICK_TEMPHUM14
+    uint32_t HTU31_serialNumber;
+    float TEMPHUM14_temperature;
+    float TEMPHUM14_humidity;
+#endif /* CLICK_ULTRALOWPRESS */
 #ifdef CLICK_ULTRALOWPRESS
     uint32_t SM8436_serialNumber;
     float ULP_temperature;
@@ -936,6 +944,19 @@ void sample_telemetry_thread_entry(ULONG parameter)
     }    
     tx_thread_sleep(100);
 #endif /* CLICK_PHT */
+#ifdef CLICK_TEMPHUM14
+    printf("<TEMPHUM14 Click> Initializing HTU31...\r\n");
+    HTU31_serialNumber = TEMPHUM14_init(TEMPHUM14_I2C_SLAVE_ADDR_GND);
+    if (HTU31_serialNumber != 0)
+    {
+        printf("<TEMPHUM14 Click> * Serial Number = %u\r\n", HTU31_serialNumber);    
+    }
+    else
+    {
+        printf("<TEMPHUM14 Click> HTU31 not detected\r\n");          
+    }
+    tx_thread_sleep(100);
+#endif /* CLICK_ULTRALOWPRESS */
 #ifdef CLICK_ULTRALOWPRESS
     printf("<ULP Click> Initializing SM8436...\r\n");
     SM8436_serialNumber = ULTRALOWPRESS_init();
@@ -1014,6 +1035,19 @@ void sample_telemetry_thread_entry(ULONG parameter)
             send_telemetry_message(parameter, (UCHAR *)buffer, buffer_length);
         }
 #endif /* CLICK_PHT */
+#ifdef CLICK_TEMPHUM14
+        if (HTU31_serialNumber != 0)
+        {
+            TEMPHUM14_setConversion( TEMPHUM14_I2C_SLAVE_ADDR_GND, 
+                    TEMPHUM14_CONVERSION_HUM_OSR_0_020, TEMPHUM14_CONVERSION_TEMP_0_040 );
+            TEMPHUM14_getTemperatureHumidity (TEMPHUM14_I2C_SLAVE_ADDR_GND, 
+                    &TEMPHUM14_temperature, &TEMPHUM14_humidity );
+            buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
+                    "{\"TEMPHUM14_temperature\": %.2f, \"TEMPHUM14_humidity\": %.2f}",
+                    TEMPHUM14_temperature, TEMPHUM14_humidity);              
+            send_telemetry_message(parameter, (UCHAR *)buffer, buffer_length);
+        }
+#endif /* CLICK_TEMPHUM14 */
 #ifdef CLICK_ULTRALOWPRESS
         if (ULTRALOWPRESS_status == ULTRALOWPRESS_OK)
         {

@@ -20,6 +20,14 @@ void APP_SENSORS_writeByte(uint8_t addr, uint8_t val)
             addr, (void*)APP_SENSORS_data.i2c.txBuffer, 1);
 }
 
+void APP_SENSORS_write(uint8_t addr, uint8_t *buffer, uint8_t size)
+{
+    memcpy(APP_SENSORS_data.i2c.txBuffer, buffer, size);
+    
+    DRV_I2C_WriteTransfer(APP_SENSORS_data.i2c.i2cHandle,
+            addr, (void*)APP_SENSORS_data.i2c.txBuffer, size);
+}
+
 void APP_SENSORS_writeWord_MSB_b4_LSB(uint8_t addr, uint16_t reg, uint16_t val)
 {
     APP_SENSORS_data.i2c.txBuffer[0] = (uint8_t)reg;

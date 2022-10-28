@@ -125,10 +125,20 @@ PHT_RETVAL PHT_init ( PHT_Data *ctx )
     {
         APP_SENSORS_data.i2c.rxBuffer[0] = 0;
     }
+
     pht_reset( ctx );
     pht_set_ratio( ctx, PHT_PT_CMD_RATIO_2048, PHT_PT_CMD_RATIO_2048);
-   
-    return PHT_OK;
+
+    if ( (ctx->data_prom[0] == 0) && (ctx->data_prom[1] == 0) && (ctx->data_prom[2] == 0) &&
+         (ctx->data_prom[3] == 0) && (ctx->data_prom[4] == 0) && (ctx->data_prom[5] == 0)
+       )
+    {
+        return PHT_ERROR;
+    }
+    else
+    {
+        return PHT_OK;
+    }
 }
 
 PHT_RETVAL pht_get_prom ( PHT_Data *ctx, uint8_t sel_data, uint32_t *tx_data )
