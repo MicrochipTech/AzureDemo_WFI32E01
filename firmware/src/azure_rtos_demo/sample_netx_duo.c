@@ -12,7 +12,7 @@
 /* Define demo stack size.   */
 
 #ifndef DEMO_STACK_SIZE
-#define DEMO_STACK_SIZE         2048
+#define DEMO_STACK_SIZE         4096
 #endif
 
 #ifndef DEMO_THREAD_PRIORITY
