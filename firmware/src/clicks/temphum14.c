@@ -33,6 +33,8 @@ static temphum14_diagn_t TEMPHUM14_statusData;
 
 uint32_t TEMPHUM14_init ( uint8_t addr )
 {   
+    TEMPHUM14_softReset( addr );
+    tx_thread_sleep(5);
     for (int index = 0; index < TEMPHUM14_SERIAL_NUMBER_BYTES; index++)
     {
         APP_SENSORS_data.i2c.rxBuffer[0] = 0;
