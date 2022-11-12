@@ -81,7 +81,8 @@ typedef struct
 {
     DRV_HANDLE i2cHandle;
     uint8_t  txBuffer[64];
-    uint16_t rxBuffer[64];
+    uint8_t  rxBuffBytes[64];
+    uint16_t rxBuffWords[64];
 } APP_SENSORS_I2C;
 
 /* MCP9808 Structure */
@@ -116,7 +117,8 @@ void APP_SENSORS_write(uint8_t addr, uint8_t *buffer, uint8_t size);
 void APP_SENSORS_writeWord_MSB_b4_LSB(uint8_t addr, uint16_t reg, uint16_t val);
 void APP_SENSORS_writeWord_LSB_b4_MSB(uint8_t addr, uint16_t reg, uint16_t val);
 void APP_SENSORS_justRead(uint8_t addr, uint8_t size);
-void APP_SENSORS_writeRead(uint8_t addr, uint16_t reg, uint8_t size);
+void APP_SENSORS_writeReadBytes(uint8_t addr, uint16_t reg, uint8_t size);
+void APP_SENSORS_writeReadWords(uint8_t addr, uint16_t reg, uint8_t size);
 int16_t APP_SENSORS_readTemperature(void);
 uint32_t APP_SENSORS_readLight(void);
 

@@ -37,7 +37,7 @@ uint32_t TEMPHUM14_init ( uint8_t addr )
     tx_thread_sleep(5);
     for (int index = 0; index < TEMPHUM14_SERIAL_NUMBER_BYTES; index++)
     {
-        APP_SENSORS_data.i2c.rxBuffer[0] = 0;
+        APP_SENSORS_data.i2c.rxBuffBytes[0] = 0;
     }   
     return (TEMPHUM14_getSerialNumber( addr ));
 }
@@ -59,6 +59,7 @@ void TEMPHUM14_setConversion ( uint8_t addr, uint8_t hum_osr, uint8_t temp_osr )
     tmp |= temp_osr;
 
     temphum14_set_cmd( addr, tmp );
+    tx_thread_sleep(10);
 }
 
 void TEMPHUM14_getTemperatureHumidity ( uint8_t addr, float *temp, float *hum )
@@ -68,12 +69,12 @@ void TEMPHUM14_getTemperatureHumidity ( uint8_t addr, float *temp, float *hum )
     float temperature;
     float humidity;
 
-    APP_SENSORS_writeRead( addr, TEMPHUM14_CMD_READ_T_AND_RH, 
+    APP_SENSORS_writeReadBytes( addr, TEMPHUM14_CMD_READ_T_AND_RH, 
             (TEMPHUM14_TEMPERATURE_NUMBER_BYTES+TEMPHUM14_HUMIDITY_NUMBER_BYTES) );
 
     for (int index = 0; index <  (TEMPHUM14_TEMPERATURE_NUMBER_BYTES+TEMPHUM14_HUMIDITY_NUMBER_BYTES); index++)
     {
-        rx_buf[ index ] = APP_SENSORS_data.i2c.rxBuffer[ index ];
+        rx_buf[ index ] = APP_SENSORS_data.i2c.rxBuffBytes[ index ];
     }
     
     tmp = rx_buf[ 0 ];
@@ -169,8 +170,8 @@ void TEMPHUM14_getDiagnostic ( uint8_t addr, temphum14_diagn_t *diag_data )
 {
     uint8_t rx_buf[ 1 ];
 
-    APP_SENSORS_writeRead( addr, TEMPHUM14_CMD_READ_DIAGNOSTIC, 1 );
-    rx_buf[ 0 ] = APP_SENSORS_data.i2c.rxBuffer[ 0 ];
+    APP_SENSORS_writeReadBytes( addr, TEMPHUM14_CMD_READ_DIAGNOSTIC, 1 );
+    rx_buf[ 0 ] = APP_SENSORS_data.i2c.rxBuffBytes[ 0 ];
         
     diag_data->nvm_error    = ( rx_buf[ 0 ] & 0x80 ) >> 7;
     diag_data->hum_un_over  = ( rx_buf[ 0 ] & 0x40 ) >> 6;
@@ -186,10 +187,10 @@ uint32_t TEMPHUM14_getSerialNumber ( uint8_t addr ) {
     uint8_t rx_buf[ TEMPHUM14_SERIAL_NUMBER_BYTES ];
     uint32_t ser_numb;
 
-    APP_SENSORS_writeRead( addr, TEMPHUM14_CMD_READ_SERIAL_NUMBER, TEMPHUM14_SERIAL_NUMBER_BYTES );
+    APP_SENSORS_writeReadBytes( addr, TEMPHUM14_CMD_READ_SERIAL_NUMBER, TEMPHUM14_SERIAL_NUMBER_BYTES );
     for (int index = 0; index < TEMPHUM14_SERIAL_NUMBER_BYTES; index++)
     {
-        rx_buf[ index ] = APP_SENSORS_data.i2c.rxBuffer[ index ];
+        rx_buf[ index ] = APP_SENSORS_data.i2c.rxBuffBytes[ index ];
     }
     
     ser_numb = rx_buf[ 0 ];

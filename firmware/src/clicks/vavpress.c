@@ -66,7 +66,7 @@ void VAVPRESS_init(void)
 
     for (int index = 0; index < EL_SIGNATURE_NUMBYTES; index++)
     {
-        APP_SENSORS_data.i2c.rxBuffer[0] = 0;
+        APP_SENSORS_data.i2c.rxBuffBytes[0] = 0;
     }
     APP_SENSORS_writeByte(VAVPRESS_I2CADDR_0, VAVPRESS_SET_CMD_RESET_FIRMWARE);
     error_code = VAVPRESS_setDefaultConfig();
@@ -132,12 +132,12 @@ vavpress_return_value_t VAVPRESS_getSensorReadings(vavpress_sensor_param_data_t 
 
     APP_SENSORS_justRead(VAVPRESS_I2CADDR_0, EXTENDED_READOUT_NUMBYTES);
 
-    press_data = VAVPRESS_2sCompToDecimal((int16_t)APP_SENSORS_data.i2c.rxBuffer[0]);
+    press_data = VAVPRESS_2sCompToDecimal((int16_t)APP_SENSORS_data.i2c.rxBuffBytes[0]);
     tmp = ( float ) press_data;
     tmp /= ( float ) param_data->scale_factor_press;
     *diff_press = tmp;
   
-    temp_data = VAVPRESS_2sCompToDecimal((int16_t)APP_SENSORS_data.i2c.rxBuffer[1]);
+    temp_data = VAVPRESS_2sCompToDecimal((int16_t)APP_SENSORS_data.i2c.rxBuffBytes[1]);
     tmp = ( float ) temp_data;
     tmp -= ( float ) param_data->readout_at_known_temperature;
     tmp /= ( float ) param_data->scale_factor_temp;
@@ -153,8 +153,8 @@ vavpress_return_value_t VAVPRESS_getElectronicSignature(vavpress_el_signature_da
     uint16_t tmp = 0;
     float tmp_f;
 
-    APP_SENSORS_writeRead(VAVPRESS_I2CADDR_0, VAVPRESS_SET_CMD_RETRIEVE_ELECTRONIC_SIGNATURE, EL_SIGNATURE_NUMBYTES);
-    memcpy(rx_buf, APP_SENSORS_data.i2c.rxBuffer, EL_SIGNATURE_NUMBYTES);
+    APP_SENSORS_writeReadBytes(VAVPRESS_I2CADDR_0, VAVPRESS_SET_CMD_RETRIEVE_ELECTRONIC_SIGNATURE, EL_SIGNATURE_NUMBYTES);
+    memcpy(rx_buf, APP_SENSORS_data.i2c.rxBuffBytes, EL_SIGNATURE_NUMBYTES);
     
     if ( rx_buf[ 1 ] < 10 ) {
         tmp_f = ( float ) rx_buf[ 0 ] + ( ( float ) rx_buf[ 1 ] / 10 );

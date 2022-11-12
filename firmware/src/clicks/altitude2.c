@@ -45,7 +45,7 @@ ALTITUDE2_RETVAL ALTITUDE2_init ( ALTITUDE2_Data *ctx )
 {
     for (int index = 0; index < ALTITUDE2_COEFFS_MAX; index++)
     {
-        APP_SENSORS_data.i2c.rxBuffer[0] = 0;
+        APP_SENSORS_data.i2c.rxBuffBytes[0] = 0;
     }
     
     altitude2_reset( ctx );
@@ -168,11 +168,11 @@ static void altitude2_i2c_send_comm_resp ( ALTITUDE2_Data *ctx, uint8_t comm_byt
     uint32_t pom = 0;
 
     tx_thread_sleep(10);
-    APP_SENSORS_writeRead(ALTITUDE2_DEVICE_ADDR_1, comm_byte, num_bytes);
+    APP_SENSORS_writeReadBytes(ALTITUDE2_DEVICE_ADDR_1, comm_byte, num_bytes);
 
     for( cnt = 0; cnt < num_bytes; cnt++ )
     {
-        tmp[ cnt ] = APP_SENSORS_data.i2c.rxBuffer[ cnt ];
+        tmp[ cnt ] = APP_SENSORS_data.i2c.rxBuffBytes[ cnt ];
         pom = pom << 8;
         pom = pom | tmp[ cnt ];
         

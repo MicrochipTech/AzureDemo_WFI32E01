@@ -49,12 +49,12 @@
 // Section: Definitions
 // *****************************************************************************
 // *****************************************************************************
-//#define WFI32IOT_SENSORS
-//#define CLICK_ALTITUDE2
-//#define CLICK_PHT
+#define WFI32IOT_SENSORS
+#define CLICK_ALTITUDE2
+#define CLICK_PHT
 #define CLICK_TEMPHUM14
-//#define CLICK_ULTRALOWPRESS
-//#define CLICK_VAVPRESS
+#define CLICK_ULTRALOWPRESS
+#define CLICK_VAVPRESS
 #define SEND_LED_PROPERTIES_WITH_TELEMETRY
 //#define PNP_CERTIFICATION_TESTING
 

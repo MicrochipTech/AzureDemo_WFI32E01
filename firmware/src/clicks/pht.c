@@ -77,11 +77,11 @@ static void dev_send_cmd_resp ( PHT_Data *ctx, uint8_t addr, uint8_t cmd_byte, u
     uint32_t pom = 0;
 
     tx_thread_sleep(10);
-    APP_SENSORS_writeRead(addr, cmd_byte, num_bytes);
+    APP_SENSORS_writeReadBytes(addr, cmd_byte, num_bytes);
 
     for( cnt = 0; cnt < num_bytes; cnt++ )
     {
-        tmp[ cnt ] = APP_SENSORS_data.i2c.rxBuffer[ cnt ];
+        tmp[ cnt ] = APP_SENSORS_data.i2c.rxBuffBytes[ cnt ];
         pom = pom << 8;
         pom = pom | tmp[ cnt ];
         
@@ -123,7 +123,7 @@ PHT_RETVAL PHT_init ( PHT_Data *ctx )
 {
     for (int index = 0; index < PHT_COEFFS_MAX; index++)
     {
-        APP_SENSORS_data.i2c.rxBuffer[0] = 0;
+        APP_SENSORS_data.i2c.rxBuffBytes[0] = 0;
     }
 
     pht_reset( ctx );
@@ -228,9 +228,9 @@ void PHT_getRelativeHumidity ( float *humidity )
     tx_thread_sleep(20);
     APP_SENSORS_justRead(PHT_I2C_SLAVE_ADDR_RH, 2);
         
-    rh_val = APP_SENSORS_data.i2c.rxBuffer[ 0 ];
+    rh_val = APP_SENSORS_data.i2c.rxBuffBytes[ 0 ];
     rh_val <<= 8;
-    rh_val |= APP_SENSORS_data.i2c.rxBuffer[ 1 ];
+    rh_val |= APP_SENSORS_data.i2c.rxBuffBytes[ 1 ];
 
     rh = ( float ) rh_val;
     rh *= 12500.0;

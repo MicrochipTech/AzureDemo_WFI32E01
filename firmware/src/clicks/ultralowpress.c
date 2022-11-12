@@ -24,7 +24,6 @@
  * @file ultralowpress.c
  * @brief Ultra-Low Press Click Driver.
  */
-#include <stdio.h>
 #include "ultralowpress.h"
     
 extern APP_SENSORS_DATA APP_SENSORS_data;
@@ -62,14 +61,14 @@ uint32_t ULTRALOWPRESS_init(void)
 {
     uint32_t serial_number = 0;
 
-    APP_SENSORS_data.i2c.rxBuffer[0] = 0;
-    APP_SENSORS_data.i2c.rxBuffer[1] = 0;
+    APP_SENSORS_data.i2c.rxBuffWords[0] = 0;
+    APP_SENSORS_data.i2c.rxBuffWords[1] = 0;
     
     // Read the 32-bit serial number from the SM8436
-    APP_SENSORS_writeRead(ULTRALOWPRESS_I2CADDR, ULTRALOWPRESS_REG_SERIAL_NUM_L, 4);
+    APP_SENSORS_writeReadWords(ULTRALOWPRESS_I2CADDR, ULTRALOWPRESS_REG_SERIAL_NUM_L, 4);
 
-    serial_number = APP_SENSORS_data.i2c.rxBuffer[1] << 16;
-    serial_number |= APP_SENSORS_data.i2c.rxBuffer[0];
+    serial_number = APP_SENSORS_data.i2c.rxBuffWords[1] << 16;
+    serial_number |= APP_SENSORS_data.i2c.rxBuffWords[0];
     
     if (serial_number == 0)
     {
@@ -89,8 +88,8 @@ bool ULTRALOWPRESS_isReady(void)
 {   
     uint16_t status_reg;
     
-    APP_SENSORS_writeRead(ULTRALOWPRESS_I2CADDR, ULTRALOWPRESS_REG_STATUS, 2);
-    status_reg = APP_SENSORS_data.i2c.rxBuffer[0];
+    APP_SENSORS_writeReadWords(ULTRALOWPRESS_I2CADDR, ULTRALOWPRESS_REG_STATUS, 2);
+    status_reg = APP_SENSORS_data.i2c.rxBuffWords[0];
     
     return ( status_reg & ULTRALOWPRESS_STATUS_TEMP_MASK ) && 
             ( status_reg & ULTRALOWPRESS_STATUS_PRESS_MASK );
@@ -105,8 +104,8 @@ float ULTRALOWPRESS_getTemperature(void)
 {
     int16_t decimal;
     
-    APP_SENSORS_writeRead(ULTRALOWPRESS_I2CADDR, ULTRALOWPRESS_REG_TEMP, 2);
-    decimal = ULTRALOWPRESS_2sCompToDecimal(APP_SENSORS_data.i2c.rxBuffer[0]);
+    APP_SENSORS_writeReadWords(ULTRALOWPRESS_I2CADDR, ULTRALOWPRESS_REG_TEMP, 2);
+    decimal = ULTRALOWPRESS_2sCompToDecimal(APP_SENSORS_data.i2c.rxBuffWords[0]);
 
     return ( (decimal - ULTRALOWPRESS_B0) / ULTRALOWPRESS_B1 );
 }
@@ -115,8 +114,8 @@ float ULTRALOWPRESS_getPressure(void)
 {
     int16_t decimal;
 
-    APP_SENSORS_writeRead(ULTRALOWPRESS_I2CADDR, ULTRALOWPRESS_REG_PRESS, 2);
-    decimal = ULTRALOWPRESS_2sCompToDecimal(APP_SENSORS_data.i2c.rxBuffer[0]);
+    APP_SENSORS_writeReadWords(ULTRALOWPRESS_I2CADDR, ULTRALOWPRESS_REG_PRESS, 2);
+    decimal = ULTRALOWPRESS_2sCompToDecimal(APP_SENSORS_data.i2c.rxBuffWords[0]);
     
     return ULTRALOWPRESS_P_MIN + ( ( decimal - ULTRALOWPRESS_OUT_MIN ) / 
             ( ULTRALOWPRESS_OUT_MAX - ULTRALOWPRESS_OUT_MIN ) ) * 

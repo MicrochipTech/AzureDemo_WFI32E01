@@ -1053,12 +1053,12 @@ void sample_telemetry_thread_entry(ULONG parameter)
         {
             if (ULTRALOWPRESS_isReady())
             {
-                //printf("\r\n<ULP Click> STATUS [ %x ] ", APP_SENSORS_data.i2c.rxBuffer[0]);
+                //printf("\r\n<ULP Click> STATUS [ %x ] ", APP_SENSORS_data.i2c.rxBuffBytes[0]);
                 ULTRALOWPRESS_clearStatus();
                 ULP_temperature = ULTRALOWPRESS_getTemperature();
-                //printf("DSP_T [ %x ] ", APP_SENSORS_data.i2c.rxBuffer[0]);
+                //printf("DSP_T [ %x ] ", APP_SENSORS_data.i2c.rxBuffBytes[0]);
                 ULP_pressure = ULTRALOWPRESS_getPressure();     
-                //printf("DSP_S [ %x ]\r\n", APP_SENSORS_data.i2c.rxBuffer[0]);
+                //printf("DSP_S [ %x ]\r\n", APP_SENSORS_data.i2c.rxBuffBytes[0]);
                 buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
                         "{\"ULP_temperature\": %.2f, \"ULP_pressure\": %.2f}",
                         ULP_temperature, ULP_pressure );                
@@ -1085,8 +1085,8 @@ void sample_telemetry_thread_entry(ULONG parameter)
             if (VAVPRESS_getSensorReadings(&VAVPRESS_param_data, &VAV_pressure, &VAV_temperature) == VAVPRESS_OK)
             {
                 //printf("\r\n<VAV Click> Extended data readout ( pressure | temperature ) = [ %x (%i) | %x (%i) ]\r\n",
-                        //APP_SENSORS_data.i2c.rxBuffer[0], VAVPRESS_2sCompToDecimal(APP_SENSORS_data.i2c.rxBuffer[0]),
-                        //APP_SENSORS_data.i2c.rxBuffer[1], VAVPRESS_2sCompToDecimal(APP_SENSORS_data.i2c.rxBuffer[1])
+                        //APP_SENSORS_data.i2c.rxBuffBytes[0], VAVPRESS_2sCompToDecimal(APP_SENSORS_data.i2c.rxBuffBytes[0]),
+                        //APP_SENSORS_data.i2c.rxBuffBytes[1], VAVPRESS_2sCompToDecimal(APP_SENSORS_data.i2c.rxBuffBytes[1])
                       //);
                 //tx_thread_sleep(500);
                 buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
