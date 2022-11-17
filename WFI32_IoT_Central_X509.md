@@ -24,9 +24,8 @@ As a solution builder, you can use IoT Central to develop a cloud-hosted IoT sol
 
     ```bash
     git clone <Demo_URL>
-    
-    (e.g. <Demo_URL> =  https://github.com/MicrochipTech/WFI32-IoT_Azure_PnP_Demo)
     ```
+    NOTE: <Demo_URL> is the link to the origin repository (e.g. https://github.com/Microchip-Azure-Demos/WFI32-IoT)
 
 2. Connect the board to PC, then make sure a device named `CURIOSITY` shows up as a disk drive (i.e. Mass Storage Device) on the `Desktop` or in a `File Explorer` window
 

@@ -19,7 +19,6 @@
 - [Program the WFI32-IoT Development Board](#program-the-wfi32-iot-development-board)
   - [1. Install the Development Tools](#1-install-the-development-tools)
   - [2. Connect to Azure IoT Central](#2-connect-to-azure-iot-central)
- - [Frequently Asked Questions](#frequently-asked-questions)
 - [References](#references)
 - [Conclusion](#conclusion)
 
@@ -101,10 +100,6 @@ The web UI lets you quickly connect devices, monitor device conditions, create r
 This demonstration platform provides 2 different ways of programming the WFI32-IoT Development Board to authenticate itself with the Microsoft Azure Cloud service. It is strongly recommended to use X.509 certificate-based authentication to take full advantage of the [Trust&GO™](https://www.microchip.com/en-us/products/security/trust-platform/trust-and-go) secure element integrated into the WFI32 module.
 1. [X.509 CA-Signed Certificates](./WFI32_IoT_Central_X509.md)
 2. [Shared Access Signature (SAS Token)](./WFI32_IoT_Central_SAS.md)
-
-## Frequently Asked Questions
-
-Having issues with connecting the board with Azure IoT services? Check out the [FAQ section](./FAQ.md)
 
 ## References
 
