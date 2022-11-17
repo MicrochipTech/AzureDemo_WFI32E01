@@ -80,33 +80,7 @@ Should you encounter any issues with your account or subscription, [submit a tec
 
 ## Adding Extra Sensors to the WFI32 IoT Board
 
-Even though the WFI32-IoT Development Board has its own on-board light and temperature sensors, additional sensors can optionally be added relatively quickly using existing off-the-shelf hardware.
-
-The WFI32-IoT Development Board, like many Microchip development boards, features a 16-pin (2 rows x 8 pins) expansion socket which conforms to the [mikroBUS™ specification](https://download.mikroe.com/documents/standards/mikrobus/mikroBUS-standard.pdf). The mikroBUS™ standard defines mainboard sockets used for interfacing microcontrollers or microprocessors (mainboards) with integrated circuits and peripheral modules (add-on boards).
-
-The standard specifies the physical layout of the mikroBUS™ pinout, the communication and power supply pins used, the positioning of the mikroBUS™ socket on the mainboard, and finally, the silkscreen marking conventions for both the sockets. The purpose of mikroBUS™ is to enable easy hardware expandability with a large number of standardized compact add-on boards, each one carrying a single sensor, transceiver, display, encoder, motor driver, connection port, or any other electronic module or integrated circuit. Created by [MikroElektronika](https://www.mikroe.com), mikroBUS™ is an open standard — anyone can implement mikroBUS™ in their hardware design.
-
-<img src=".//media/image8.png" style="width:4in;height:5in"/>
-
-MikroElektronika manufactures hundreds of ["Click" boards](https://www.mikroe.com/click) which conform to the mikroBUS™ standard. This demonstration supports the optional addition of up to 2 MikroElektronika Click boards which feature differential low pressure sensors manufactured by [TE Connectivity](https://www.te.com/usa-en/home.html):
-
-•	[Ultra-Low Press Click board](https://www.mikroe.com/ultra-low-press-click)
-
-This compact add-on board contains a mountable gage pressure sensor for pneumatic pressure measurements. This board features the SM8436, an I2C configurable ultra-low pressure sensor with high accuracy and long-term stability from Silicon Microstructure (part of TE Connectivity). A state-of-the-art MEMS pressure transducer technology and CMOS mixed-signal processing technology produces a digital, fully conditioned, multi-order pressure and temperature compensated sensor like this available in a gage pressure configuration. It also features superior sensitivity needed for ultra-low pressure measurements ranging from 0 to 250Pa Differential / 500 Pa Gauge. Therefore, this Click board™ is suitable for differential pressure measurements found in pressure monitoring applications like building fire safety systems, isolation rooms, and high purity work stations as well as positive pressure solutions found in hospital surgical environments.
-
-<img src=".//media/image9a.png" style="width:2in;height:3.5in"/>
-
-•	[VAV Press Click board](https://www.mikroe.com/vav-press-click)
-
-This compact add-on board contains a board-mount pressure sensor. This board features the LMIS025B, a low differential pressure sensor from First Sensor (part of TE Connectivity). It is based on thermal flow measurement of gas through a micro-flow channel integrated within the sensor chip. The innovative LMI technology features superior sensitivity, especially for ultra-low pressures ranging from 0 to 25 Pa. The extremely low gas flow through the sensor ensures high immunity to dust contamination, humidity, and long tubing compared to other flow-based pressure sensors. This Click board™ is suitable for pressure measurements in Variable Air Volume (VAV) building ventilation systems, industrial, and respiratory applications in medical.
-
-<img src=".//media/image9b.png" style="width:2in;height:3.5in"/>
-
-Both ULP & VAV Click boards can be connected to the WFI32-IoT Development Board at the same time using the MikroElektronika [Shuttle Bundle](https://www.mikroe.com/mikrobus-shuttle-bundle) accessory kit. The bundle features the [Shuttle click](https://www.mikroe.com/shuttle-click) 4-socket expansion board, which provides an easy and elegant solution for stacking up to four Click boards™ onto a single mikroBUS™ socket. It is a perfect solution for expanding the capacity of the development system with additional mikroBUS™ sockets when there is a demand for using more Click boards™ than the used development system is able to support.
-
-<img src=".//media/image10a.png">
-
-<img src=".//media/image10b.png">
+Even though the WFI32-IoT Development Board has its own on-board light and temperature sensors, additional sensors can optionally be [added](./Clicks.md) relatively quickly using existing off-the-shelf hardware.
 
 ## Program the WFI32-IoT Development Board
 
