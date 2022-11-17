@@ -107,6 +107,30 @@
     {
       "@type": [
         "Telemetry",
+        "Humidity"
+      ],
+      "displayName": {
+          "en": "Humidity (TEMPHUM14 Click)"
+        },
+      "name": "TEMPHUM14_humidity",
+      "schema": "double",
+      "unit": "percentage"
+    },
+    {
+      "@type": [
+        "Telemetry",
+        "Temperature"
+      ],
+      "displayName": {
+          "en": "Temperature (TEMPHUM14 Click)"
+        },
+      "name": "TEMPHUM14_temperature",
+      "schema": "double",
+      "unit": "degreeCelsius"
+    },
+    {
+      "@type": [
+        "Telemetry",
         "Pressure"
       ],
       "displayName": {
