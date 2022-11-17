@@ -8,7 +8,7 @@
 
     - [MPLAB XC32 Compiler (minimum v4.10)](https://www.microchip.com/en-us/development-tools-tools-and-software/mplab-xc-compilers#tabs)
 
-        NOTE: This demonstration project was tested successfully with XC32 v4.10, and in general should work with later versions of the compiler as they become available. If you encounter issues building the project, it is recommended to download XC32 v4.10 from the [MPLAB Development Ecosystem Downloads Archive](https://www.microchip.com/en-us/tools-resources/archives/mplab-ecosystem) (to fall back to the version Microchip successfully tested prior to release). 
+        NOTE: This demonstration project was tested successfully with XC32 v4.10, and in general should work with later versions of the compiler as they become available. If you encounter issues building the project with a newer version of the compiler, it is recommended to download XC32 v4.10 from the [MPLAB Development Ecosystem Downloads Archive](https://www.microchip.com/en-us/tools-resources/archives/mplab-ecosystem) (to fall back to the version Microchip successfully tested prior to release). 
 
      - [MPLAB Harmony Software Framework](https://microchipdeveloper.com/harmony3:mhc-overview)
 
