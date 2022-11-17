@@ -54,7 +54,7 @@ extern APP_PIC32MZ_W1_DATA app_pic32mz_w1Data;
 /* Generally, IoTHub Client and DPS Client do not run at the same time, user can use union as below to
    share the memory between IoTHub Client and DPS Client.
 
-   NOTE: If user can not make sure sharing memory is safe, IoTHub Client and DPS Client must be defined seperately.  */
+   NOTE: If user can not make sure sharing memory is safe, IoTHub Client and DPS Client must be defined separately.  */
 typedef union SAMPLE_CLIENT_UNION
 {
     NX_AZURE_IOT_HUB_CLIENT                         iothub_client;
@@ -92,6 +92,15 @@ static UCHAR sample_iothub_device_id[SAMPLE_MAX_BUFFER];
 
 /* Define sample threads.  */
 #ifndef DISABLE_TELEMETRY_SAMPLE
+#ifdef CLICK_ALTITUDE2
+extern ALTITUDE2_RETVAL ALTITUDE2_status;
+#endif /* CLICK_ALTITUDE2 */
+#ifdef CLICK_PHT
+extern PHT_RETVAL PHT_status;
+#endif /* CLICK_PHT */
+#ifdef CLICK_TEMPHUM14
+extern temphum14_return_value_t TEMPHUM14_status;
+#endif /* CLICK_TEMPHUM14 */
 #ifdef CLICK_ULTRALOWPRESS
 extern ultralowpress_return_value_t ULTRALOWPRESS_status;
 #endif /* CLICK_ULTRALOWPRESS */
@@ -871,16 +880,83 @@ void sample_telemetry_thread_entry(ULONG parameter)
     CHAR buffer[TELEMETRY_MSGLEN_MAX];
     UINT buffer_length;
     UCHAR loop = NX_TRUE;
+#ifdef CLICK_ALTITUDE2 
+    UINT index_a;
+    static ALTITUDE2_Data altitude2;
+    float ALT2_temperature, ALT2_pressure, ALT2_altitude;
+#endif /* CLICK_ALTITUDE2 */
+#ifdef CLICK_PHT 
+    UINT index_b;
+    static PHT_Data pht;
+    float PHT_temperature, PHT_pressure, PHT_humidity;
+#endif /* CLICK_PHT */
+#ifdef CLICK_TEMPHUM14
+    uint32_t HTU31_serialNumber;
+    float TEMPHUM14_temperature;
+    float TEMPHUM14_humidity;
+#endif /* CLICK_ULTRALOWPRESS */
+#ifdef CLICK_ULTRALOWPRESS
     uint32_t SM8436_serialNumber;
-    float ULP_temperature, VAV_temperature;
+    float ULP_temperature;
     float ULP_pressure = 0.0;
-    float VAV_pressure = 0.0;    
+#endif /* CLICK_ULTRALOWPRESS */
+#ifdef CLICK_VAVPRESS
+    float VAV_temperature;
+    float VAV_pressure = 0.0;
+#endif /* CLICK_VAVPRESS */
     NX_PARAMETER_NOT_USED(parameter);
 
     APP_SENSORS_init();
     
     tx_thread_sleep(AZ_telemetryInterval * NX_IP_PERIODIC_RATE);
 
+#ifdef CLICK_ALTITUDE2
+    printf("<ALT2 Click> Initializing MS5607...\r\n");
+    ALTITUDE2_status = ALTITUDE2_init(&altitude2);
+    if (ALTITUDE2_status == ALTITUDE2_OK)
+    {
+        for (index_a = 1; index_a < (ALTITUDE2_COEFFS_MAX+1); index_a++)
+        {
+            printf("<ALT2 Click> [PROM] C%d = %d\r\n", index_a, altitude2.data_prom[index_a-1]);
+            tx_thread_sleep(100);
+        }
+    }
+    else
+    {
+        printf("<ALT2 Click> MS5607 was not detected\r\n");          
+    }    
+    tx_thread_sleep(100);
+#endif /* CLICK_ALTITUDE2 */
+#ifdef CLICK_PHT
+    printf("<PHT Click> Initializing MS8607...\r\n");
+    PHT_status = PHT_init(&pht);
+    if (PHT_status == PHT_OK)
+    {
+        for (index_b = 1; index_b < (PHT_COEFFS_MAX+1); index_b++)
+        {
+            printf("<PHT Click> [PROM] C%d = %d\r\n", index_b, pht.data_prom[index_b-1]);
+            tx_thread_sleep(100);
+        }
+    }
+    else
+    {
+        printf("<PHT Click> MS8607 was not detected\r\n");          
+    }    
+    tx_thread_sleep(100);
+#endif /* CLICK_PHT */
+#ifdef CLICK_TEMPHUM14
+    printf("<TEMPHUM14 Click> Initializing HTU31...\r\n");
+    HTU31_serialNumber = TEMPHUM14_init(TEMPHUM14_I2C_SLAVE_ADDR_GND);
+    if (HTU31_serialNumber != 0)
+    {
+        printf("<TEMPHUM14 Click> * Serial Number = %u\r\n", HTU31_serialNumber);    
+    }
+    else
+    {
+        printf("<TEMPHUM14 Click> HTU31 not detected\r\n");          
+    }
+    tx_thread_sleep(100);
+#endif /* CLICK_ULTRALOWPRESS */
 #ifdef CLICK_ULTRALOWPRESS
     printf("<ULP Click> Initializing SM8436...\r\n");
     SM8436_serialNumber = ULTRALOWPRESS_init();
@@ -894,7 +970,6 @@ void sample_telemetry_thread_entry(ULONG parameter)
     }
     tx_thread_sleep(100);
 #endif /* CLICK_ULTRALOWPRESS */
-
 #ifdef CLICK_VAVPRESS
     printf("<VAV Click> Initializing LMIS025B...\r\n");
     VAVPRESS_init();
@@ -939,17 +1014,51 @@ void sample_telemetry_thread_entry(ULONG parameter)
                 APP_SENSORS_readTemperature(), APP_SENSORS_readLight() );
         send_telemetry_message(parameter, (UCHAR *)buffer, buffer_length);
 #endif /* WFI32IOT_SENSORS */
+#ifdef CLICK_ALTITUDE2
+        if (ALTITUDE2_status == ALTITUDE2_OK)
+        {
+            ALTITUDE2_readData(&altitude2, &ALT2_temperature, &ALT2_pressure, &ALT2_altitude);
+            buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
+                    "{\"ALT2_temperature\": %.2f, \"ALT2_pressure\": %.2f, \"ALT2_altitude\": %.2f}",
+                    ALT2_temperature, ALT2_pressure, ALT2_altitude );                
+            send_telemetry_message(parameter, (UCHAR *)buffer, buffer_length);
+        }
+#endif /* CLICK_ALTITUDE2 */
+#ifdef CLICK_PHT
+        if (PHT_status == PHT_OK)
+        {
+            PHT_getTemperaturePressure(&pht, &PHT_temperature, &PHT_pressure);            
+            PHT_getRelativeHumidity(&PHT_humidity);
+            buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
+                    "{\"PHT_temperature\": %.2f, \"PHT_pressure\": %.2f, \"PHT_humidity\": %.2f}",
+                    PHT_temperature, PHT_pressure, PHT_humidity );                 
+            send_telemetry_message(parameter, (UCHAR *)buffer, buffer_length);
+        }
+#endif /* CLICK_PHT */
+#ifdef CLICK_TEMPHUM14
+        if (HTU31_serialNumber != 0)
+        {
+            TEMPHUM14_setConversion( TEMPHUM14_I2C_SLAVE_ADDR_GND, 
+                    TEMPHUM14_CONVERSION_HUM_OSR_0_020, TEMPHUM14_CONVERSION_TEMP_0_040 );
+            TEMPHUM14_getTemperatureHumidity (TEMPHUM14_I2C_SLAVE_ADDR_GND, 
+                    &TEMPHUM14_temperature, &TEMPHUM14_humidity );
+            buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
+                    "{\"TEMPHUM14_temperature\": %.2f, \"TEMPHUM14_humidity\": %.2f}",
+                    TEMPHUM14_temperature, TEMPHUM14_humidity);              
+            send_telemetry_message(parameter, (UCHAR *)buffer, buffer_length);
+        }
+#endif /* CLICK_TEMPHUM14 */
 #ifdef CLICK_ULTRALOWPRESS
         if (ULTRALOWPRESS_status == ULTRALOWPRESS_OK)
         {
             if (ULTRALOWPRESS_isReady())
             {
-                //printf("\r\n<ULP Click> STATUS [ %x ] ", APP_SENSORS_data.i2c.rxBuffer[0]);
+                //printf("\r\n<ULP Click> STATUS [ %x ] ", APP_SENSORS_data.i2c.rxBuffBytes[0]);
                 ULTRALOWPRESS_clearStatus();
                 ULP_temperature = ULTRALOWPRESS_getTemperature();
-                //printf("DSP_T [ %x ] ", APP_SENSORS_data.i2c.rxBuffer[0]);
+                //printf("DSP_T [ %x ] ", APP_SENSORS_data.i2c.rxBuffBytes[0]);
                 ULP_pressure = ULTRALOWPRESS_getPressure();     
-                //printf("DSP_S [ %x ]\r\n", APP_SENSORS_data.i2c.rxBuffer[0]);
+                //printf("DSP_S [ %x ]\r\n", APP_SENSORS_data.i2c.rxBuffBytes[0]);
                 buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
                         "{\"ULP_temperature\": %.2f, \"ULP_pressure\": %.2f}",
                         ULP_temperature, ULP_pressure );                
@@ -963,6 +1072,10 @@ void sample_telemetry_thread_entry(ULONG parameter)
             {
                 //printf("\r\n<ULP Click> SM8436 is not ready...\r\n");
             }
+            if (ULP_pressure < ALARM_PRESSURE_PA)
+            {
+                appConnectStatus.alarm = false; 
+            }
             //tx_thread_sleep(500);
         }
 #endif /* CLICK_ULTRALOWPRESS */
@@ -972,8 +1085,8 @@ void sample_telemetry_thread_entry(ULONG parameter)
             if (VAVPRESS_getSensorReadings(&VAVPRESS_param_data, &VAV_pressure, &VAV_temperature) == VAVPRESS_OK)
             {
                 //printf("\r\n<VAV Click> Extended data readout ( pressure | temperature ) = [ %x (%i) | %x (%i) ]\r\n",
-                        //APP_SENSORS_data.i2c.rxBuffer[0], VAVPRESS_2sCompToDecimal(APP_SENSORS_data.i2c.rxBuffer[0]),
-                        //APP_SENSORS_data.i2c.rxBuffer[1], VAVPRESS_2sCompToDecimal(APP_SENSORS_data.i2c.rxBuffer[1])
+                        //APP_SENSORS_data.i2c.rxBuffBytes[0], VAVPRESS_2sCompToDecimal(APP_SENSORS_data.i2c.rxBuffBytes[0]),
+                        //APP_SENSORS_data.i2c.rxBuffBytes[1], VAVPRESS_2sCompToDecimal(APP_SENSORS_data.i2c.rxBuffBytes[1])
                       //);
                 //tx_thread_sleep(500);
                 buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
@@ -985,16 +1098,15 @@ void sample_telemetry_thread_entry(ULONG parameter)
                     appConnectStatus.alarm = true;
                 }
             }
+            if (VAV_pressure < ALARM_PRESSURE_PA)
+            {
+                appConnectStatus.alarm = false; 
+            }
         }
 #endif /* CLICK_VAVPRESS */
 #ifdef SEND_LED_PROPERTIES_WITH_TELEMETRY
         sample_reported_properties_send_action(&iothub_client);
 #endif /* SEND_LED_PROPERTIES_WITH_TELEMETRY */
-    if ( (ULP_pressure < ALARM_PRESSURE_PA) &&
-         (VAV_pressure < ALARM_PRESSURE_PA) )
-    {
-        appConnectStatus.alarm = false; 
-    }
 #ifdef PNP_CERTIFICATION_TESTING
         send_button_event(parameter, 1, button_press_data.sw1_press_count);
 #endif /* PNP_CERTIFICATION_TESTING */

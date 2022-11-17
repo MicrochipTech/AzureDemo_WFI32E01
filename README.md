@@ -78,7 +78,7 @@ Sign up for a free Azure account for evaluation purposes by following the proces
 
 Should you encounter any issues with your account or subscription, [submit a technical support ticket](https://azure.microsoft.com/en-us/support/options/).
 
-## Adding Extra Sensors to the WFI32 IoT Board
+## Adding Extra Sensors to the WFI32-IoT Development Board
 
 Even though the WFI32-IoT Development Board has its own on-board light and temperature sensors, additional sensors can optionally be [added](./Clicks.md) relatively quickly using existing off-the-shelf hardware.
 
