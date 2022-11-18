@@ -502,8 +502,6 @@ void SYS_Initialize ( void* data )
     /* Configure Wait States */
     PRECONbits.PFMWS = 5;
 
-
-
 	GPIO_Initialize();
 
     CORETIMER_Initialize();

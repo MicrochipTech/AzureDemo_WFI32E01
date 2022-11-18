@@ -127,6 +127,9 @@ void GPIO_Initialize ( void )
     {
         portPinCbObj[i].callback = NULL;
     }
+
+    RST_OutputEnable();
+    RST_Set();
 }
 
 // *****************************************************************************

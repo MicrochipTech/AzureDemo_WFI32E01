@@ -304,9 +304,9 @@ void CLK_Initialize( void )
 		/* EWPLLFBDIV    = 800 */
 		/* EWPLLREFDIV   = 20 */
 		/* EWPLLICLK     = POSC */
-		/* ETHCLKOUTEN   = ENABLED */
+		/* ETHCLKOUTEN   = DISABLED */
 		/* EWPLL_BYP     = NO_BYPASS */
-		EWPLLCON = 0x15320206 ^ EWPLLCON_MSK;
+		EWPLLCON = 0x05320206 ^ EWPLLCON_MSK;
 		DelayMs(1);
 		EWPLLCON &= ~EWPLL_PWRON;
 		/****************************************************************
