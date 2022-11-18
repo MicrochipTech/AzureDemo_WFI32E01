@@ -43,10 +43,6 @@
 		"keywords": [
 			"MHC",
 			"Harmony",
-			"PIC32MZ1025W104132",
-			"WFI32",
-			"WFI32E01",
-			"PIC32MZ W1 Family",
 			"wireless",
 			"IoT",
 			"Azure",
@@ -54,21 +50,10 @@
 			"Trust&GO",
 			"X.509",
 			"SAS",
-			"Azure RTOS",
 			"Authentication",
-			"Certificates",
-			"PKCS#11",
 			"Security",
-			"Secure Element",
-			"NetX Duo",
-			"WFI32-IoT",
-			"DPS",
-			"IoT Hub",
-			"IoT Central",
-			"Click",
-            "mikroBUS"
+			"Secure Element"
 		],
-        "board": "WFI32-IoT Development Board",
 		"additionalData": {
 			"longDescription": {
 				"metaDataVersion": "1.0.0",
