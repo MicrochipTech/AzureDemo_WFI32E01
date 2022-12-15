@@ -134,7 +134,7 @@ If any of the files do not exist when the demo application is reset, the missing
 
 IoT Central allows you to create an application dashboard to monitor the telemetry and take appropriate actions based on customized rules.
 
-1. Create a custom IoT Central application by accessing (clicking on) the existing [Microchip WFI32-IoT Application Template](https://apps.azureiotcentral.com/build/new/db598a83-644a-4e2c-b4e1-f3e52978d006) (if there is a problem with loading the template, refer to the [Create an application](https://docs.microsoft.com/en-us/azure/iot-central/core/quick-deploy-iot-central) section to create your IoT Central application from scratch). If you are not currently logged into your [Microsoft account](https://account.microsoft.com/account), you will be prompted to sign in with your credentials to proceed. If you do not have an existing Microsoft account, go ahead and create one now by clicking on the `Create one!` link
+1. Create a custom IoT Central application by accessing (clicking on) the existing [Microchip WFI32-IoT Application Template](https://apps.azureiotcentral.com/build/new/e76ed2fc-5ab1-42f7-9d16-8e1a69bf61e5) (if there is a problem with loading the template, refer to the [Create an application](https://docs.microsoft.com/en-us/azure/iot-central/core/quick-deploy-iot-central) section to create your IoT Central application from scratch). If you are not currently logged into your [Microsoft account](https://account.microsoft.com/account), you will be prompted to sign in with your credentials to proceed. If you do not have an existing Microsoft account, go ahead and create one now by clicking on the `Create one!` link
 
 2. Azure IoT Builder will guide you through the process of creating your application. Review and select the various settings for your IoT Central application (if needed, refer to [Create an application](https://docs.microsoft.com/en-us/azure/iot-central/core/quick-deploy-iot-central) for additional guidance on selecting the settings for your application). Do not click the `Create` button just yet - only after reviewing and taking into consideration the following recommendations:
   
@@ -268,7 +268,7 @@ An enrollment group is an entry for a group of devices that share a common attes
     <img src=".//media/image102a.png" style="width:5.in;height:2.18982in" alt="A screenshot of a cell phone Description automatically generated" />
     <img src=".//media/image102b.png" style="width:5.in;height:2.18982in" alt="A screenshot of a cell phone Description automatically generated" />
 
-5. Select `Device Group` > `WFI32-IoT WM;x - All devices` and then check the box for your specific device name for `Devices`
+5. Select `Device Group` > `WFI32-IoT WM;3 - All devices` and then check the box for your specific device name for `Devices`
 
     <img src=".//media/image103a.png" style="width:5.in;height:2.08982in" alt="A screenshot of a cell phone Description automatically generated" />
 
@@ -294,30 +294,29 @@ An enrollment group is an entry for a group of devices that share a common attes
 
     <img src=".//media/image108.png" style="width:5.in;height:1.98982in" alt="A screenshot of a cell phone Description automatically generated" />
 
-## WFI32-IoT Differential Pressure Sensors
+## Visualizing Additional HVAC Sensors
 
-If you have one or both of the optional MikroElektronika "Ultra-Low Press" and/or "VAV Press" Click boards installed on the WFI32-IoT Development Board's mikroBUS™ socket, use the pre-configured example dashboard for visualizing the differential pressure and temperature sensor telemetry from the Click board(s).
+If you have connected at least one of the optional MikroElektronika Click boards to the WFI32-IoT Development Board's mikroBUS™ socket, use the pre-configured example dashboard for visualizing the telemetry data reported from the additional Click board(s).
 
 1. Using the left-hand navigation pane, select `Analyze` &gt; `Dashboards`
 
-2. Towards the top of the web page, click on the dashboard selector and change the view to `WFI32-IoT Differential Pressure Sensors`
+2. Towards the top of the web page, click on the dashboard selector and change the view to `WFI32-IoT HVAC Sensors`
 
-    <img src=".//media/image109.png">
+    <img src=".//media/image109a.png">
 
 3. Click on the `Edit` icon
 
 4. For each of the tiles used to display device data (and does not currently show any data), configure each tile by adding your device to the tile by executing the following steps:
 
     - click `Edit` icon
-    - select `WFI32_IoT_WM;x` for `Device group`
+    - select `WFI32_IoT_WM;3` for `Device group`
     - click `Select All` for `Devices`
+    - click `+ Add Capability` to add the specific telemetry parameter(s) you'd like displayed in the tile
     - click the `Update` button
-
-    NOTE: Whenever a device group has been reselected, the tile may inadvertently drop the telemetry parameters that were selected previously - so you may have to add those telemetry parameters back into the tile before clicking on the `Update` button
 
 5. Click on the `Save` icon
 
-    <img src=".//media/image110.png" style="width:7.0in;height:6.0in" alt="A screenshot of a cell phone Description automatically generated" />
+    <img src=".//media/image110a.png" />
 
 6. The demo application uses two of the WFI32 module's pins as GPIO's to convey the status of the board. Pins 1 & 15 of the mikroBUS™ connector can be read simultaneously as a 2-bit value representing 4 possible states ('0' = Logic LOW, '1' = Logic HIGH)
 
@@ -335,10 +334,10 @@ If you have one or both of the optional MikroElektronika "Ultra-Low Press" and/o
 
 To create additional tiles for your IoT Central dashboard, refer to [Configure the IoT Central application dashboard](https://docs.microsoft.com/en-us/azure/iot-central/core/howto-add-tiles-to-your-dashboard). The below screen captures show additional possibilities of dashboard components that can highlight the telemetry data and properties facilitated by the `Plug and Play` interface.  Note that multiple devices can be selected for each tile to allow groups of devices to be visualized within a single tile. 
 
-<img src=".//media/image95.png" style="width:5.in;height:3.34982in" alt="A screenshot of a cell phone Description automatically generated" />
+<img src=".//media/image95.png" />
 
-<img src=".//media/image96.png" style="width:5.in;height:4.4182in" alt="A screenshot of a cell phone Description automatically generated" />
+<img src=".//media/image96.png" />
 
-<img src=".//media/image97.png" style="width:5.in;height:3.34982in" alt="A screenshot of a cell phone Description automatically generated" />
+<img src=".//media/image97.png" />
 
-<img src=".//media/image98.png" style="width:5.in;height:3.34982in" alt="A screenshot of a cell phone Description automatically generated" />
+<img src=".//media/image98.png" />

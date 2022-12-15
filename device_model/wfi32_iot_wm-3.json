@@ -1,5 +1,5 @@
 {
-  "@id": "dtmi:com:Microchip:WFI32_IoT_WM;2",
+  "@id": "dtmi:com:Microchip:WFI32_IoT_WM;3",
   "@type": "Interface",
   "contents": [
     {
@@ -41,8 +41,7 @@
           "en": "Altitude (ALT2 Click)"
         },
       "name": "ALT2_altitude",
-      "schema": "double",
-      "unit": "meter"
+      "schema": "double"
     },
     {
       "@type": [
@@ -53,8 +52,7 @@
           "en": "Pressure (ALT2 Click)"
         },
       "name": "ALT2_pressure",
-      "schema": "double",
-      "unit": "mbar"
+      "schema": "double"
     },
     {
       "@type": [
@@ -77,8 +75,7 @@
           "en": "Humidity (PHT Click)"
         },
       "name": "PHT_humidity",
-      "schema": "double",
-      "unit": "percentage"
+      "schema": "double"
     },
     {
       "@type": [
@@ -89,8 +86,7 @@
           "en": "Pressure (PHT Click)"
         },
       "name": "PHT_pressure",
-      "schema": "double",
-      "unit": "mbar"
+      "schema": "double"
     },
     {
       "@type": [
@@ -113,8 +109,7 @@
           "en": "Humidity (TEMPHUM14 Click)"
         },
       "name": "TEMPHUM14_humidity",
-      "schema": "double",
-      "unit": "percentage"
+      "schema": "double"
     },
     {
       "@type": [
