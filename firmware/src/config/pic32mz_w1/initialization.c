@@ -553,7 +553,6 @@ void SYS_Initialize ( void* data )
 
 
     APP_Initialize();
-    APP_PIC32MZ_W1_Initialize();
 
     EVIC_Initialize();
 

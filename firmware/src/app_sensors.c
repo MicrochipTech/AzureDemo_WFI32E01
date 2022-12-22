@@ -10,6 +10,9 @@
 /**************************************************************************/
 #include "app_sensors.h"
 
+extern APP_DATA app_pic32mz_w1Data;
+
+
 APP_SENSORS_DATA APP_SENSORS_data;
 
 void APP_SENSORS_writeByte(uint8_t addr, uint8_t val)
@@ -74,6 +77,7 @@ void APP_SENSORS_writeReadWords(uint8_t addr, uint16_t reg, uint8_t size)
             (void*)&APP_SENSORS_data.i2c.rxBuffWords, size);
 }
 
+ 
 void APP_SENSORS_process(uint8_t addr, uint8_t reg)
 {       
     APP_SENSORS_data.i2c.rxBuffWords[0] = (APP_SENSORS_data.i2c.rxBuffWords[0] << 8) | (APP_SENSORS_data.i2c.rxBuffWords[0] >> 8);
@@ -121,9 +125,17 @@ void APP_SENSORS_process(uint8_t addr, uint8_t reg)
             break;
     }
 }
+#ifndef WFI32_IoT_BOARD
+void ADC_ResultHandler(ADCHS_CHANNEL_NUM channel, uintptr_t context) {
+    /* Read the ADC result */
+    app_pic32mz_w1Data.adcData.adcCount = ADCHS_ChannelResultGet(ADCHS_CH15);
+    app_pic32mz_w1Data.adcData.dataReady = true;
+}
+#endif
 
 void APP_SENSORS_init(void)
 {
+#ifdef WFI32_IoT_BOARD
     memset(&APP_SENSORS_data.mcp9808, 0, sizeof(APP_SENSORS_data.mcp9808));
     memset(&APP_SENSORS_data.opt3001, 0, sizeof(APP_SENSORS_data.opt3001));
     memset(&APP_SENSORS_data.i2c, 0, sizeof(APP_SENSORS_data.i2c));
@@ -136,22 +148,34 @@ void APP_SENSORS_init(void)
 #ifdef WFI32IOT_SENSORS
     APP_SENSORS_writeWord_MSB_b4_LSB(MCP9808_I2C_ADDRESS, MCP9808_REG_CONFIG, MCP9808_CONFIG_DEFAULT);
     APP_SENSORS_writeWord_MSB_b4_LSB(OPT3001_I2C_ADDRESS, OPT3001_REG_CONFIG, OPT3001_CONFIG_CONT_CONVERSION);
-#endif /* WFI32IOT_SENSORS */
+#endif /* WFI32IOT_SENSORS */    
+    
+#else /*WFI32-Curiosity*/
+    ADCHS_CallbackRegister(ADCHS_CH15, ADC_ResultHandler, (uintptr_t) NULL);
+#endif /*WFI32-IoT*/
 }
 
 int16_t APP_SENSORS_readTemperature(void)
 {
+#ifdef WFI32_IoT_BOARD  
     APP_SENSORS_writeReadWords(MCP9808_I2C_ADDRESS, MCP9808_REG_TAMBIENT, 2);
     APP_SENSORS_process(MCP9808_I2C_ADDRESS, MCP9808_REG_TAMBIENT);
 
     return (APP_SENSORS_data.mcp9808.temperature);
+#else /* WFI32-Curiosity*/    
+    return app_pic32mz_w1Data.adcData.temp;
+#endif /*WFI32-IoT*/    
 }
 
 uint32_t APP_SENSORS_readLight(void)
 {
+#ifdef WFI32_IoT_BOARD   
     APP_SENSORS_writeReadWords(OPT3001_I2C_ADDRESS, OPT3001_REG_RESULT, 2);
     APP_SENSORS_process(OPT3001_I2C_ADDRESS, OPT3001_REG_RESULT);
          
     return (APP_SENSORS_data.opt3001.light);
+#else /* WFI32-Curiosity*/
+    return 0;
+#endif /*WFI32-IoT*/
 }
 

@@ -110,10 +110,6 @@ static void _APP_IDLE_Tasks( ULONG thread_input )
 TX_THREAD      _APP_Task_TCB;
 uint8_t*       _APP_Task_Stk_Ptr;
 
-TX_THREAD      _APP_PIC32MZ_W1_Task_TCB;
-uint8_t*       _APP_PIC32MZ_W1_Task_Stk_Ptr;
-
-
 static void _APP_Tasks( ULONG thread_input )
 {
     while(1)
@@ -122,18 +118,6 @@ static void _APP_Tasks( ULONG thread_input )
         tx_thread_sleep((ULONG)(50 / (TX_TICK_PERIOD_MS)));
     }
 }
-
-static void _APP_PIC32MZ_W1_Tasks( ULONG thread_input )
-{
-    while(1)
-    {
-        APP_PIC32MZ_W1_Tasks();
-        tx_thread_sleep((ULONG)(50 / (TX_TICK_PERIOD_MS)));
-    }
-}
-
-
-
 
 TX_THREAD      _SYS_USB_DEVICE_Task_TCB;
 uint8_t*       _SYS_USB_DEVICE_Task_Stk_Ptr;
@@ -317,7 +301,7 @@ void tx_application_define(void* first_unused_memory)
     /* Allocate the stack for _APP threads */
     tx_byte_allocate(&byte_pool_0,
         (VOID **) &_APP_Task_Stk_Ptr,
-        2048,
+        4096,
         TX_NO_WAIT
     );
 
@@ -327,31 +311,13 @@ void tx_application_define(void* first_unused_memory)
         _APP_Tasks,
         0,
         _APP_Task_Stk_Ptr,
-        2048,
-        1,
-        1,
-        TX_NO_TIME_SLICE,
-        TX_AUTO_START
-    );
-    /* Allocate the stack for _APP_PIC32MZ_W1 threads */
-    tx_byte_allocate(&byte_pool_0,
-        (VOID **) &_APP_PIC32MZ_W1_Task_Stk_Ptr,
-        4096,
-        TX_NO_WAIT
-    );
-
-    /* create the _APP_PIC32MZ_W1 thread */
-    tx_thread_create(&_APP_PIC32MZ_W1_Task_TCB,
-        "_APP_PIC32MZ_W1_Tasks",
-        _APP_PIC32MZ_W1_Tasks,
-        1,
-        _APP_PIC32MZ_W1_Task_Stk_Ptr,
         4096,
         1,
         1,
         TX_NO_TIME_SLICE,
         TX_AUTO_START
     );
+    
 }
 
 // *****************************************************************************

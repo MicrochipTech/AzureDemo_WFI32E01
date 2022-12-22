@@ -46,11 +46,13 @@ extern "C" {
 
 /* LED Colors */
 typedef enum 
-{
-    APP_LED_BLUE = 0,
-    APP_LED_GREEN,
-    APP_LED_YELLOW,
+{    
+    APP_LED_GREEN = 0,
     APP_LED_RED,
+#ifdef WFI32_IoT_BOARD            
+    APP_LED_YELLOW,
+    APP_LED_BLUE,   
+#endif            
     APP_LED_COLOR_INVALID,
 } APP_LED_COLOR;
 

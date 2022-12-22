@@ -43,14 +43,14 @@ volatile uint32_t AZ_systemRebootTimer = 0;
 volatile bool bPropertyYLEDFound = false;
 /* External variables used by the application  */
 extern APP_CONNECT_STATUS appConnectStatus;
-extern APP_SENSORS_DATA APP_SENSORS_data;
+//extern APP_SENSORS_DATA APP_SENSORS_data;
 extern APP_LED_CTRL appLedCtrl[APP_LED_TOTAL];
 
 // define the modelID associated with device template and the dps payload
 #define SAMPLE_PNP_MODEL_ID         "dtmi:com:Microchip:WFI32_IoT_WM;3"
 #define SAMPLE_PNP_DPS_PAYLOAD      "{\"modelId\":\"" SAMPLE_PNP_MODEL_ID "\"}"
 
-extern APP_PIC32MZ_W1_DATA app_pic32mz_w1Data;
+extern APP_DATA app_pic32mz_w1Data;
 /* Generally, IoTHub Client and DPS Client do not run at the same time, user can use union as below to
    share the memory between IoTHub Client and DPS Client.
 
@@ -125,10 +125,12 @@ static const CHAR *sample_properties[MAX_PROPERTY_COUNT][2] = {{"propertyA", "va
 #endif /* !defined(DISABLE_TELEMETRY_SAMPLE) && !defined(DISABLE_C2D_SAMPLE) */
 
 // property names for LEDs
-static const CHAR sample_prop_name_LED_blue[] = "led_b";
 static const CHAR sample_prop_name_LED_green[] = "led_g";
-static const CHAR sample_prop_name_LED_yellow[] = "led_y";
 static const CHAR sample_prop_name_LED_red[] = "led_r";
+#ifdef WFI32_IoT_BOARD
+static const CHAR sample_prop_name_LED_yellow[] = "led_y";
+static const CHAR sample_prop_name_LED_blue[] = "led_b";
+#endif
 
 #ifndef DISABLE_DIRECT_METHOD_SAMPLE
 static CHAR method_response_payload[] = "{\"status\": \"OK\"}";
@@ -272,7 +274,11 @@ static int parse_packet_data(char* packetData, char* responseProperty, int respo
             strcat(responseProperty,", ");
         }
         //printf("%s = %s\r\n", PROPERTY_LEDY, propertyValue);
+#ifdef WFI32_IoT_BOARD        
         appLedCtrl[APP_LED_YELLOW].mode = atoi(propertyValue);
+#else
+        appLedCtrl[APP_LED_RED].mode = atoi(propertyValue);
+#endif        
         sprintf(tempStr, "%s: %s", PROPERTY_LEDY, propertyValue);
         responseLength += strlen(tempStr);
         strcat(responseProperty, tempStr);            
@@ -364,21 +370,23 @@ ULONG reported_property_version;
 
     if ((status = nx_azure_iot_json_writer_append_begin_object(&json_writer)) ||
         (status = nx_azure_iot_json_writer_append_property_with_int32_value(&json_writer,
-                                                                             (const UCHAR *)sample_prop_name_LED_blue,
-                                                                             sizeof(sample_prop_name_LED_blue) - 1,
-                                                                             appLedCtrl[APP_LED_BLUE].mode)) ||
+                                                                             (const UCHAR *)sample_prop_name_LED_red,
+                                                                             sizeof(sample_prop_name_LED_red) - 1,
+                                                                             appLedCtrl[APP_LED_RED].mode)) ||
         (status = nx_azure_iot_json_writer_append_property_with_int32_value(&json_writer,
                                                                              (const UCHAR *)sample_prop_name_LED_green,
                                                                              sizeof(sample_prop_name_LED_green) - 1,
                                                                              appLedCtrl[APP_LED_GREEN].mode)) ||
+#ifdef WFI32_IoT_BOARD            
         (status = nx_azure_iot_json_writer_append_property_with_int32_value(&json_writer,
                                                                              (const UCHAR *)sample_prop_name_LED_yellow,
                                                                              sizeof(sample_prop_name_LED_yellow) - 1,
                                                                              appLedCtrl[APP_LED_YELLOW].mode)) ||
         (status = nx_azure_iot_json_writer_append_property_with_int32_value(&json_writer,
-                                                                             (const UCHAR *)sample_prop_name_LED_red,
-                                                                             sizeof(sample_prop_name_LED_red) - 1,
-                                                                             appLedCtrl[APP_LED_RED].mode)) ||
+                                                                             (const UCHAR *)sample_prop_name_LED_blue,
+                                                                             sizeof(sample_prop_name_LED_blue) - 1,
+                                                                             appLedCtrl[APP_LED_BLUE].mode)) ||
+#endif            
         (status = nx_azure_iot_json_writer_append_end_object(&json_writer)))
     {
         printf("Build reported property failed: error code = 0x%08x\r\n", status);
@@ -1013,6 +1021,12 @@ void sample_telemetry_thread_entry(ULONG parameter)
                 "{\"WFI32IoT_temperature\": %u, \"WFI32IoT_light\": %u}",
                 APP_SENSORS_readTemperature(), APP_SENSORS_readLight() );
         send_telemetry_message(parameter, (UCHAR *)buffer, buffer_length);
+#else
+        //printf("\r\n<WFI32-IoT> Reading temperature & light sensors...\r\n");
+        buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
+                "{\"WFI32Curiosity_temperature\": %u}",
+                APP_SENSORS_readTemperature());
+        send_telemetry_message(parameter, (UCHAR *)buffer, buffer_length);
 #endif /* WFI32IOT_SENSORS */
 #ifdef CLICK_ALTITUDE2
         if (ALTITUDE2_status == ALTITUDE2_OK)
@@ -1345,7 +1359,11 @@ void sample_device_twin_thread_entry(ULONG parameter)
         }
         if(bPropertyYLEDFound)
         {
+#ifdef WFI32_IoT_BOARD            
             sample_send_integer_write_proterty_response(&iothub_client, (UCHAR*)"led_y", (UINT)sizeof("led_y"), appLedCtrl[APP_LED_YELLOW].mode,response_status,reported_property_version, NX_NULL,NX_NULL);
+#else
+            sample_send_integer_write_proterty_response(&iothub_client, (UCHAR*)"led_y", (UINT)sizeof("led_y"), appLedCtrl[APP_LED_RED].mode,response_status,reported_property_version, NX_NULL,NX_NULL);
+#endif            
             bPropertyYLEDFound = false;
         }
         if ((response_status < 200) || (response_status >= 300))

@@ -18,7 +18,6 @@
 
 # Libraries
 *.lib
-*.a
 *.la
 *.lo
 
@@ -49,10 +48,14 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
-firmware/AzureDemo_WFI32E01.X/build/
-firmware/AzureDemo_WFI32E01.X/debug/
-firmware/AzureDemo_WFI32E01.X/dist/
-firmware/AzureDemo_WFI32E01.X/.generated_files
+firmware/AzureDemo_WFI32-IoT.X/build/
+firmware/AzureDemo_WFI32-IoT.X/debug/
+firmware/AzureDemo_WFI32-IoT.X/dist/
+firmware/AzureDemo_WFI32-IoT.X/.generated_files
+firmware/AzureDemo_WFI32-Curiosity.X/build/
+firmware/AzureDemo_WFI32-Curiosity.X/debug/
+firmware/AzureDemo_WFI32-Curiosity.X/dist/
+firmware/AzureDemo_WFI32-Curiosity.X/.generated_files
 **/nbproject/private
 **/nbproject/Makefile-*
 **/nbproject/Package-*

@@ -25,6 +25,7 @@ void APP_LED_refresh(void)
         appLedCtrl[APP_LED_RED].mode = APP_LED_ON;
         LED_RED_On();        
     }
+#ifdef WFI32_IoT_BOARD    
     switch (appLedCtrl[APP_LED_YELLOW].mode)
     {
         case APP_LED_OFF: LED_YELLOW_Off(); break;
@@ -32,15 +33,35 @@ void APP_LED_refresh(void)
         case APP_LED_BLINKING: LED_YELLOW_Toggle(); break;
         default: break;
     }
+#else
+    switch (appLedCtrl[APP_LED_RED].mode)
+    {
+        case APP_LED_OFF: LED_RED_Off(); break;
+        case APP_LED_ON: LED_RED_On(); break;
+        case APP_LED_BLINKING: LED_RED_Toggle(); break;
+        default: break;
+    }
+#endif    
     if (appConnectStatus.wifi == false)
     {
-        appLedCtrl[APP_LED_BLUE].mode = APP_LED_OFF;
+
+#ifdef WFI32_IoT_BOARD
+        appLedCtrl[APP_LED_BLUE].mode = APP_LED_OFF;        
         LED_BLUE_Off();
+#else
+        appLedCtrl[APP_LED_GREEN].mode = APP_LED_OFF;
+        LED_GREEN_Off();
+#endif                
     }
     else
-    {
+    {        
+#ifdef WFI32_IoT_BOARD        
         appLedCtrl[APP_LED_BLUE].mode = APP_LED_ON;
-        LED_BLUE_On();        
+        LED_BLUE_On();
+#else
+        appLedCtrl[APP_LED_GREEN].mode = APP_LED_ON;
+        LED_GREEN_On();
+#endif                
     }
     if (appConnectStatus.cloud == false)
     {
@@ -60,5 +81,9 @@ void APP_LED_init(void)
     {
         appLedCtrl[counter].mode = APP_LED_OFF;
     }
+#ifdef WFI32_IoT_BOARD        
     appLedCtrl[APP_LED_YELLOW].mode = APP_LED_BLINKING;
+#else
+    appLedCtrl[APP_LED_RED].mode = APP_LED_BLINKING;
+#endif    
 }
