@@ -384,8 +384,8 @@ static bool parseCloudConfig(char *configBuffer)
     sprintf((char *)default_primary_key, "%s", primary_key_ep->valuestring);
     
     cJSON_Delete(messageJson);
-    SYS_CONSOLE_PRINT(
-            "Data parsed from cloud.cfg - registration id will be overwritten with data extracted from certificate if X.509 authentication method is used\r\n");
+    //SYS_CONSOLE_PRINT(
+            //"Data parsed from cloud.cfg - registration id will be overwritten with data extracted from certificate if X.509 authentication method is used\r\n");
     SYS_CONSOLE_PRINT("id_scope:%s - registration_id:%s - primary_key:%s \r\n", 
                                         default_id_scope, 
                                         default_registration_id, 
@@ -1010,29 +1010,7 @@ void APP_Tasks ( void )
         {
             break;
         }
-    }
-    
-#ifndef WFI32_IoT_BOARD
-    /*Average over 100 ADC samples*/
-    static uint32_t adcCountAccumulate = 0;
-    static uint16_t adcAccumulateNum = 0;
-    if (app_pic32mz_w1Data.adcData.dataReady) {
-        if (adcAccumulateNum <= APP_CTRL_ADC_AVG_COUNT) {
-            adcCountAccumulate += app_pic32mz_w1Data.adcData.adcCount;
-            adcAccumulateNum++;
-        } else {
-            adcCountAccumulate = adcCountAccumulate / APP_CTRL_ADC_AVG_COUNT;
-            float input_voltage = (float) adcCountAccumulate * APP_CTRL_ADC_VREF / APP_CTRL_ADC_MAX_COUNT;
-            float temp = ((input_voltage - .7) / .1)*10;
-            app_pic32mz_w1Data.adcData.temp = temp;
-            /*For the next averaging cycle*/
-            adcAccumulateNum = 0;
-            adcCountAccumulate = 0;
-            //SYS_CONSOLE_PRINT("Temp=%0.1f\r\n",app_controlData.adcData.temp);
-        }
-        app_pic32mz_w1Data.adcData.dataReady = false;
-    }
-#endif    
+    }    
 }
 
 

@@ -127,9 +127,9 @@ void APP_SENSORS_process(uint8_t addr, uint8_t reg)
 }
 #ifndef WFI32_IoT_BOARD
 void ADC_ResultHandler(ADCHS_CHANNEL_NUM channel, uintptr_t context) {
-    /* Read the ADC result */
-    app_pic32mz_w1Data.adcData.adcCount = ADCHS_ChannelResultGet(ADCHS_CH15);
-    app_pic32mz_w1Data.adcData.dataReady = true;
+    /* Read the ADC result */    
+    app_pic32mz_w1Data.adcData.adcCount += ADCHS_ChannelResultGet(ADCHS_CH15);   
+    app_pic32mz_w1Data.adcData.adcCount = app_pic32mz_w1Data.adcData.adcCount >> 1;
 }
 #endif
 
@@ -151,19 +151,25 @@ void APP_SENSORS_init(void)
 #endif /* WFI32IOT_SENSORS */    
     
 #else /*WFI32-Curiosity*/
+    APP_SENSORS_DBG(SYS_ERROR_INFO, "Registering the ADC callback\n");
     ADCHS_CallbackRegister(ADCHS_CH15, ADC_ResultHandler, (uintptr_t) NULL);
+    TMR3_Start();
 #endif /*WFI32-IoT*/
 }
 
+#ifdef WFI32_IoT_BOARD  
 int16_t APP_SENSORS_readTemperature(void)
 {
-#ifdef WFI32_IoT_BOARD  
     APP_SENSORS_writeReadWords(MCP9808_I2C_ADDRESS, MCP9808_REG_TAMBIENT, 2);
     APP_SENSORS_process(MCP9808_I2C_ADDRESS, MCP9808_REG_TAMBIENT);
 
     return (APP_SENSORS_data.mcp9808.temperature);
-#else /* WFI32-Curiosity*/    
-    return app_pic32mz_w1Data.adcData.temp;
+#else /* WFI32-Curiosity*/            
+float APP_SENSORS_readTemperature(void)
+{    
+    float input_voltage = (float) (app_pic32mz_w1Data.adcData.adcCount * APP_CTRL_ADC_VREF / APP_CTRL_ADC_MAX_COUNT); 
+    app_pic32mz_w1Data.adcData.adcCount = 0;
+    return  ((input_voltage - .7) / .1)*10;            
 #endif /*WFI32-IoT*/    
 }
 

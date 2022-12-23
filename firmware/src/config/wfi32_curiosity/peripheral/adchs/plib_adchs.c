@@ -60,7 +60,7 @@ void ADCHS_Initialize()
     ADCCON1bits.ON = 0;
 
 
-    ADCCON1 = 0x600000;
+    ADCCON1 = 0x660000;
     ADCCON2 = 0x20001;
     ADCCON3 = 0x1000000;
 
@@ -82,7 +82,7 @@ void ADCHS_Initialize()
     
 
     /* Input scan */
-    ADCCSS1 = 0x0;
+    ADCCSS1 = 0x8000;
     
 
 

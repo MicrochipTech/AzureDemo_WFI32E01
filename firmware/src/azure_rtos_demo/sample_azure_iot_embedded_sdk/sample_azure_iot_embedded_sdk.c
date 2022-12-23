@@ -1024,7 +1024,7 @@ void sample_telemetry_thread_entry(ULONG parameter)
 #else
         //printf("\r\n<WFI32-IoT> Reading temperature & light sensors...\r\n");
         buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
-                "{\"WFI32Curiosity_temperature\": %u}",
+                "{\"WFI32Curiosity_temperature\": %f}",
                 APP_SENSORS_readTemperature());
         send_telemetry_message(parameter, (UCHAR *)buffer, buffer_length);
 #endif /* WFI32IOT_SENSORS */

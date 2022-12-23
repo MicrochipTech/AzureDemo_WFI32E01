@@ -964,7 +964,7 @@ files:
   physicalPath: driver/wifi/pic32mzw1
   security: NON_SECURE
   type: SOURCE
-  userChecksum: FBF53FFC458037E3BD44D4F66DBDED56
+  userChecksum: 7AD5F5F2CCF3702EB034A66F50CAD4CA
 - generatedChecksum: 7F18BED3C301C3734527B3EC8919EF26
   logicalPath: config/wfi32_curiosity/driver/sst26
   name: drv_sst26.c
@@ -2750,20 +2750,20 @@ files:
   security: NON_SECURE
   type: SOURCE
   userChecksum: B6F3E42B935A65000F5F4453F70A4812
-- generatedChecksum: 31EE200AF38C47B98E3CF59C25749A05
+- generatedChecksum: D48D71A06F08591232F6F88C4E10D741
   logicalPath: config/wfi32_curiosity
   name: initialization.c
   physicalPath: ''
   security: NON_SECURE
   type: SOURCE
-  userChecksum: 31EE200AF38C47B98E3CF59C25749A05
-- generatedChecksum: 1E8A9713EFFD34904B3049FDD8724CFB
+  userChecksum: D48D71A06F08591232F6F88C4E10D741
+- generatedChecksum: BD684F14CB84EF71432E9D4032EB3ED2
   logicalPath: config/wfi32_curiosity
   name: interrupts.c
   physicalPath: ''
   security: NON_SECURE
   type: SOURCE
-  userChecksum: 1E8A9713EFFD34904B3049FDD8724CFB
+  userChecksum: BD684F14CB84EF71432E9D4032EB3ED2
 - generatedChecksum: DDE1502643FF3AC0D173667595C2A1CC
   logicalPath: third_party/azure_rtos/netxduo/addons/azure_iot/azure_iot_security_module/src/utils
   name: irand.c
@@ -5536,13 +5536,13 @@ files:
   security: NON_SECURE
   type: SOURCE
   userChecksum: AE95956898821E1253106ACA154D5BA0
-- generatedChecksum: 64E759F8DFE18B866B45CE7ABF891B5D
+- generatedChecksum: DB44FF0E3223464BF7C6BD0ADF880670
   logicalPath: third_party/azure_rtos/netxduo/nx_secure/src
   name: nx_secure_tls_remote_certificate_free.c
   physicalPath: ../../third_party/azure_rtos/netxduo/nx_secure/src
   security: NON_SECURE
   type: SOURCE
-  userChecksum: 64E759F8DFE18B866B45CE7ABF891B5D
+  userChecksum: DB44FF0E3223464BF7C6BD0ADF880670
 - generatedChecksum: 69329F4C38D055BA2022162ADB224B56
   logicalPath: third_party/azure_rtos/netxduo/nx_secure/src
   name: nx_secure_tls_remote_certificate_free_all.c
@@ -9057,13 +9057,13 @@ files:
   security: NON_SECURE
   type: SOURCE
   userChecksum: 70B736CF55DAB91A2FE5778E5FD21DD6
-- generatedChecksum: C3121602CE4CB4C12413938571F7FE3A
+- generatedChecksum: 8A30D1A4CC439E01C5E905271E274489
   logicalPath: config/wfi32_curiosity/peripheral/adchs
   name: plib_adchs.c
   physicalPath: peripheral/adchs
   security: NON_SECURE
   type: SOURCE
-  userChecksum: C3121602CE4CB4C12413938571F7FE3A
+  userChecksum: 8A30D1A4CC439E01C5E905271E274489
 - generatedChecksum: 65A7BD3CB0B8FE05768B2EC9A503C3AB
   logicalPath: config/wfi32_curiosity/peripheral/cache
   name: plib_cache.c
@@ -9085,13 +9085,13 @@ files:
   security: NON_SECURE
   type: SOURCE
   userChecksum: 0DA10C8889278A796D0EE4C6096B57C3
-- generatedChecksum: 76D9BEFCB84D6D61A5DF3A321259899B
+- generatedChecksum: B05B62B11D48FE7821AF1316113FA49E
   logicalPath: config/wfi32_curiosity/peripheral/clk
   name: plib_clk.c
   physicalPath: peripheral/clk
   security: NON_SECURE
   type: SOURCE
-  userChecksum: 76D9BEFCB84D6D61A5DF3A321259899B
+  userChecksum: B05B62B11D48FE7821AF1316113FA49E
 - generatedChecksum: 2FEFEA0D4E94F5A5F3D76BAEC3D602E5
   logicalPath: config/wfi32_curiosity/peripheral/coretimer
   name: plib_coretimer.c
@@ -9099,13 +9099,13 @@ files:
   security: NON_SECURE
   type: SOURCE
   userChecksum: 2FEFEA0D4E94F5A5F3D76BAEC3D602E5
-- generatedChecksum: 5B0F4E1498694F4FAAE95DCB83086103
+- generatedChecksum: F7F9269E19A77CFCC08C75C374357DDE
   logicalPath: config/wfi32_curiosity/peripheral/evic
   name: plib_evic.c
   physicalPath: peripheral/evic
   security: NON_SECURE
   type: SOURCE
-  userChecksum: 5B0F4E1498694F4FAAE95DCB83086103
+  userChecksum: F7F9269E19A77CFCC08C75C374357DDE
 - generatedChecksum: CEE4F21FAF81C9FB3B41815B854F16A2
   logicalPath: config/wfi32_curiosity/peripheral/gpio
   name: plib_gpio.c
@@ -9148,6 +9148,13 @@ files:
   security: NON_SECURE
   type: SOURCE
   userChecksum: B370A50696EE3645C4A0B18C061CE06A
+- generatedChecksum: F7C41A620E02E4C36E06CF905152107E
+  logicalPath: config/wfi32_curiosity/peripheral/tmr
+  name: plib_tmr3.c
+  physicalPath: peripheral/tmr
+  security: NON_SECURE
+  type: SOURCE
+  userChecksum: F7C41A620E02E4C36E06CF905152107E
 - generatedChecksum: 2FBC096B9C841EF4A53C30B2F830960B
   logicalPath: config/wfi32_curiosity/peripheral/uart
   name: plib_uart1.c
@@ -10834,7 +10841,7 @@ files:
   physicalPath: driver/wifi/pic32mzw1
   security: NON_SECURE
   type: SOURCE
-  userChecksum: CE786CFA4D2675F116B70FFC45C8C05C
+  userChecksum: 2AF265264265C8788F0F14E93BDF472F
 - generatedChecksum: 5C2A427D83E5CCA5D980D9FEC6D02E5D
   logicalPath: config/wfi32_curiosity/driver/wifi/pic32mzw1
   name: wdrv_pic32mzw_assoc.c
@@ -10947,20 +10954,6 @@ files:
   security: NON_SECURE
   type: HEADER
   userChecksum: null
-- generatedChecksum: 7D19AC9BA5FB5810788D5908B906D58E
-  logicalPath: third_party/azure_rtos/netxduo/addons/azure_iot/azure_iot_security_module/inc/configs/L4_BASE
-  name: asc_config.h
-  physicalPath: ../../third_party/azure_rtos/netxduo/addons/azure_iot/azure_iot_security_module/inc/configs/L4_BASE
-  security: NON_SECURE
-  type: HEADER
-  userChecksum: 7D19AC9BA5FB5810788D5908B906D58E
-- generatedChecksum: B3C0AD6DAB2DD184EDDB23721AD88351
-  logicalPath: third_party/azure_rtos/netxduo/addons/azure_iot/azure_iot_security_module/inc/configs/RTOS_BASE
-  name: asc_config.h
-  physicalPath: ../../third_party/azure_rtos/netxduo/addons/azure_iot/azure_iot_security_module/inc/configs/RTOS_BASE
-  security: NON_SECURE
-  type: HEADER
-  userChecksum: B3C0AD6DAB2DD184EDDB23721AD88351
 - generatedChecksum: 0F1A889B4FDD35E49F2009E1C38E85E2
   logicalPath: third_party/azure_rtos/netxduo/addons/azure_iot/azure_iot_security_module/inc/configs/RTOS_BASE_UT
   name: asc_config.h
@@ -10968,6 +10961,20 @@ files:
   security: NON_SECURE
   type: HEADER
   userChecksum: 0F1A889B4FDD35E49F2009E1C38E85E2
+- generatedChecksum: B3C0AD6DAB2DD184EDDB23721AD88351
+  logicalPath: third_party/azure_rtos/netxduo/addons/azure_iot/azure_iot_security_module/inc/configs/RTOS_BASE
+  name: asc_config.h
+  physicalPath: ../../third_party/azure_rtos/netxduo/addons/azure_iot/azure_iot_security_module/inc/configs/RTOS_BASE
+  security: NON_SECURE
+  type: HEADER
+  userChecksum: B3C0AD6DAB2DD184EDDB23721AD88351
+- generatedChecksum: 7D19AC9BA5FB5810788D5908B906D58E
+  logicalPath: third_party/azure_rtos/netxduo/addons/azure_iot/azure_iot_security_module/inc/configs/L4_BASE
+  name: asc_config.h
+  physicalPath: ../../third_party/azure_rtos/netxduo/addons/azure_iot/azure_iot_security_module/inc/configs/L4_BASE
+  security: NON_SECURE
+  type: HEADER
+  userChecksum: 7D19AC9BA5FB5810788D5908B906D58E
 - generatedChecksum: 6FEA76DF098FC3B095EA48D572F80622
   logicalPath: third_party/azure_rtos/netxduo/addons/azure_iot/azure_iot_security_module/iot-security-module-core/inc/asc_security_core
   name: asc_result.h
@@ -11233,7 +11240,7 @@ files:
   physicalPath: third_party_adapter/azure_rtos/src
   security: NON_SECURE
   type: HEADER
-  userChecksum: 0EBAE77D9BD5103277CD08C2716B46E9
+  userChecksum: D6D73CFCC07F15ADC016C57B87481DE6
 - generatedChecksum: 79243CE1660399874BF629BF6778BDB9
   logicalPath: third_party/azure_rtos/netxduo/addons/azure_iot/azure_iot_security_module/iot-security-module-core/inc/asc_security_core/model/schema
   name: baseline_builder.h
@@ -11395,13 +11402,13 @@ files:
   security: NON_SECURE
   type: HEADER
   userChecksum: 5B74FE08334F944DD0BF78CC700377F7
-- generatedChecksum: 712ACCC31A2F48A8051F3080E1676B0B
+- generatedChecksum: 2944E1DCFCC5E464B02DE7C5B803A23C
   logicalPath: config/wfi32_curiosity
   name: definitions.h
   physicalPath: ''
   security: NON_SECURE
   type: HEADER
-  userChecksum: 712ACCC31A2F48A8051F3080E1676B0B
+  userChecksum: 2944E1DCFCC5E464B02DE7C5B803A23C
 - generatedChecksum: E189C26B2269F8DE46033CCD0621958D
   logicalPath: config/wfi32_curiosity
   name: device.h
@@ -12018,13 +12025,6 @@ files:
   security: NON_SECURE
   type: HEADER
   userChecksum: 7CDC5B009047E9BB60D2B2CD247A10A4
-- generatedChecksum: 6787AE166FCA4AFC7C293306E09527EB
-  logicalPath: third_party/azure_rtos/netxduo/addons/azure_iot/azure_iot_security_module/inc/iot_security_module
-  name: mti.h
-  physicalPath: ../../third_party/azure_rtos/netxduo/addons/azure_iot/azure_iot_security_module/inc/iot_security_module
-  security: NON_SECURE
-  type: HEADER
-  userChecksum: 6787AE166FCA4AFC7C293306E09527EB
 - generatedChecksum: 8E96881EB7F55513F97273CD0C4441B4
   logicalPath: third_party/azure_rtos/netxduo/addons/azure_iot/azure_iot_security_module/iot-security-module-core/inc/asc_security_core/model
   name: mti.h
@@ -12032,6 +12032,13 @@ files:
   security: NON_SECURE
   type: HEADER
   userChecksum: 8E96881EB7F55513F97273CD0C4441B4
+- generatedChecksum: 6787AE166FCA4AFC7C293306E09527EB
+  logicalPath: third_party/azure_rtos/netxduo/addons/azure_iot/azure_iot_security_module/inc/iot_security_module
+  name: mti.h
+  physicalPath: ../../third_party/azure_rtos/netxduo/addons/azure_iot/azure_iot_security_module/inc/iot_security_module
+  security: NON_SECURE
+  type: HEADER
+  userChecksum: 6787AE166FCA4AFC7C293306E09527EB
 - generatedChecksum: CF9C96981819B231ACE4F7775BB01CE2
   logicalPath: third_party/azure_rtos/netxduo/addons/azure_iot/azure_iot_security_module/iot-security-module-core/inc/asc_security_core/model/objects
   name: network_activity.h
@@ -12347,48 +12354,13 @@ files:
   security: NON_SECURE
   type: HEADER
   userChecksum: 97ED9E3C043A291AE95056795AF2B1E5
-- generatedChecksum: 25027EC2530C994313C29104326C1EC1
-  logicalPath: third_party/azure_rtos/netxduo/crypto_libraries/ports/cortex_m3/ac5/inc
+- generatedChecksum: 085BBC44711628CF394C41564D48B883
+  logicalPath: third_party/azure_rtos/netxduo/crypto_libraries/ports/cortex_m4/iar/inc
   name: nx_crypto_port.h
-  physicalPath: ../../third_party/azure_rtos/netxduo/crypto_libraries/ports/cortex_m3/ac5/inc
+  physicalPath: ../../third_party/azure_rtos/netxduo/crypto_libraries/ports/cortex_m4/iar/inc
   security: NON_SECURE
   type: HEADER
-  userChecksum: 25027EC2530C994313C29104326C1EC1
-- generatedChecksum: BDEC35FE916736BFB8497528694280C6
-  logicalPath: third_party/azure_rtos/netxduo/crypto_libraries/ports/cortex_m3/ac6/inc
-  name: nx_crypto_port.h
-  physicalPath: ../../third_party/azure_rtos/netxduo/crypto_libraries/ports/cortex_m3/ac6/inc
-  security: NON_SECURE
-  type: HEADER
-  userChecksum: BDEC35FE916736BFB8497528694280C6
-- generatedChecksum: 34F4CE08E8CE00E7EF679CD863EE998B
-  logicalPath: third_party/azure_rtos/netxduo/crypto_libraries/ports/cortex_m3/gnu/inc
-  name: nx_crypto_port.h
-  physicalPath: ../../third_party/azure_rtos/netxduo/crypto_libraries/ports/cortex_m3/gnu/inc
-  security: NON_SECURE
-  type: HEADER
-  userChecksum: 34F4CE08E8CE00E7EF679CD863EE998B
-- generatedChecksum: D873168823157EA2BBAE2303AD004D6F
-  logicalPath: third_party/azure_rtos/netxduo/crypto_libraries/ports/cortex_m3/iar/inc
-  name: nx_crypto_port.h
-  physicalPath: ../../third_party/azure_rtos/netxduo/crypto_libraries/ports/cortex_m3/iar/inc
-  security: NON_SECURE
-  type: HEADER
-  userChecksum: D873168823157EA2BBAE2303AD004D6F
-- generatedChecksum: C67ACE629DFD5188C776F447A8A0C09E
-  logicalPath: third_party/azure_rtos/netxduo/crypto_libraries/ports/cortex_m3/keil/inc
-  name: nx_crypto_port.h
-  physicalPath: ../../third_party/azure_rtos/netxduo/crypto_libraries/ports/cortex_m3/keil/inc
-  security: NON_SECURE
-  type: HEADER
-  userChecksum: C67ACE629DFD5188C776F447A8A0C09E
-- generatedChecksum: 60253FFA1ACB498C28D2022FC1D96AB3
-  logicalPath: third_party/azure_rtos/netxduo/crypto_libraries/ports/cortex_m4/ac5/inc
-  name: nx_crypto_port.h
-  physicalPath: ../../third_party/azure_rtos/netxduo/crypto_libraries/ports/cortex_m4/ac5/inc
-  security: NON_SECURE
-  type: HEADER
-  userChecksum: 60253FFA1ACB498C28D2022FC1D96AB3
+  userChecksum: 085BBC44711628CF394C41564D48B883
 - generatedChecksum: B469FE80355E0B4662C54944187C1029
   logicalPath: third_party/azure_rtos/netxduo/crypto_libraries/ports/cortex_m4/ac6/inc
   name: nx_crypto_port.h
@@ -12403,13 +12375,6 @@ files:
   security: NON_SECURE
   type: HEADER
   userChecksum: 5C8D9C9ACBCE57485834E79E0704F85F
-- generatedChecksum: 085BBC44711628CF394C41564D48B883
-  logicalPath: third_party/azure_rtos/netxduo/crypto_libraries/ports/cortex_m4/iar/inc
-  name: nx_crypto_port.h
-  physicalPath: ../../third_party/azure_rtos/netxduo/crypto_libraries/ports/cortex_m4/iar/inc
-  security: NON_SECURE
-  type: HEADER
-  userChecksum: 085BBC44711628CF394C41564D48B883
 - generatedChecksum: 377790D7083F3C1892F89DFF058FDFC9
   logicalPath: third_party/azure_rtos/netxduo/crypto_libraries/ports/cortex_m4/keil/inc
   name: nx_crypto_port.h
@@ -12417,13 +12382,62 @@ files:
   security: NON_SECURE
   type: HEADER
   userChecksum: 377790D7083F3C1892F89DFF058FDFC9
-- generatedChecksum: 78EE9F25C9A00C380229E9C6BE187BBC
-  logicalPath: third_party/azure_rtos/netxduo/crypto_libraries/ports/cortex_m7/ac5/inc
+- generatedChecksum: 60253FFA1ACB498C28D2022FC1D96AB3
+  logicalPath: third_party/azure_rtos/netxduo/crypto_libraries/ports/cortex_m4/ac5/inc
   name: nx_crypto_port.h
-  physicalPath: ../../third_party/azure_rtos/netxduo/crypto_libraries/ports/cortex_m7/ac5/inc
+  physicalPath: ../../third_party/azure_rtos/netxduo/crypto_libraries/ports/cortex_m4/ac5/inc
   security: NON_SECURE
   type: HEADER
-  userChecksum: 78EE9F25C9A00C380229E9C6BE187BBC
+  userChecksum: 60253FFA1ACB498C28D2022FC1D96AB3
+- generatedChecksum: D873168823157EA2BBAE2303AD004D6F
+  logicalPath: third_party/azure_rtos/netxduo/crypto_libraries/ports/cortex_m3/iar/inc
+  name: nx_crypto_port.h
+  physicalPath: ../../third_party/azure_rtos/netxduo/crypto_libraries/ports/cortex_m3/iar/inc
+  security: NON_SECURE
+  type: HEADER
+  userChecksum: D873168823157EA2BBAE2303AD004D6F
+- generatedChecksum: BDEC35FE916736BFB8497528694280C6
+  logicalPath: third_party/azure_rtos/netxduo/crypto_libraries/ports/cortex_m3/ac6/inc
+  name: nx_crypto_port.h
+  physicalPath: ../../third_party/azure_rtos/netxduo/crypto_libraries/ports/cortex_m3/ac6/inc
+  security: NON_SECURE
+  type: HEADER
+  userChecksum: BDEC35FE916736BFB8497528694280C6
+- generatedChecksum: 34F4CE08E8CE00E7EF679CD863EE998B
+  logicalPath: third_party/azure_rtos/netxduo/crypto_libraries/ports/cortex_m3/gnu/inc
+  name: nx_crypto_port.h
+  physicalPath: ../../third_party/azure_rtos/netxduo/crypto_libraries/ports/cortex_m3/gnu/inc
+  security: NON_SECURE
+  type: HEADER
+  userChecksum: 34F4CE08E8CE00E7EF679CD863EE998B
+- generatedChecksum: C67ACE629DFD5188C776F447A8A0C09E
+  logicalPath: third_party/azure_rtos/netxduo/crypto_libraries/ports/cortex_m3/keil/inc
+  name: nx_crypto_port.h
+  physicalPath: ../../third_party/azure_rtos/netxduo/crypto_libraries/ports/cortex_m3/keil/inc
+  security: NON_SECURE
+  type: HEADER
+  userChecksum: C67ACE629DFD5188C776F447A8A0C09E
+- generatedChecksum: 25027EC2530C994313C29104326C1EC1
+  logicalPath: third_party/azure_rtos/netxduo/crypto_libraries/ports/cortex_m3/ac5/inc
+  name: nx_crypto_port.h
+  physicalPath: ../../third_party/azure_rtos/netxduo/crypto_libraries/ports/cortex_m3/ac5/inc
+  security: NON_SECURE
+  type: HEADER
+  userChecksum: 25027EC2530C994313C29104326C1EC1
+- generatedChecksum: 1C8FC01310C2CC9C4A7B2538765EF742
+  logicalPath: third_party/azure_rtos/netxduo/crypto_libraries/ports/linux/gnu/inc
+  name: nx_crypto_port.h
+  physicalPath: ../../third_party/azure_rtos/netxduo/crypto_libraries/ports/linux/gnu/inc
+  security: NON_SECURE
+  type: HEADER
+  userChecksum: 1C8FC01310C2CC9C4A7B2538765EF742
+- generatedChecksum: 59343CAB4A49B9C6EECFB0A71CDFF5A7
+  logicalPath: third_party/azure_rtos/netxduo/crypto_libraries/ports/cortex_m7/iar/inc
+  name: nx_crypto_port.h
+  physicalPath: ../../third_party/azure_rtos/netxduo/crypto_libraries/ports/cortex_m7/iar/inc
+  security: NON_SECURE
+  type: HEADER
+  userChecksum: 59343CAB4A49B9C6EECFB0A71CDFF5A7
 - generatedChecksum: B2C4E12BF710DC85838AD8079636FF2B
   logicalPath: third_party/azure_rtos/netxduo/crypto_libraries/ports/cortex_m7/ac6/inc
   name: nx_crypto_port.h
@@ -12438,20 +12452,13 @@ files:
   security: NON_SECURE
   type: HEADER
   userChecksum: D856BA3C39F78FD7B5F2929A22F5D335
-- generatedChecksum: 59343CAB4A49B9C6EECFB0A71CDFF5A7
-  logicalPath: third_party/azure_rtos/netxduo/crypto_libraries/ports/cortex_m7/iar/inc
+- generatedChecksum: 78EE9F25C9A00C380229E9C6BE187BBC
+  logicalPath: third_party/azure_rtos/netxduo/crypto_libraries/ports/cortex_m7/ac5/inc
   name: nx_crypto_port.h
-  physicalPath: ../../third_party/azure_rtos/netxduo/crypto_libraries/ports/cortex_m7/iar/inc
+  physicalPath: ../../third_party/azure_rtos/netxduo/crypto_libraries/ports/cortex_m7/ac5/inc
   security: NON_SECURE
   type: HEADER
-  userChecksum: 59343CAB4A49B9C6EECFB0A71CDFF5A7
-- generatedChecksum: 1C8FC01310C2CC9C4A7B2538765EF742
-  logicalPath: third_party/azure_rtos/netxduo/crypto_libraries/ports/linux/gnu/inc
-  name: nx_crypto_port.h
-  physicalPath: ../../third_party/azure_rtos/netxduo/crypto_libraries/ports/linux/gnu/inc
-  security: NON_SECURE
-  type: HEADER
-  userChecksum: 1C8FC01310C2CC9C4A7B2538765EF742
+  userChecksum: 78EE9F25C9A00C380229E9C6BE187BBC
 - generatedChecksum: C315039DD22EB0BE7087886B094A7B1B
   logicalPath: third_party/azure_rtos/netxduo/crypto_libraries/ports/win32/vs_2019/inc
   name: nx_crypto_port.h
@@ -13173,6 +13180,13 @@ files:
   security: NON_SECURE
   type: HEADER
   userChecksum: 612994C7F3C27F2CFA2621C1F65D4068
+- generatedChecksum: AB441E032FD7B269DB6B2AA5661A890C
+  logicalPath: config/wfi32_curiosity/peripheral/tmr
+  name: plib_tmr3.h
+  physicalPath: peripheral/tmr
+  security: NON_SECURE
+  type: HEADER
+  userChecksum: AB441E032FD7B269DB6B2AA5661A890C
 - generatedChecksum: D948F2CE092CAB556EF299D3CCD83A55
   logicalPath: config/wfi32_curiosity/peripheral/tmr
   name: plib_tmr_common.h
@@ -13201,13 +13215,13 @@ files:
   security: NON_SECURE
   type: HEADER
   userChecksum: 67EEAF539A53B6B8FD7B600ACCB3F3CA
-- generatedChecksum: 7AFFC4178335897ED9D5804CAB531BCF
+- generatedChecksum: 9C90A94077F62F71141B144757F04E7E
   logicalPath: config/wfi32_curiosity/driver/usb/usbfs/src
   name: plib_usbfs.h
   physicalPath: driver/usb/usbfs/src
   security: NON_SECURE
   type: HEADER
-  userChecksum: 7AFFC4178335897ED9D5804CAB531BCF
+  userChecksum: 9C90A94077F62F71141B144757F04E7E
 - generatedChecksum: 9B4B2B2E7722D50697564E6D6E4F9E04
   logicalPath: config/wfi32_curiosity/driver/usb/usbfs/src
   name: plib_usbfs_header.h
@@ -14747,7 +14761,7 @@ files:
   physicalPath: driver/wifi/pic32mzw1/include
   security: NON_SECURE
   type: HEADER
-  userChecksum: D785872311E731C718F49DBB845D95A6
+  userChecksum: A84D2AD1F303FCBA4C93404ACE43204B
 - generatedChecksum: 9E636CC2C18F82E2DF63BA89528C89BD
   logicalPath: config/wfi32_curiosity/driver/wifi/pic32mzw1/include
   name: wdrv_pic32mzw_api.h

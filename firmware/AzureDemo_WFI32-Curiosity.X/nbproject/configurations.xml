@@ -290,6 +290,7 @@
             <logicalFolder name="f5" displayName="tmr" projectFiles="true">
               <itemPath>../src/config/wfi32_curiosity/peripheral/tmr/plib_tmr_common.h</itemPath>
               <itemPath>../src/config/wfi32_curiosity/peripheral/tmr/plib_tmr2.h</itemPath>
+              <itemPath>../src/config/wfi32_curiosity/peripheral/tmr/plib_tmr3.h</itemPath>
             </logicalFolder>
             <logicalFolder name="f4" displayName="uart" projectFiles="true">
               <itemPath>../src/config/wfi32_curiosity/peripheral/uart/plib_uart_common.h</itemPath>
@@ -1202,6 +1203,7 @@
             </logicalFolder>
             <logicalFolder name="f5" displayName="tmr" projectFiles="true">
               <itemPath>../src/config/wfi32_curiosity/peripheral/tmr/plib_tmr2.c</itemPath>
+              <itemPath>../src/config/wfi32_curiosity/peripheral/tmr/plib_tmr3.c</itemPath>
             </logicalFolder>
             <logicalFolder name="f4" displayName="uart" projectFiles="true">
               <itemPath>../src/config/wfi32_curiosity/peripheral/uart/plib_uart1.c</itemPath>
@@ -2755,42 +2757,43 @@
                    displayName="Important Files"
                    projectFiles="false">
       <logicalFolder name="f1" displayName="wfi32_curiosity.mhc" projectFiles="true">
-        <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/adchs.yml</itemPath>
-        <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/atecc608.yml</itemPath>
-        <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/BSP_PIC32MZ_W1_Curiosity.yml</itemPath>
-        <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/core.yml</itemPath>
-        <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/core_timer.yml</itemPath>
-        <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/cryptoauthlib.yml</itemPath>
-        <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/cryptoauthlib_pkcs11.yml</itemPath>
-        <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/cryptoauthlib_tng.yml</itemPath>
-        <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/dfp.yml</itemPath>
-        <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/drvWifiPic32mzw1.yml</itemPath>
-        <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/drv_ba414e.yml</itemPath>
-        <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/drv_i2c.yml</itemPath>
-        <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/drv_memory.yml</itemPath>
-        <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/drv_sst26.yml</itemPath>
         <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/drv_usbfs_v1.yml</itemPath>
-        <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/GraphSettings.yml</itemPath>
+        <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/drvWifiPic32mzw1.yml</itemPath>
+        <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/adchs.yml</itemPath>
         <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/HarmonyCore.yml</itemPath>
-        <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/i2c1.yml</itemPath>
-        <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/i2c2.yml</itemPath>
-        <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/lib_azure_rtos.yml</itemPath>
-        <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/lib_crypto.yml</itemPath>
-        <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/ocmp2.yml</itemPath>
-        <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/project.yml</itemPath>
-        <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/settings.yml</itemPath>
-        <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/spi1.yml</itemPath>
-        <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/sys_command.yml</itemPath>
         <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/sys_console.yml</itemPath>
-        <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/sys_debug.yml</itemPath>
         <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/sys_fs.yml</itemPath>
-        <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/sys_time.yml</itemPath>
+        <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/core_timer.yml</itemPath>
+        <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/lib_crypto.yml</itemPath>
         <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/ThreadX.yml</itemPath>
-        <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/tmr2.yml</itemPath>
-        <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/uart1.yml</itemPath>
-        <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/uart2.yml</itemPath>
+        <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/core.yml</itemPath>
+        <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/sys_command.yml</itemPath>
+        <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/project.yml</itemPath>
+        <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/drv_ba414e.yml</itemPath>
+        <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/drv_sst26.yml</itemPath>
+        <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/GraphSettings.yml</itemPath>
+        <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/dfp.yml</itemPath>
+        <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/cryptoauthlib.yml</itemPath>
+        <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/sys_time.yml</itemPath>
         <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/usb_device.yml</itemPath>
+        <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/lib_azure_rtos.yml</itemPath>
+        <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/atecc608.yml</itemPath>
+        <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/drv_memory.yml</itemPath>
+        <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/tmr3.yml</itemPath>
+        <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/tmr2.yml</itemPath>
         <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/usb_device_msd.yml</itemPath>
+        <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/ocmp2.yml</itemPath>
+        <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/uart1.yml</itemPath>
+        <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/cryptoauthlib_pkcs11.yml</itemPath>
+        <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/uart2.yml</itemPath>
+        <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/sys_debug.yml</itemPath>
+        <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/drv_i2c.yml</itemPath>
+        <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/spi1.yml</itemPath>
+        <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/cryptoauthlib_tng.yml</itemPath>
+        <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/i2c1.yml</itemPath>
+        <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/settings.yml</itemPath>
+        <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/BSP_PIC32MZ_W1_Curiosity.yml</itemPath>
+        <itemPath>../src/config/wfi32_curiosity/wfi32_curiosity.mhc/i2c2.yml</itemPath>
       </logicalFolder>
       <itemPath>Makefile</itemPath>
       <itemPath>../src/config/wfi32_curiosity/harmony-manifest-success.yml</itemPath>
@@ -2870,7 +2873,7 @@
         <property key="enable-unroll-loops" value="false"/>
         <property key="exclude-floating-point" value="false"/>
         <property key="extra-include-directories"
-                  value="../src/config/wfi32_curiosity/third_party_adapter/azure_rtos/src/tcpip;../src;../src/config/wfi32_curiosity;../src/config/wfi32_curiosity/driver/wifi/pic32mzw1/include/;../src/config/wfi32_curiosity/library/cryptoauthlib;../src/config/wfi32_curiosity/library/cryptoauthlib/crypto;../src/config/wfi32_curiosity/library/cryptoauthlib/pkcs11;../src/config/wfi32_curiosity/library/cryptoauthlib/tng;../src/config/wfi32_curiosity/system/fs/fat_fs/file_system;../src/config/wfi32_curiosity/system/fs/fat_fs/hardware_access;../src/config/wfi32_curiosity/third_party_adapter/azure_rtos;../src/config/wfi32_curiosity/third_party_adapter/azure_rtos/src;../src/config/wfi32_curiosity/third_party_adapter/azure_rtos/src/tcpip;../src/config/wfi32_curiosity/threadx_config;../src/third_party/azure_rtos/filex/common/inc;../src/third_party/azure_rtos/filex/ports/mips/gnu/inc;../src/third_party/azure_rtos/netxduo;../src/third_party/azure_rtos/netxduo/addons;../src/third_party/azure_rtos/netxduo/addons/azure_iot;../src/third_party/azure_rtos/netxduo/addons/azure_iot/azure-sdk-for-c/sdk/inc;../src/third_party/azure_rtos/netxduo/addons/azure_iot/azure_iot_security_module;../src/third_party/azure_rtos/netxduo/addons/azure_iot/azure_iot_security_module/inc;../src/third_party/azure_rtos/netxduo/addons/azure_iot/azure_iot_security_module/inc/configs/RTOS_BASE_UT;../src/third_party/azure_rtos/netxduo/addons/azure_iot/azure_iot_security_module/iot-security-module-core/deps/flatcc/include;../src/third_party/azure_rtos/netxduo/addons/azure_iot/azure_iot_security_module/iot-security-module-core/inc;../src/third_party/azure_rtos/netxduo/addons/cloud;../src/third_party/azure_rtos/netxduo/addons/dhcp;../src/third_party/azure_rtos/netxduo/addons/dns;../src/third_party/azure_rtos/netxduo/addons/mqtt;../src/third_party/azure_rtos/netxduo/addons/sntp;../src/third_party/azure_rtos/netxduo/common/inc;../src/third_party/azure_rtos/netxduo/crypto_libraries/inc;../src/third_party/azure_rtos/netxduo/nx_secure/inc;../src/third_party/azure_rtos/netxduo/nx_secure/ports;../src/third_party/azure_rtos/netxduo/ports/mips/gnu/inc;../src/third_party/rtos/threadx/common/inc;../src/third_party/rtos/threadx/ports/pic32mz/mplabx/inc"/>
+                  value=" ../src/config/wfi32_curiosity/third_party_adapter/azure_rtos/src/tcpip;../src;../src/config/wfi32_curiosity;../src/config/wfi32_curiosity/driver/wifi/pic32mzw1/include/;../src/config/wfi32_curiosity/library/cryptoauthlib;../src/config/wfi32_curiosity/library/cryptoauthlib/crypto;../src/config/wfi32_curiosity/library/cryptoauthlib/pkcs11;../src/config/wfi32_curiosity/library/cryptoauthlib/tng;../src/config/wfi32_curiosity/system/fs/fat_fs/file_system;../src/config/wfi32_curiosity/system/fs/fat_fs/hardware_access;../src/config/wfi32_curiosity/third_party_adapter/azure_rtos;../src/config/wfi32_curiosity/third_party_adapter/azure_rtos/src;../src/config/wfi32_curiosity/third_party_adapter/azure_rtos/src/tcpip;../src/config/wfi32_curiosity/threadx_config;../src/third_party/azure_rtos/filex/common/inc;../src/third_party/azure_rtos/filex/ports/mips/gnu/inc;../src/third_party/azure_rtos/netxduo;../src/third_party/azure_rtos/netxduo/addons;../src/third_party/azure_rtos/netxduo/addons/azure_iot;../src/third_party/azure_rtos/netxduo/addons/azure_iot/azure-sdk-for-c/sdk/inc;../src/third_party/azure_rtos/netxduo/addons/azure_iot/azure_iot_security_module;../src/third_party/azure_rtos/netxduo/addons/azure_iot/azure_iot_security_module/inc;../src/third_party/azure_rtos/netxduo/addons/azure_iot/azure_iot_security_module/inc/configs/RTOS_BASE_UT;../src/third_party/azure_rtos/netxduo/addons/azure_iot/azure_iot_security_module/iot-security-module-core/deps/flatcc/include;../src/third_party/azure_rtos/netxduo/addons/azure_iot/azure_iot_security_module/iot-security-module-core/inc;../src/third_party/azure_rtos/netxduo/addons/cloud;../src/third_party/azure_rtos/netxduo/addons/dhcp;../src/third_party/azure_rtos/netxduo/addons/dns;../src/third_party/azure_rtos/netxduo/addons/mqtt;../src/third_party/azure_rtos/netxduo/addons/sntp;../src/third_party/azure_rtos/netxduo/common/inc;../src/third_party/azure_rtos/netxduo/crypto_libraries/inc;../src/third_party/azure_rtos/netxduo/nx_secure/inc;../src/third_party/azure_rtos/netxduo/nx_secure/ports;../src/third_party/azure_rtos/netxduo/ports/mips/gnu/inc;../src/third_party/rtos/threadx/common/inc;../src/third_party/rtos/threadx/ports/pic32mz/mplabx/inc"/>
         <property key="generate-16-bit-code" value="false"/>
         <property key="generate-micro-compressed-code" value="false"/>
         <property key="isolate-each-function" value="true"/>
@@ -3082,7 +3085,33 @@
         <property key="voltagevalue" value="3.25"/>
       </PICkit3PlatformTool>
       <PKOBSKDEPlatformTool>
+        <property key="AutoSelectMemRanges" value="auto"/>
+        <property key="SecureSegment.SegmentProgramming" value="FullChipProgramming"/>
+        <property key="ToolFirmwareFilePath"
+                  value="Press to browse for a specific firmware version"/>
+        <property key="ToolFirmwareOption.UseLatestFirmware" value="true"/>
+        <property key="debugoptions.debug-startup" value="Use system settings"/>
+        <property key="debugoptions.reset-behaviour" value="Use system settings"/>
         <property key="firmware.download.all" value="false"/>
+        <property key="lastid" value=""/>
+        <property key="memories.configurationmemory" value="true"/>
+        <property key="memories.dataflash" value="true"/>
+        <property key="memories.eeprom" value="true"/>
+        <property key="memories.id" value="true"/>
+        <property key="memories.programmemory" value="true"/>
+        <property key="memories.programmemory.ranges" value="10000000-100fffff"/>
+        <property key="memories.userotp" value="true"/>
+        <property key="programoptions.donoteraseauxmem" value="false"/>
+        <property key="programoptions.eraseb4program" value="true"/>
+        <property key="programoptions.preservedataflash" value="false"/>
+        <property key="programoptions.preservedataflash.ranges" value=""/>
+        <property key="programoptions.preserveeeprom" value="false"/>
+        <property key="programoptions.preserveeeprom.ranges"
+                  value="${memories.eedata.default}"/>
+        <property key="programoptions.preserveprogram.ranges" value=""/>
+        <property key="programoptions.preserveprogramrange" value="false"/>
+        <property key="programoptions.usehighvoltageonmclr" value="false"/>
+        <property key="programoptions.uselvpprogramming" value="true"/>
       </PKOBSKDEPlatformTool>
       <Tool>
         <property key="ADC" value="true"/>
@@ -3147,8 +3176,10 @@
         <property key="debugoptions.reset-behaviour" value="Use system settings"/>
         <property key="debugoptions.simultaneous.debug" value="false"/>
         <property key="debugoptions.useswbreakpoints" value="false"/>
+        <property key="firmware.download.all" value="false"/>
         <property key="freeze.timers" value="false"/>
         <property key="hwtoolclock.frcindebug" value="false"/>
+        <property key="lastid" value=""/>
         <property key="memories.aux" value="false"/>
         <property key="memories.bootflash" value="true"/>
         <property key="memories.configurationmemory" value="true"/>
@@ -3163,8 +3194,9 @@
                   value="${memories.instruction.ram.ranges}"/>
         <property key="memories.programmemory" value="true"/>
         <property key="memories.programmemory.end" value="0x1d003fff"/>
-        <property key="memories.programmemory.ranges" value="1d000000-1d003fff"/>
+        <property key="memories.programmemory.ranges" value="10000000-100fffff"/>
         <property key="memories.programmemory.start" value="0x1d000000"/>
+        <property key="memories.userotp" value="true"/>
         <property key="poweroptions.powerenable" value="false"/>
         <property key="programmerToGoFilePath"
                   value="C:/Microchip/AzureTest/AzureDemo_WFI32E01/firmware/AzureDemo_WFI32-Curiosity.X/debug/wfi32_curiosity/AzureDemo_WFI32-Curiosity_ptg"/>
@@ -3174,10 +3206,10 @@
         <property key="programoptions.pgmentry.voltage" value="low"/>
         <property key="programoptions.pgmspeed" value="Med"/>
         <property key="programoptions.preservedataflash" value="false"/>
-        <property key="programoptions.preservedataflash.ranges"
-                  value="${memories.dataflash.default}"/>
+        <property key="programoptions.preservedataflash.ranges" value=""/>
         <property key="programoptions.preserveeeprom" value="false"/>
-        <property key="programoptions.preserveeeprom.ranges" value=""/>
+        <property key="programoptions.preserveeeprom.ranges"
+                  value="${memories.eedata.default}"/>
         <property key="programoptions.preserveprogram.ranges" value=""/>
         <property key="programoptions.preserveprogramrange" value="false"/>
         <property key="programoptions.preserveprogramrange.end" value="0x1d003fff"/>
@@ -3188,7 +3220,7 @@
         <property key="programoptions.programuserotp" value="false"/>
         <property key="programoptions.testmodeentrymethod" value="VDDFirst"/>
         <property key="programoptions.usehighvoltageonmclr" value="false"/>
-        <property key="programoptions.uselvpprogramming" value="false"/>
+        <property key="programoptions.uselvpprogramming" value="true"/>
         <property key="toolpack.updateoptions"
                   value="toolpack.updateoptions.uselatestoolpack"/>
         <property key="toolpack.updateoptions.packversion"

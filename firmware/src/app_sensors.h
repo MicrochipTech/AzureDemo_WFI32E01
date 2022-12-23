@@ -78,7 +78,6 @@ extern "C" {
 
 #define APP_CTRL_ADC_VREF                (3.3f)
 #define APP_CTRL_ADC_MAX_COUNT           (4095)
-#define APP_CTRL_ADC_AVG_COUNT           10
 // *****************************************************************************
 /* I2C Operations */
 typedef struct
@@ -123,7 +122,11 @@ void APP_SENSORS_writeWord_LSB_b4_MSB(uint8_t addr, uint16_t reg, uint16_t val);
 void APP_SENSORS_justRead(uint8_t addr, uint8_t size);
 void APP_SENSORS_writeReadBytes(uint8_t addr, uint16_t reg, uint8_t size);
 void APP_SENSORS_writeReadWords(uint8_t addr, uint16_t reg, uint8_t size);
+#ifdef WFI32_IoT_BOARD  
 int16_t APP_SENSORS_readTemperature(void);
+#else
+float APP_SENSORS_readTemperature(void);
+#endif
 uint32_t APP_SENSORS_readLight(void);
 
 #endif /* _APP_SENSORS_H */

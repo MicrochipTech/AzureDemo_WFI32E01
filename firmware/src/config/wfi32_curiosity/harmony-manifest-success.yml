@@ -4,13 +4,13 @@
 
 
 project: AzureDemo_WFI32E01
-creation_date: 2022-12-22T13:00:14.887-07:00[America/Phoenix]    # ISO 8601 format: https://www.w3.org/TR/NOTE-datetime
-operating_system: Windows 10
+creation_date: 2022-12-23T14:05:01.920-07:00[America/Phoenix]    # ISO 8601 format: https://www.w3.org/TR/NOTE-datetime
+operating_system: Mac OS X
 mhc_mode: IDE            # [IDE|Standalone|Headless]
 mhc_version: v3.8.5
 mplabx_version: v6.00        # if MPLAB X plugin only
 plugin_version: v3.6.4        # if MPLAB X plugin only
-compiler: XC32 (4.20)
+compiler: XC32 (3.01)
 
 modules:
     - {name: "cryptoauthlib", version: "20211006"}

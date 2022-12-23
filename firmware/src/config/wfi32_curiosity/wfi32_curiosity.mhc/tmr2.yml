@@ -59,5 +59,12 @@ children:
       children:
       - type: Dynamic
         attributes: {id: tmr2, value: '256'}
+  - type: Boolean
+    attributes: {id: TMR_SLAVE_INTERRUPT_MODE}
+    children:
+    - type: Values
+      children:
+      - type: Dynamic
+        attributes: {id: tmr2, value: 'true'}
 - type: ElementPosition
   attributes: {x: '634', y: '774', id: tmr2}

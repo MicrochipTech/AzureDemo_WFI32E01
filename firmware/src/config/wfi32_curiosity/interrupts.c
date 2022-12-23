@@ -63,6 +63,7 @@
 
 void CORE_TIMER_InterruptHandler( void );
 void TIMER_2_InterruptHandler( void );
+void TIMER_3_InterruptHandler( void );
 void DRV_USBFS_USB_Handler( void );
 void SPI1_RX_InterruptHandler( void );
 void SPI1_TX_InterruptHandler( void );
@@ -106,6 +107,17 @@ void __ISR(_TIMER_2_VECTOR, ipl1SAVEALL) TIMER_2_Handler (void)
     _tx_thread_context_save();
 
     TIMER_2_InterruptHandler();
+
+    /* Call ThreadX context restore. */
+    _tx_thread_context_restore();
+}
+
+void __ISR(_TIMER_3_VECTOR, ipl1SAVEALL) TIMER_3_Handler (void)
+{
+    /* Call ThreadX context save. */
+    _tx_thread_context_save();
+
+    TIMER_3_InterruptHandler();
 
     /* Call ThreadX context restore. */
     _tx_thread_context_restore();

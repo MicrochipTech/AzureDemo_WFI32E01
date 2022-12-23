@@ -64,6 +64,7 @@
 #include "peripheral/uart/plib_uart1.h"
 #include "peripheral/uart/plib_uart2.h"
 #include "peripheral/tmr/plib_tmr2.h"
+#include "peripheral/tmr/plib_tmr3.h"
 #include "driver/usb/usbfs/drv_usbfs.h"
 #include "peripheral/spi/spi_master/plib_spi1_master.h"
 #include "system/int/sys_int.h"
