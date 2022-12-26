@@ -12,7 +12,7 @@
 #ifndef SAMPLE_CONFIG_H
 #define SAMPLE_CONFIG_H
 
-#include "app_pic32mz_w1.h"
+#include "app.h"
 
 #ifdef __cplusplus
 extern   "C" {

@@ -87,7 +87,7 @@ void altitude2_reset( ALTITUDE2_Data *ctx )
     
     for( cnt = 1; cnt < (ALTITUDE2_COEFFS_MAX+1); cnt++ )
     {
-        altitude2_read_prom( ctx, cnt, &ctx->data_prom[ cnt - 1 ] );
+        altitude2_read_prom( ctx, cnt, (uint32_t *)&ctx->data_prom[ cnt - 1 ] );
     } 
 }
 

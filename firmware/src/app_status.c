@@ -17,7 +17,11 @@ void APP_STATUS_update(void)
     if (appConnectStatus.alarm == true) 
     {
         GPIO_RA14_Set();
+#ifdef WFI32_IoT_BOARD        
         GPIO_RA13_Set();
+#else
+        GPIO_RK6_Set();
+#endif        
         LED_RED_On();
     }
     else
@@ -25,12 +29,20 @@ void APP_STATUS_update(void)
         if (appConnectStatus.wifi == true) 
         {
             GPIO_RA14_Clear();
+#ifdef WFI32_IoT_BOARD              
             GPIO_RA13_Set();
+#else
+            GPIO_RK6_Set();
+#endif            
         }
         if (appConnectStatus.cloud == true) 
         {
             GPIO_RA14_Set();
+#ifdef WFI32_IoT_BOARD                          
             GPIO_RA13_Clear();
+#else
+            GPIO_RK6_Clear();
+#endif            
         }
         if ( (appConnectStatus.wifi == true) && (appConnectStatus.cloud == true) )
         {

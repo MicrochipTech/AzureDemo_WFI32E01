@@ -44,6 +44,7 @@ extern "C" {
     
 // *****************************************************************************
 
+    
 /* MCP9808 registers */
 #define MCP9808_I2C_ADDRESS         0x18 
 #define MCP9808_REG_CONFIG          0x01
@@ -75,6 +76,8 @@ extern "C" {
 #define OPT3001_MANUF_ID                0x5449
 #define OPT3001_DEVICE_ID               0x3001
 
+#define APP_CTRL_ADC_VREF                (3.3f)
+#define APP_CTRL_ADC_MAX_COUNT           (4095)
 // *****************************************************************************
 /* I2C Operations */
 typedef struct
@@ -119,7 +122,11 @@ void APP_SENSORS_writeWord_LSB_b4_MSB(uint8_t addr, uint16_t reg, uint16_t val);
 void APP_SENSORS_justRead(uint8_t addr, uint8_t size);
 void APP_SENSORS_writeReadBytes(uint8_t addr, uint16_t reg, uint8_t size);
 void APP_SENSORS_writeReadWords(uint8_t addr, uint16_t reg, uint8_t size);
+#ifdef WFI32_IoT_BOARD  
 int16_t APP_SENSORS_readTemperature(void);
+#else
+float APP_SENSORS_readTemperature(void);
+#endif
 uint32_t APP_SENSORS_readLight(void);
 
 #endif /* _APP_SENSORS_H */

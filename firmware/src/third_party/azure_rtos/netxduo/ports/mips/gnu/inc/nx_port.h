@@ -70,8 +70,8 @@
 /* Define various constants for the port.  */ 
 
 #ifndef NX_IP_PERIODIC_RATE
-#define NX_IP_PERIODIC_RATE 1000             /* Default IP periodic rate of 1 second for 
-                                               ports with 1ms timer interrupts.  This 
+#define NX_IP_PERIODIC_RATE 10             /* Default IP periodic rate of 1 second for 
+                                               ports with 10ms timer interrupts.  This 
                                                value may be defined instead at the 
                                                command line and this value will not be
                                                used.  */
@@ -96,7 +96,7 @@
         /* i = D, C, B, A */                                \
         arg = i;                                            \
     }
-#define NX_CHANGE_USHORT_ENDIAN(a)      (a = (((a >> 8) | (a << 8)) & 0xFFFF))
+#define NX_CHANGE_USHORT_ENDIAN(a)      a = (((a >> 8) | (a << 8)) & 0xFFFF)
 
 #ifndef htonl
 #define htonl(val)  ((((val) >> 24) & 0x000000FF) | (((val) >> 24) & 0x000000FF) | (((val) >> 24) & 0x000000FF) | (((val) >> 24) & 0x000000FF))
