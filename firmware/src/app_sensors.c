@@ -135,9 +135,6 @@ void ADC_ResultHandler(ADCHS_CHANNEL_NUM channel, uintptr_t context) {
 
 void APP_SENSORS_init(void)
 {
-#ifdef WFI32_IoT_BOARD
-    memset(&APP_SENSORS_data.mcp9808, 0, sizeof(APP_SENSORS_data.mcp9808));
-    memset(&APP_SENSORS_data.opt3001, 0, sizeof(APP_SENSORS_data.opt3001));
     memset(&APP_SENSORS_data.i2c, 0, sizeof(APP_SENSORS_data.i2c));
 
     APP_SENSORS_data.i2c.i2cHandle = DRV_I2C_Open(DRV_I2C_INDEX_0, DRV_IO_INTENT_READWRITE);
@@ -145,11 +142,13 @@ void APP_SENSORS_init(void)
     {
         APP_SENSORS_DBG(SYS_ERROR_ERROR, "Failed to open I2C driver for reading sensors!\r\n");
     }
-#ifdef WFI32IOT_SENSORS
+#ifdef WFI32_IoT_BOARD
+    memset(&APP_SENSORS_data.mcp9808, 0, sizeof(APP_SENSORS_data.mcp9808));
+    memset(&APP_SENSORS_data.opt3001, 0, sizeof(APP_SENSORS_data.opt3001));
+    
     APP_SENSORS_writeWord_MSB_b4_LSB(MCP9808_I2C_ADDRESS, MCP9808_REG_CONFIG, MCP9808_CONFIG_DEFAULT);
     APP_SENSORS_writeWord_MSB_b4_LSB(OPT3001_I2C_ADDRESS, OPT3001_REG_CONFIG, OPT3001_CONFIG_CONT_CONVERSION);
-#endif /* WFI32IOT_SENSORS */    
-    
+
 #else /*WFI32-Curiosity*/
     APP_SENSORS_DBG(SYS_ERROR_INFO, "Registering the ADC callback\n");
     ADCHS_CallbackRegister(ADCHS_CH15, ADC_ResultHandler, (uintptr_t) NULL);
