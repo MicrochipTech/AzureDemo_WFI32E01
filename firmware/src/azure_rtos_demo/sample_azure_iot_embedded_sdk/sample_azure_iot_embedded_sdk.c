@@ -47,7 +47,11 @@ extern APP_CONNECT_STATUS appConnectStatus;
 extern APP_LED_CTRL appLedCtrl[APP_LED_TOTAL];
 
 // define the modelID associated with device template and the dps payload
+#ifdef WFI32_IoT_BOARD
 #define SAMPLE_PNP_MODEL_ID         "dtmi:com:Microchip:WFI32_IoT_WM;3"
+#else
+#define SAMPLE_PNP_MODEL_ID         "dtmi:com:Microchip:WFI32_Curiosity_WM;1"
+#endif
 #define SAMPLE_PNP_DPS_PAYLOAD      "{\"modelId\":\"" SAMPLE_PNP_MODEL_ID "\"}"
 
 extern APP_DATA app_pic32mz_w1Data;
