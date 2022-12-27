@@ -1,6 +1,4 @@
-# Connecting the WFI32-IoT Development Board (Part No. EV36W50A) to Azure IoT Central using X.509 Certificate Attestation
-
-NOTE: Should you encounter any issues/obstacles with the following procedure, check out the [FAQ section](./FAQ.md)
+# Connecting the WFI32E01 to Azure IoT Central using X.509 Certificate Attestation
 
 ## Introduction
 
@@ -25,9 +23,13 @@ As a solution builder, you can use IoT Central to develop a cloud-hosted IoT sol
     ```bash
     git clone <Demo_URL>
     ```
-    NOTE: <Demo_URL> is the link to the origin repository (e.g. https://github.com/Microchip-Azure-Demos/WFI32-IoT)
+    NOTE: <Demo_URL> is the link to the origin repository (e.g. https://github.com/MicrochipTech/AzureDemo_WFI32E01)
 
-2. Connect the board to PC, then make sure a device named `CURIOSITY` shows up as a disk drive (i.e. Mass Storage Device) on the `Desktop` or in a `File Explorer` window
+2. Perform one of the following steps based on the specific WFI32E01 development board being used: 
+
+- [WFI32-Curiosity](https://www.microchip.com/en-us/development-tool/EV12F11A): Use a jumper to short the `PKOB` pins of jumper `J302`. Connect the board to the PC using the connector (located in one corner of the board) labeled `USB DEBUG` (note there are 2 different USB connectors on the board).
+
+- [WFI32-IoT](https://www.microchip.com/en-us/development-tool/ev36w50a): Connect the board to PC, then make sure a device named `CURIOSITY` shows up as a disk drive (i.e. Mass Storage Device) on the `Desktop` or in a `File Explorer` window
 
     <img src=".//media/image17a.png" />
 
@@ -35,21 +37,19 @@ As a solution builder, you can use IoT Central to develop a cloud-hosted IoT sol
 
     <img src=".//media/image18a.png" style="width:2.0in;height:4.0833in" alt="A screenshot of a cell phone Description automatically generated" />
 
-    Once the MPLAB X IDE has finished its initialization routines, you should notice the "Kit Window" that acknowledges an active connection to the WFI32-IoT Development Board
+    Once the MPLAB X IDE has finished its initialization routines, you should notice the "Kit Window" that acknowledges an active connection to the WFI32-IoT Development Board (this does not apply to the PIC32 WFI32E Curiosity Development Board - the window will say there is no kit connected which is fine)
 
     <img src=".//media/image18b.png"  />
 
-4. Navigate to the main toolbar's `File` > `Open Project` operation to load the demo project folder (\*.X) located at `[your_path]\Microchip-WFI32-IoT\firmware\WFI32-IoT_Azure.X`
+4. Navigate to the main toolbar's `File` > `Open Project` operation to load the demo project folder (\*.X) located at `[your_path]\AzureDemo_WFI32E01\firmware\AzureDemo_WFI32-IoT.X` (or `AzureDemo_WFI32-Curiosity.X`)
 
     <img src=".//media/image19a.png" style="width:3.0in;height:2.0833in" alt="A screenshot of a cell phone Description automatically generated" />
-
-    <img src=".//media/image19b.png" style="width:4.0in;height:2.23in" alt="A screenshot of a cell phone Description automatically generated" />
 
    If the `load error` message in red appears in the `Output` window, click on the `Resolve DFP for configuration: default` link
 
     <img src=".//media/image21.png" style="width:6.5in;height:1.00833in" alt="A screenshot of a cell phone Description automatically generated" />
 
-5. Set the `WFI32-IoT_Azure` project as the main (currently focused/active) project by right-clicking on it and selecting `Set as Main Project`
+5. Set the `AzureDemo_WFI32-IoT` (or `AzureDemo_WFI32-Curiosity`) project as the main (currently focused/active) project by right-clicking on it and selecting `Set as Main Project`
 
     <img src=".//media/image40.png" style="width:5.in;height:3.18982in" alt="A screenshot of a cell phone Description automatically generated" />
 
@@ -61,23 +61,29 @@ As a solution builder, you can use IoT Central to develop a cloud-hosted IoT sol
 
 7. Verify the project properties are set correctly before building the project by executing the following steps:
 
-    - right-click on the `WFI32-IoT_Azure` project
+    - right-click on the `AzureDemo_WFI32-IoT` (or `AzureDemo_WFI32-Curiosity`) project
     - select `Properties`
     - under `Connected Hardware Tool`, select the name which has been pre-assigned to your specific board (e.g. "Curiosity/Starter Kits (PKOB4)", "WFI32-IoT Board-SN", etc.)
     - select the latest `PIC32MZ-W_DFP` version
-    - select the latest XC32 version for `Compiler Toolchain`
+    - select the XC32 version 4.10 for `Compiler Toolchain`
 
         <img src=".//media/image42.png" style="width:5.in;height:3.18982in" alt="A screenshot of a cell phone Description automatically generated" />
 
     If any changes were made in the project properties window, the `Apply` button should become enabled.  Make sure to hit the `Apply` button before hitting `OK`
 
-8. Right-click on the `WFI32-IoT_Azure` project and select `Clean`. Right-click the project again and select `Make and Program Device`. This operation will automatically build the project before attempting to program the target device. The build process starting from a clean state will take a while, so this might be a good time to go grab a cup of coffee :)
+8. Right-click on the active project and select `Clean`. Right-click the project again and select `Make and Program Device`. This operation will automatically build the project before attempting to program the target device. The build process starting from a clean state will take a while, so this might be a good time to go grab a cup of coffee :)
 
-9. After the `BUILD SUCCESSFUL` message appears in the Output window, the application HEX file will be programmed onto the WFI32-IoT Development Board. Once programming has finished, the board will automatically reset and start running its application code. The Mass Storage Device will reinitialize and take on the new name of `WFI32-IOT`
+9. After the `BUILD SUCCESSFUL` message appears in the Output window, the application HEX file will be programmed onto the development Board. Once programming has finished, the board will automatically reset and start running its application code. The Mass Storage Device will reinitialize and take on the name of `WFI32-IOT`
 
-10. Quit the MPLAB X IDE by selecting `MPLAB X IDE` &gt; `Quit MPLAB X IDE` from the main toolbar. Please confirm the application has actually been closed before proceeding...
+10. Quit the MPLAB X IDE by selecting `MPLAB X IDE` &gt; `Quit MPLAB X IDE` from the main toolbar. Please confirm the application has actually been closed before proceeding
 
-11. Set up a Command Line Interface (CLI) to the board. Open a serial terminal (e.g. PuTTY, TeraTerm, etc.) and connect to the COM port corresponding to your board at `115200 baud` (e.g. open PuTTY Configuration window &gt; choose `session` &gt; choose `Serial`&gt; enter/select the right COMx port). You can find the right COM port number by opening your PC’s `Device Manager` &gt; expand `Ports(COM & LPT)` &gt; take note of `USB Serial Device (COMx)`
+11. Set up a Command Line Interface (CLI) to the board - choose one of the following based on the development board being used:
+
+- If using the [PIC32 WFI32E Curiosity](https://www.microchip.com/en-us/development-tool/EV12F11A) board, a [USB-to-UART converter](https://www.newark.com/c/cable-wire-cable-assemblies/cable-assemblies/usb-adapter-cables?conversion-type=usb-to-uart-converter) needs to be connected to the U1RX & U1TX pins of the GPIO Header (J207). Next, set the jumper on `J302` so that the `VBUS` pins are shorted. Then, disconnect the USB cable from the `USB DEBUG` port and connect it to the other USB port labeled `USB POWER` port. Open a serial terminal (e.g. PuTTY, TeraTerm, etc.) and connect to the COM port corresponding to the USB-to-UART converter at `115200 baud`.
+
+    <img src=".//media/WFI32-Curiosity_J207.png"/>
+
+- If using the [WFI32-IoT](https://www.microchip.com/en-us/development-tool/ev36w50a) board, open a serial terminal (e.g. PuTTY, TeraTerm, etc.) and connect to the COM port corresponding to your board at `115200 baud` (e.g. open PuTTY Configuration window &gt; choose `session` &gt; choose `Serial`&gt; enter/select the right COMx port). You can find the right COM port number by opening your PC’s `Device Manager` &gt; expand `Ports(COM & LPT)` &gt; take note of `USB Serial Device (COMx)`
 
     <img src=".//media/image43.png"/>
 
@@ -85,11 +91,11 @@ As a solution builder, you can use IoT Central to develop a cloud-hosted IoT sol
 
     <img src=".//media/image44.png" style="width:5.in;height:2.68982in" alt="A screenshot of a cell phone Description automatically generated" />
 
-13. Enter in the `wifi` command on the CLI. You should see that the WFI32-IoT Development Board replies with a message that it is *not* currently connected to Wi-Fi
+13. Enter in the `wifi` command on the CLI. You should see that the WFI32 Development Board replies with a message that it is *not* currently connected to Wi-Fi
 
     <img src=".//media/image45.png" style="width:5.in;height:1.58982in" alt="A screenshot of a cell phone Description automatically generated" />
 
-14. Configure the WFI32-IoT Development Board's device settings with your wireless router’s SSID and password. To be on the safe side, there should be no spaces used in the SSID and password for your network, and the Wi-Fi Access Point should be operating in the 2.4 GHz frequency band.
+14. Configure the WFI32 Development Board's device settings with your wireless router’s SSID and password. To be on the safe side, there should be no spaces used in the SSID and password for your network, and the Wi-Fi Access Point should be operating in the 2.4 GHz frequency band.
 
     The easiest way to configure the device's Wi-Fi settings is to open the `WFI32-IOT` Mass Storage Device and double-click on the `clickme.html` file - then follow the steps shown on the resulting web page
 
@@ -116,9 +122,9 @@ As a solution builder, you can use IoT Central to develop a cloud-hosted IoT sol
         CMD:SEND_UART=wifi MY_SSID,MY_PSWD,4
         ```
 
-15. Type the `reset` command on the serial terminal CLI. Within a few seconds, you should see the Blue LED on the WFI32-IoT Development Board stay constantly on - signifying that the board has successfuly connected to your Wi-Fi network using the settings stored in the `WIFI.CFG` file
+15. [WFI32-IoT only - WFI32 Curiosity users can skip this step] Type the `reset` command on the serial terminal CLI. Within a few seconds, you should see the Blue LED on the WFI32-IoT Development Board stay constantly on - signifying that the board has successfuly connected to your Wi-Fi network using the settings stored in the `WIFI.CFG` file
 
-    NOTE: Do not proceed until the WFI32-IoT Development Board has established a successful connection to your Wi-Fi network - the Blue LED needs to be always on!
+    NOTE: Do not proceed until the WFI32 Development Board has established a successful connection to your Wi-Fi network - the Blue LED needs to be always on!
 
 ## Confirm Access to the Root CA, Signer CA, and Device Certificates
 
@@ -134,7 +140,7 @@ If any of the files do not exist when the demo application is reset, the missing
 
 IoT Central allows you to create an application dashboard to monitor the telemetry and take appropriate actions based on customized rules.
 
-1. Create a custom IoT Central application by accessing (clicking on) the existing [Microchip WFI32-IoT Application Template](https://apps.azureiotcentral.com/build/new/e76ed2fc-5ab1-42f7-9d16-8e1a69bf61e5) (if there is a problem with loading the template, refer to the [Create an application](https://docs.microsoft.com/en-us/azure/iot-central/core/quick-deploy-iot-central) section to create your IoT Central application from scratch). If you are not currently logged into your [Microsoft account](https://account.microsoft.com/account), you will be prompted to sign in with your credentials to proceed. If you do not have an existing Microsoft account, go ahead and create one now by clicking on the `Create one!` link
+1. Create a custom IoT Central application by accessing (clicking on) the existing [Microchip WFI32E01 Application Template](https://apps.azureiotcentral.com/build/new/e590035c-187d-41ca-ada0-d87099d79880) (if there is a problem with loading the template, refer to the [Create an application](https://docs.microsoft.com/en-us/azure/iot-central/core/quick-deploy-iot-central) section to create your IoT Central application from scratch). If you are not currently logged into your [Microsoft account](https://account.microsoft.com/account), you will be prompted to sign in with your credentials to proceed. If you do not have an existing Microsoft account, go ahead and create one now by clicking on the `Create one!` link
 
 2. Azure IoT Builder will guide you through the process of creating your application. Review and select the various settings for your IoT Central application (if needed, refer to [Create an application](https://docs.microsoft.com/en-us/azure/iot-central/core/quick-deploy-iot-central) for additional guidance on selecting the settings for your application). Do not click the `Create` button just yet - only after reviewing and taking into consideration the following recommendations:
   
@@ -162,17 +168,17 @@ IoT Central allows you to create an application dashboard to monitor the telemet
 
     <img src=".//media/image108.png" style="width:5.in;height:1.98982in" alt="A screenshot of a cell phone Description automatically generated" />
 
-## Connect and Test the WFI32-IoT Device
+## Connect and Test the WFI32E01 Device
 
 1.	Look up the `ID Scope` for your IoT Central application (using the left-hand navigation pane, select `Permissions` &gt; `Device connection groups`)
 
     <img src=".//media/image84a.png" style="width:5.in;height:3.18982in" alt="A screenshot of a cell phone Description automatically generated" />
 
-2. Enter in the `cloud` command on the CLI. You should see that the WFI32-IoT Development Board replies with a message that it is *not* currently connected to the Cloud
+2. Enter in the `cloud` command on the CLI. You should see that the WFI32 Development Board replies with a message that it is *not* currently connected to the Cloud
 
     <img src=".//media/image85.png" style="width:5.in;height:2.18982in" alt="A screenshot of a cell phone Description automatically generated" />
 
-3. Set the ID Scope value in the WFI32-IoT Development Board by editing the `CLOUD.CFG` file which is accessed via the `WFI32-IOT` disk drive. The unique ID Scope value will be used by the WFI32-IoT Development Board to connect to the built-in DPS used by your IoT Central application. Using the text editor of your choice, modify the existing line in the file so that the ID_SCOPE string is set to the value assigned to your IoT Central application, for example
+3. Set the ID Scope value in the WFI32E01 Development Board by editing the `CLOUD.CFG` file which is accessed via the `WFI32-IOT` disk drive. The unique ID Scope value will be used by the development board to connect to the built-in DPS used by your IoT Central application. Using the text editor of your choice, modify the existing line in the file so that the ID_SCOPE string is set to the value assigned to your IoT Central application, for example
     ```bash
     "ID_SCOPE":	"0ne0041E397",
     ```
@@ -181,7 +187,7 @@ IoT Central allows you to create an application dashboard to monitor the telemet
 
 ## Create an Enrollment Group
 
-An enrollment group is an entry for a group of devices that share a common attestation mechanism (e.g. device certificates all derived from a common root and/or signer certificate(s)). Using an enrollment group is recommended for a large number of devices that share an initial configuration and/or for devices that all go to the same tenant. Create an X.509 enrollment group for your IoT Central application so that hundreds, thousands, or even millions/billions of devices can automatically connect to your cloud application without any human intervention.
+An enrollment group is an entry for a group of devices that share a common attestation mechanism (e.g. device certificates all derived from a common signer certificate). Using an enrollment group is recommended for a large number of devices that share an initial configuration and/or for devices that all go to the same tenant. Create an X.509 enrollment group for your IoT Central application so that hundreds, thousands, or even millions/billions of devices can automatically connect to your cloud application without any human intervention.
 
 1. Using the left-hand side navigation pane of your IoT Central application, under `Security` select `Permissions` &gt; `Device connection groups`
 
@@ -203,17 +209,15 @@ An enrollment group is an entry for a group of devices that share a common attes
 
     <img src=".//media/image83.png" style="width:5.in;height:2.18982in" alt="A screenshot of a cell phone Description automatically generated" />
 
-6. Enter in the `reset` command on the CLI (or hit the `RESET` button on the WFI32-IoT Development Board)
+6. Enter in the `reset` command on the CLI
 
-    <img src=".//media/image89b.png" style="width:5.in;height:1.58982in" alt="A screenshot of a cell phone Description automatically generated" />
-
-7. View the diagnostic messages output to the serial terminal program to confirm that the demo application is going through its startup sequence. When the "Connected to Azure IoT Hub" message appears, both Blue (Wi-Fi) and Green (Cloud) LEDs should stay constantly on. By default, the temperature and light sensor readings should be sent to your IoT Central application every 5 seconds. The Yellow LED (Data) should be toggling approximately once per second
+7. View the diagnostic messages output to the serial terminal program to confirm that the demo application is going through its startup sequence. When the "Connected to Azure IoT Hub" message appears, the Green LED should stay constantly on. By default, the temperature and light sensor readings should be sent to your IoT Central application every 5 seconds. For the WFI32-IoT Development Board, the Yellow LED (Data) should be toggling approximately once per second
 
     <img src=".//media/image89c.png"/>
 
 ## Test Device Interaction with the Cloud
 
-1. Press each of the `SW1` & `SW2` user buttons on the WFI32-IoT Development Board a few times. The Red LED should blink on each user button press that is detected
+1. Press each of the `SW1` & `SW2` user buttons on the WFI32-IoT Development Board a few times (the WFI32 Curiosity Board only has `SW1`). For the WFI32-IoT Development Board, the Red LED should blink on each user button press that is detected
 
     <img src=".//media/image89d.png" style="width:5.in;height:2.08982in" alt="A screenshot of a cell phone Description automatically generated" />
 
@@ -227,7 +231,7 @@ An enrollment group is an entry for a group of devices that share a common attes
 
     <img src=".//media/image92a.png"/>
 
-4. Increase the ambient light source shining on top of the board. Wait approximately 10-15 seconds.  Click on the `Refresh` icon to confirm that the light sensor value has increased
+4. [WFI32-IoT users only] Increase the ambient light source shining on top of the board. Wait approximately 10-15 seconds.  Click on the `Refresh` icon to confirm that the light sensor value has increased
 
     <img src=".//media/image93a.png" style="width:5.in;height:2.18982in" alt="A screenshot of a cell phone Description automatically generated" />
 
@@ -245,11 +249,11 @@ An enrollment group is an entry for a group of devices that share a common attes
 
     <img src=".//media/image93d.png" style="width:4.0in;height:1.25in" alt="A screenshot of a cell phone Description automatically generated" />
 
-8. Click on the `Properties` tab. This view allows you to change the state of the Yellow LED and update the telemetry reporting interval since these are properties that have been defined as writable by the cloud. The remaining LEDs are used as status indicators so they are not writable from the cloud. Feel free to change the Yellow LED's state between On, Off, and Blinking and visually confirm if the Yellow LED physically changes its state. Change the telemetry interval and verify if the telemetry is being updated more or less frequently based on your selection. For any property changes to actually take effect, the `Save` icon must be clicked after making your selections
+8. Click on the `Properties` tab. This view allows you to change the state of the Yellow LED (WFI32-IoT board only) and update the telemetry reporting interval since these are properties that have been defined as writable by the cloud. The remaining LEDs are used as status indicators so they are not writable from the cloud. Feel free to change the Yellow LED's state between On, Off, and Blinking and visually confirm if the Yellow LED physically changes its state. Change the telemetry interval and verify if the telemetry is being updated more or less frequently based on your selection. For any property changes to actually take effect, the `Save` icon must be clicked after making your selections
 
     <img src=".//media/image94.png" style="width:5.0in;height:4.18982in" alt="A screenshot of a cell phone Description automatically generated" />
 
-## Configure the Dashboard for Data Visualization
+## Configure the Dashboard for Data Visualization (WFI32-IoT Only)
 
 1. Navigate to the left-hand vertical toolbar and click on the `Dashboards` icon
 
@@ -296,11 +300,11 @@ An enrollment group is an entry for a group of devices that share a common attes
 
 ## Visualizing Additional HVAC Sensors
 
-If you have connected at least one of the optional MikroElektronika Click boards to the WFI32-IoT Development Board's mikroBUS™ socket, use the pre-configured example dashboard for visualizing the telemetry data reported from the additional Click board(s).
+If you have connected at least one of the optional MikroElektronika Click boards to the WFI32E01 Development Board's mikroBUS™ socket, use the pre-configured example dashboard for visualizing the telemetry data reported from the additional Click board(s).
 
 1. Using the left-hand navigation pane, select `Analyze` &gt; `Dashboards`
 
-2. Towards the top of the web page, click on the dashboard selector and change the view to `WFI32-IoT HVAC Sensors`
+2. Towards the top of the web page, click on the dashboard selector and change the view to `WFI32E01 HVAC Sensors`
 
     <img src=".//media/image109a.png">
 
@@ -309,7 +313,7 @@ If you have connected at least one of the optional MikroElektronika Click boards
 4. For each of the tiles used to display device data (and does not currently show any data), configure each tile by adding your device to the tile by executing the following steps:
 
     - click `Edit` icon
-    - select `WFI32_IoT_WM;3` for `Device group`
+    - select `WFI32_IoT_WM;3` or `WFI32_Curiosity_WM;1` for `Device group`
     - click `Select All` for `Devices`
     - click `+ Add Capability` to add the specific telemetry parameter(s) you'd like displayed in the tile
     - click the `Update` button

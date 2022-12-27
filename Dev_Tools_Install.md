@@ -1,4 +1,4 @@
-# Development Tools Installation for Microchip WFI32-IoT Board (Part No. EV36W50A)
+# Development Tools Installation for the Microchip WFI32E01 Certified Module
 
 ## Install Software Required for the Host Computer
 
@@ -19,3 +19,11 @@
 - Verify working operation of the `Git Bash` prompt (e.g. for Windows: click `Start` > type `Git Bash`)
 
 3. Any [Terminal Emulator](https://en.wikipedia.org/wiki/List_of_terminal_emulators) program of your choice
+
+## Additional Hardware Requirements for the PIC32 WFI32E Curiosity Board
+
+If using the [PIC32 WFI32E Curiosity](https://www.microchip.com/en-us/development-tool/EV12F11A) board, a [USB-to-UART converter](https://www.newark.com/c/cable-wire-cable-assemblies/cable-assemblies/usb-adapter-cables?conversion-type=usb-to-uart-converter) needs to be connected to the U1RX & U1TX pins of the GPIO Header (J207)
+
+<img src=".//media/WFI32-Curiosity_J207.png"/>
+
+NOTE: In order to enable the on-board analog temperature sensor, the jumper J209 (TEMP SENSE) must be shorted
