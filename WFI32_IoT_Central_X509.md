@@ -140,7 +140,7 @@ If any of the files do not exist when the demo application is reset, the missing
 
 IoT Central allows you to create an application dashboard to monitor the telemetry and take appropriate actions based on customized rules.
 
-1. Create a custom IoT Central application by accessing (clicking on) the existing [Microchip WFI32E01 Application Template](https://apps.azureiotcentral.com/build/new/e590035c-187d-41ca-ada0-d87099d79880) (if there is a problem with loading the template, refer to the [Create an application](https://docs.microsoft.com/en-us/azure/iot-central/core/quick-deploy-iot-central) section to create your IoT Central application from scratch). If you are not currently logged into your [Microsoft account](https://account.microsoft.com/account), you will be prompted to sign in with your credentials to proceed. If you do not have an existing Microsoft account, go ahead and create one now by clicking on the `Create one!` link
+1. Create a custom IoT Central application by accessing (clicking on) the existing [Microchip WFI32E01 Application Template](https://apps.azureiotcentral.com/build/new/f99b7fd0-98ca-4b09-a5a1-0a45283c15b2) (if there is a problem with loading the template, refer to the [Create an application](https://docs.microsoft.com/en-us/azure/iot-central/core/quick-deploy-iot-central) section to create your IoT Central application from scratch). If you are not currently logged into your [Microsoft account](https://account.microsoft.com/account), you will be prompted to sign in with your credentials to proceed. If you do not have an existing Microsoft account, go ahead and create one now by clicking on the `Create one!` link
 
 2. Azure IoT Builder will guide you through the process of creating your application. Review and select the various settings for your IoT Central application (if needed, refer to [Create an application](https://docs.microsoft.com/en-us/azure/iot-central/core/quick-deploy-iot-central) for additional guidance on selecting the settings for your application). Do not click the `Create` button just yet - only after reviewing and taking into consideration the following recommendations:
   
@@ -217,7 +217,7 @@ An enrollment group is an entry for a group of devices that share a common attes
 
 ## Test Device Interaction with the Cloud
 
-1. Press each of the `SW1` & `SW2` user buttons on the WFI32-IoT Development Board a few times (the WFI32 Curiosity Board only has `SW1`). For the WFI32-IoT Development Board, the Red LED should blink on each user button press that is detected
+1. Press each of the `SW1` & `SW2` user buttons on the WFI32-IoT Development Board a few times (the WFI32 Curiosity Board only has `SW1`). The Red LED should toggle for each user button press that is detected
 
     <img src=".//media/image89d.png" style="width:5.in;height:2.08982in" alt="A screenshot of a cell phone Description automatically generated" />
 
