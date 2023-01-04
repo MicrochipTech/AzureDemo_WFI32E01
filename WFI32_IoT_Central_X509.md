@@ -73,6 +73,8 @@ As a solution builder, you can use IoT Central to develop a cloud-hosted IoT sol
 
 8. Right-click on the active project and select `Clean`. Right-click the project again and select `Make and Program Device`. This operation will automatically build the project before attempting to program the target device. The build process starting from a clean state will take a while, so this might be a good time to go grab a cup of coffee :)
 
+    **NOTE**: If the project fails to build, use the [MPLAB IPE method](MPLAB_IPE.md) to program the board instead of using the MPLAB X IDE.
+
 9. After the `BUILD SUCCESSFUL` message appears in the Output window, the application HEX file will be programmed onto the development Board. Once programming has finished, the board will automatically reset and start running its application code. The Mass Storage Device will reinitialize and take on the name of `WFI32-IOT`
 
 10. Quit the MPLAB X IDE by selecting `MPLAB X IDE` &gt; `Quit MPLAB X IDE` from the main toolbar. Please confirm the application has actually been closed before proceeding

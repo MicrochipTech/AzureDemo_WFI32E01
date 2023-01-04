@@ -4,7 +4,7 @@
 
  This document describes how to connect the [WFI32-IoT](https://www.microchip.com/en-us/development-tool/ev36w50a) and [PIC32 WFI32E Curiosity](https://www.microchip.com/en-us/development-tool/EV12F11A) Development Boards (both featuring the same fully certified, highly integrated [WFI32E01PC](https://www.microchip.com/en-us/product/WFI32E01PC) wireless module) to Azure IoT Central which leverages Microsoft’s Azure RTOS to enable better experiences of embedded firmware development for Cloud applications.
 
-<img src=".//media/EV36W50A-horizontal.jpeg" width=200 />
+<img src=".//media/EV36W50A-horizontal.jpeg" width=265 />
 <img src=".//media/EV12F11A_Curiosity.jpeg" width=400/>
 
 ## Table of Contents
