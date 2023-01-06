@@ -37,7 +37,7 @@ As a solution builder, you can use IoT Central to develop a cloud-hosted IoT sol
 
 3. Launch the `MPLAB X` IDE (this tool should have been previously installed and most likely resides in the \Program Files\Microchip\ folder)
 
-    <img src=".//media/image18a.png" style="width:2.0in;height:4.0833in" alt="A screenshot of a cell phone Description automatically generated" />
+    <img src=".//media/image18a.png" width=200 />
 
     Once the MPLAB X IDE has finished its initialization routines, you should notice the "Kit Window" that acknowledges an active connection to the WFI32-IoT Development Board (this does not apply to the PIC32 WFI32E Curiosity Development Board - the window will say there is no kit connected which is fine)
 
@@ -45,7 +45,7 @@ As a solution builder, you can use IoT Central to develop a cloud-hosted IoT sol
 
 4. Navigate to the main toolbar's `File` > `Open Project` operation to load the demo project folder (\*.X) located at `[your_path]\AzureDemo_WFI32E01\firmware\AzureDemo_WFI32-IoT.X` (or `AzureDemo_WFI32-Curiosity.X`)
 
-    <img src=".//media/image19a.png" style="width:3.0in;height:2.0833in" alt="A screenshot of a cell phone Description automatically generated" />
+    <img src=".//media/image19a.png" width=200 />
 
    If the `load error` message in red appears in the `Output` window, click on the `Resolve DFP for configuration: default` link
 
@@ -57,7 +57,7 @@ As a solution builder, you can use IoT Central to develop a cloud-hosted IoT sol
 
 6. In the `Projects` window, open the `sample_config.h` header file and confirm that the below three compiler definitions are active
 
-    <img src=".//media/image41a.png" style="width:5.in;height:3.18982in" alt="A screenshot of a cell phone Description automatically generated" />
+    <img src=".//media/image41a.png" width=200 />
 
     <img src=".//media/image41b.png" style="width:5.in;height:1.0in" alt="A screenshot of a cell phone Description automatically generated" />
 
@@ -154,7 +154,7 @@ IoT Central allows you to create an application dashboard to monitor the telemet
 
     - If you select the **Free** plan, you can connect up to 5 devices for free.  However, the free trial period will expire after 7 days which means a [paid pricing plan](https://azure.microsoft.com/en-us/pricing/details/iot-central/) will need to be selected to continue using the application.  Of course, there is nothing to stop you from creating a new free trial application but the device will need to be configured for the app from scratch.  Since the **Standard** plans each allow 2 free devices with no time-restricted trial period, if you only plan on evaluating 1 or 2 devices for connecting to the IoT Central app, then it's best to choose the **Standard 2** plan to get the highest total allowable number of messages (30K per month)
 
-        <img src=".//media/image80b.png">
+        <img src=".//media/image80b.png" width=200>
 
     - `Billing info` section: If there is an issue with selecting an existing subscription in the drop-down list (or no subscriptions appear in the list at all), click on the `Create subscription` link to create a new subscription to use for the creation of this application.  Take note of the exact subscription name (e.g. "Azure subscription 1" like shown in the below screen shot) which was selected as it will be needed in a future step (suggest copying/pasting the exact text into a text editor file as temporary storage for the name)
        
@@ -195,11 +195,11 @@ An enrollment group is an entry for a group of devices that share a common attes
 
 1. Using the left-hand side navigation pane of your IoT Central application, under `Security` select `Permissions` &gt; `Device connection groups`
 
-   <img src=".//media/image81a.png" style="width:6.5.in;height:3.63506in" />
+   <img src=".//media/image81a.png" width=200 />
 
 2. Click on the `+ New` button and create a new enrollment group using any name (with Group type = `IoT devices` and attestation type = `Certificates (X.509)`).  Hit the `Save` icon when finished
 
-   <img src=".//media/image81b.png" style="width:6.5.in;height:3.63506in" />
+   <img src=".//media/image81b.png" width=200 />
 
 3. Now that the new enrollment group has been created, click on `Manage Primary`
 
@@ -207,11 +207,11 @@ An enrollment group is an entry for a group of devices that share a common attes
 
 4. Click on `+ Add certificate` and browse to the **signer** certificate file (which should be located in the `WFI32-IOT` Mass Storage Device). Click the `Upload` button (then click on `Close` when the certificate has been accepted)
 
-   <img src=".//media/image75.png" style="width:5.5.in;height:2.13506in" />
+   <img src=".//media/image75.png" width=200 />
 
 5. Click on the `Save` icon at the top of the page, and note the ID Scope which was created for the enrollment group. The X.509 enrollment group has been successfully created and should be ready to go!
 
-    <img src=".//media/image83.png" style="width:5.in;height:2.18982in" alt="A screenshot of a cell phone Description automatically generated" />
+    <img src=".//media/image83.png" width=200 />
 
 6. Enter in the `reset` command on the CLI
 
@@ -227,7 +227,7 @@ An enrollment group is an entry for a group of devices that share a common attes
 
 2. Click on the `Raw data` tab and confirm that the button press telemetry messages were received (scroll the web page to the right to view the `Button Press Count` & `Button Push Event` columns)
 
-    <img src=".//media/image90.png" style="width:5.in;height:1.48982in" alt="A screenshot of a cell phone Description automatically generated" />
+    <img src=".//media/image90.png" width=200 />
 
 3. Click on the `Refresh` icon (in the top right area of the page) to display all messages received since the previous page refresh operation.  Confirm that periodic telemetry messages are being continuously received approximately every 5 seconds (which is the default interval value for the `telemetryInterval` property that dictates the telemetry reporting frequency)
 
@@ -243,19 +243,19 @@ An enrollment group is an entry for a group of devices that share a common attes
 
 6. Click on the `Command` tab. Type a text message in the `String to send` box and then click on the `Run` button. Confirm that the message was received in the serial console window
 
-    <img src=".//media/image93b_01.png" style="width:5.0in;height:2.2in" alt="A screenshot of a cell phone Description automatically generated" />
+    <img src=".//media/image93b_01.png" width=200 />
 
     <img src=".//media/image93b_02.png" style="width:5.0in;height:1.2in" alt="A screenshot of a cell phone Description automatically generated" />
 
 7. Click on the `command history` link and note the response that was received from the device
 
-    <img src=".//media/image93c.png" style="width:3.0in;height:0.7in" alt="A screenshot of a cell phone Description automatically generated" />
+    <img src=".//media/image93c.png" width=200 />
 
-    <img src=".//media/image93d.png" style="width:4.0in;height:1.25in" alt="A screenshot of a cell phone Description automatically generated" />
+    <img src=".//media/image93d.png" width=200 />
 
 8. Click on the `Properties` tab. This view allows you to change the state of the Yellow LED (WFI32-IoT board only) and update the telemetry reporting interval since these are properties that have been defined as writable by the cloud. The remaining LEDs are used as status indicators so they are not writable from the cloud. Feel free to change the Yellow LED's state between On, Off, and Blinking and visually confirm if the Yellow LED physically changes its state. Change the telemetry interval and verify if the telemetry is being updated more or less frequently based on your selection. For any property changes to actually take effect, the `Save` icon must be clicked after making your selections
 
-    <img src=".//media/image94.png" style="width:5.0in;height:4.18982in" alt="A screenshot of a cell phone Description automatically generated" />
+    <img src=".//media/image94.png" width=200 />
 
 ## Configure the Dashboard for Data Visualization (WFI32-IoT Only)
 
@@ -273,18 +273,18 @@ An enrollment group is an entry for a group of devices that share a common attes
 
 4. For **all** of the existing tiles named `Light` or `Temperature`, click on the upper right-hand corner of the tile to select `Edit` in the drop-down menu
 
-    <img src=".//media/image102a.png" style="width:5.in;height:2.18982in" alt="A screenshot of a cell phone Description automatically generated" />
-    <img src=".//media/image102b.png" style="width:5.in;height:2.18982in" alt="A screenshot of a cell phone Description automatically generated" />
+    <img src=".//media/image102a.png" width=200 />
+    <img src=".//media/image102b.png" width=200 />
 
 5. Select `Device Group` > `WFI32-IoT WM;3 - All devices` and then check the box for your specific device name for `Devices`
 
-    <img src=".//media/image103a.png" style="width:5.in;height:2.08982in" alt="A screenshot of a cell phone Description automatically generated" />
+    <img src=".//media/image103a.png" width=200 />
 
 6. Under the `Telemetry` category, click on `+ Capability` and select the parameter pertaining to the title of the tile (e.g. `Brightness from Light Sensor (WFI32-IoT)` for each of the `Light` tiles or `Temperature (WFI32-IoT)` for each of the `Temperature` tiles)
 
-    <img src=".//media/image104a.png" style="width:5.in;height:0.89082in" alt="A screenshot of a cell phone Description automatically generated" />
-    <img src=".//media/image104b.png" style="width:5.in;height:2.18982in" alt="A screenshot of a cell phone Description automatically generated" />
-    <img src=".//media/image104c.png" style="width:5.in;height:1.18982in" alt="A screenshot of a cell phone Description automatically generated" />
+    <img src=".//media/image104a.png" width=200 />
+    <img src=".//media/image104b.png" width=200 />
+    <img src=".//media/image104c.png" width=200 />
 
 7. Click on `Update` and repeat the process for the remainder of the existing tiles
 
@@ -328,7 +328,7 @@ If you have connected at least one of the optional MikroElektronika Click boards
 
 6. The demo application uses two of the WFI32 module's pins as GPIO's to convey the status of the board. Pins 1 & 15 of the mikroBUS™ connector can be read simultaneously as a 2-bit value representing 4 possible states ('0' = Logic LOW, '1' = Logic HIGH)
 
-    <img src=".//media/image111.png" style="width:5.0in;height:1.5in" alt="A screenshot of a cell phone Description automatically generated" />
+    <img src=".//media/image111.png" width=200 />
 
     NOTE: An alarm condition is triggered whenever the differential pressure reading of either sensor has exceeded a pre-set value which can be easily changed in the `app.h` header file of the project
 
@@ -336,7 +336,7 @@ If you have connected at least one of the optional MikroElektronika Click boards
     #define ALARM_PRESSURE_PA 25.0
     ```
 
-    <img src=".//media/image112.png" style="width:2.5in;height:2.7in" alt="A screenshot of a cell phone Description automatically generated" />
+    <img src=".//media/image112.png" width=200 />
  
 ## Expand the Dashboard with Additional Tiles
 
