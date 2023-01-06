@@ -93,17 +93,17 @@ As a solution builder, you can use IoT Central to develop a cloud-hosted IoT sol
 
 12. Before typing anything in the terminal emulator window, **disable** the local echo feature in the terminal settings for best results.  In the terminal window, hit `[RETURN]` to bring up the Command Line Interface prompt (which is simply the `>` character). Type `help` and then hit `[RETURN]` to get the list of available commands for the CLI.  The Command Line Interface allows you to send simple ASCII-string commands to set or get the user-configurable operating parameters of the application while it is running
 
-    <img src=".//media/image44.png" style="width:5.in;height:2.68982in" alt="A screenshot of a cell phone Description automatically generated" />
+    <img src=".//media/image44.png" width=200 />
 
 13. Enter in the `wifi` command on the CLI. You should see that the WFI32 Development Board replies with a message that it is *not* currently connected to Wi-Fi
 
-    <img src=".//media/image45.png" style="width:5.in;height:1.58982in" alt="A screenshot of a cell phone Description automatically generated" />
+    <img src=".//media/image45.png" width=200 />
 
 14. Configure the WFI32 Development Board's device settings with your wireless router’s SSID and password. To be on the safe side, there should be no spaces used in the SSID and password for your network, and the Wi-Fi Access Point should be operating in the 2.4 GHz frequency band.
 
     The easiest way to configure the device's Wi-Fi settings is to open the `WFI32-IOT` Mass Storage Device and double-click on the `clickme.html` file - then follow the steps shown on the resulting web page
 
-    <img src=".//media/image45a.png" style="width:5.in;height:1.58982in" alt="A screenshot of a cell phone Description automatically generated" />
+    <img src=".//media/image45a.png" width=200 />
 
     If for some reason this method does not work, you can also go to [Microchip IoT WiFi Configuration](https://iot.microchip.com/wificfg). As a last resort, you can always manually edit the `WIFI.CFG` file located in the `WFI32-IOT` Mass Storage Device as the network credentials are saved to this file.
     
@@ -136,7 +136,7 @@ The `WFI32-IOT` Mass Storage Device (MSD) contains the 3 certificates saved in P
 
 Whenever the demo application is reset, it will check for the presence of all 3 files on the `WFI32-IOT` drive. Each file has the *.PEM suffix and is named to distinguish between the root, signer, and device certificates; e.g.
 
-<img src=".//media/image46.png">
+<img src=".//media/image46.png" width=200>
 
 If any of the files do not exist when the demo application is reset, the missing file(s) will be automatically generated. In case any of these files are accidentally edited, simply delete the certificate(s) from the `WFI32-IOT` MSD and reset the application so that they will be automatically regenerated.
 
@@ -154,7 +154,7 @@ IoT Central allows you to create an application dashboard to monitor the telemet
 
     - If you select the **Free** plan, you can connect up to 5 devices for free.  However, the free trial period will expire after 7 days which means a [paid pricing plan](https://azure.microsoft.com/en-us/pricing/details/iot-central/) will need to be selected to continue using the application.  Of course, there is nothing to stop you from creating a new free trial application but the device will need to be configured for the app from scratch.  Since the **Standard** plans each allow 2 free devices with no time-restricted trial period, if you only plan on evaluating 1 or 2 devices for connecting to the IoT Central app, then it's best to choose the **Standard 2** plan to get the highest total allowable number of messages (30K per month)
 
-        <img src=".//media/image80b.png" width=200>
+        <img src=".//media/image80b.png" width=300>
 
     - `Billing info` section: If there is an issue with selecting an existing subscription in the drop-down list (or no subscriptions appear in the list at all), click on the `Create subscription` link to create a new subscription to use for the creation of this application.  Take note of the exact subscription name (e.g. "Azure subscription 1" like shown in the below screen shot) which was selected as it will be needed in a future step (suggest copying/pasting the exact text into a text editor file as temporary storage for the name)
        
@@ -180,7 +180,7 @@ IoT Central allows you to create an application dashboard to monitor the telemet
 
 2. Enter in the `cloud` command on the CLI. You should see that the WFI32 Development Board replies with a message that it is *not* currently connected to the Cloud
 
-    <img src=".//media/image85.png" style="width:5.in;height:2.18982in" alt="A screenshot of a cell phone Description automatically generated" />
+    <img src=".//media/image85.png" width=200 />
 
 3. Set the ID Scope value in the WFI32E01 Development Board by editing the `CLOUD.CFG` file which is accessed via the `WFI32-IOT` disk drive. The unique ID Scope value will be used by the development board to connect to the built-in DPS used by your IoT Central application. Using the text editor of your choice, modify the existing line in the file so that the ID_SCOPE string is set to the value assigned to your IoT Central application, for example
     ```bash
