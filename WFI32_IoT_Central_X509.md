@@ -103,7 +103,7 @@ As a solution builder, you can use IoT Central to develop a cloud-hosted IoT sol
 
     The easiest way to configure the device's Wi-Fi settings is to open the `WFI32-IOT` Mass Storage Device and double-click on the `clickme.html` file - then follow the steps shown on the resulting web page
 
-    <img src=".//media/image45a.png" width=200 />
+    <img src=".//media/image45a.png" width=400 />
 
     If for some reason this method does not work, you can also go to [Microchip IoT WiFi Configuration](https://iot.microchip.com/wificfg). As a last resort, you can always manually edit the `WIFI.CFG` file located in the `WFI32-IOT` Mass Storage Device as the network credentials are saved to this file.
     
@@ -136,7 +136,7 @@ The `WFI32-IOT` Mass Storage Device (MSD) contains the 3 certificates saved in P
 
 Whenever the demo application is reset, it will check for the presence of all 3 files on the `WFI32-IOT` drive. Each file has the *.PEM suffix and is named to distinguish between the root, signer, and device certificates; e.g.
 
-<img src=".//media/image46.png" width=200>
+<img src=".//media/image46.png" width=400>
 
 If any of the files do not exist when the demo application is reset, the missing file(s) will be automatically generated. In case any of these files are accidentally edited, simply delete the certificate(s) from the `WFI32-IOT` MSD and reset the application so that they will be automatically regenerated.
 
@@ -176,7 +176,7 @@ IoT Central allows you to create an application dashboard to monitor the telemet
 
 1.	Look up the `ID Scope` for your IoT Central application (using the left-hand navigation pane, select `Permissions` &gt; `Device connection groups`)
 
-    <img src=".//media/image84a.png" style="width:5.in;height:3.18982in" alt="A screenshot of a cell phone Description automatically generated" />
+    <img src=".//media/image84a.png" width=400 />
 
 2. Enter in the `cloud` command on the CLI. You should see that the WFI32 Development Board replies with a message that it is *not* currently connected to the Cloud
 

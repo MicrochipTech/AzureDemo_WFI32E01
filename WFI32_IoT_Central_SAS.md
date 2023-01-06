@@ -103,7 +103,7 @@ As a solution builder, you can use IoT Central to develop a cloud-hosted IoT sol
 
     The easiest way to configure the device's Wi-Fi settings is to open the `WFI32-IOT` Mass Storage Device and double-click on the `clickme.html` file - then follow the steps shown on the resulting web page
 
-    <img src=".//media/image45a.png" width=200 />
+    <img src=".//media/image45a.png" width=400 />
 
     If for some reason this method does not work, you can also go to [Microchip IoT WiFi Configuration](https://iot.microchip.com/wificfg). As a last resort, you can always manually edit the `WIFI.CFG` file located in the `WFI32-IOT` Mass Storage Device as the network credentials are saved to this file.
     
@@ -166,7 +166,7 @@ IoT Central allows you to create an application dashboard to monitor the telemet
 
 1.	Look up the `ID Scope` for your IoT Central application (using the left-hand navigation pane, select `Permissions` &gt; `Device connection groups`)
 
-    <img src=".//media/image84a.png" width=200 />
+    <img src=".//media/image84a.png" width=400 />
 
 2. Enter in the `cloud` command on the CLI. You should see that the WFI32 Development Board replies with a message that it is *not* currently connected to the Cloud
 
