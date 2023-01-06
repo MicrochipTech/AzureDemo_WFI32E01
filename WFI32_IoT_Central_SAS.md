@@ -25,6 +25,8 @@ As a solution builder, you can use IoT Central to develop a cloud-hosted IoT sol
     ```
     NOTE: <Demo_URL> is the link to the origin repository (e.g. https://github.com/MicrochipTech/AzureDemo_WFI32E01)
 
+    RECOMMENDATION: Put the newly-created folder in a root directory (e.g. C:\) to minimize the length of the path. Due to the large number of source files included in each project, it is advised to minimize the absolute path names for each file. In some operating systems (e.g. Windows), the longer path names could cause issues with loading/building the projects
+
 2. Perform one of the following steps based on the specific WFI32E01 development board being used: 
 
 - [WFI32-Curiosity](https://www.microchip.com/en-us/development-tool/EV12F11A): Use a jumper to short the `PKOB` pins of jumper `J302`. Connect the board to the PC using the connector (located in one corner of the board) labeled `USB DEBUG` (note there are 2 different USB connectors on the board).

@@ -1127,6 +1127,31 @@ void sample_telemetry_thread_entry(ULONG parameter)
 #endif /* SEND_LED_PROPERTIES_WITH_TELEMETRY */
 #ifdef PNP_CERTIFICATION_TESTING
         send_button_event(parameter, 1, button_press_data.sw1_press_count);
+        tx_thread_sleep(100);
+        buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
+            "{\"ALT2_temperature\": %.2f, \"ALT2_pressure\": %.2f, \"ALT2_altitude\": %.2f}",
+            ALT2_temperature, ALT2_pressure, ALT2_altitude );                
+        send_telemetry_message(parameter, (UCHAR *)buffer, buffer_length);
+        tx_thread_sleep(100);
+        buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
+            "{\"PHT_temperature\": %.2f, \"PHT_pressure\": %.2f, \"PHT_humidity\": %.2f}",
+            PHT_temperature, PHT_pressure, PHT_humidity );                 
+        send_telemetry_message(parameter, (UCHAR *)buffer, buffer_length);
+        tx_thread_sleep(100);
+        buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
+            "{\"TEMPHUM14_temperature\": %.2f, \"TEMPHUM14_humidity\": %.2f}",
+            TEMPHUM14_temperature, TEMPHUM14_humidity);              
+        send_telemetry_message(parameter, (UCHAR *)buffer, buffer_length);
+        tx_thread_sleep(100);
+        buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
+            "{\"ULP_temperature\": %.2f, \"ULP_pressure\": %.2f}",
+            ULP_temperature, ULP_pressure );                
+        send_telemetry_message(parameter, (UCHAR *)buffer, buffer_length);
+        tx_thread_sleep(100);
+        buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
+            "{\"VAV_temperature\": %.2f, \"VAV_pressure\": %.2f}",
+            VAV_temperature, VAV_pressure);              
+        send_telemetry_message(parameter, (UCHAR *)buffer, buffer_length);
 #endif /* PNP_CERTIFICATION_TESTING */
         tx_thread_sleep(AZ_telemetryInterval * NX_IP_PERIODIC_RATE);
     }
