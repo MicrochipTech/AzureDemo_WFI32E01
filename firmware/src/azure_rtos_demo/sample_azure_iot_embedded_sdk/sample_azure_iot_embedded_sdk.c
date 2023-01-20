@@ -1015,7 +1015,7 @@ void sample_telemetry_thread_entry(ULONG parameter)
     }
     tx_thread_sleep(100);
 #endif /* CLICK_VAVPRESS */
-        
+
     /* Loop to send telemetry messages */
     while (loop)
     {

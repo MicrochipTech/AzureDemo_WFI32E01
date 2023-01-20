@@ -129,8 +129,11 @@ PHT_RETVAL PHT_init ( PHT_Data *ctx )
     pht_reset( ctx );
     pht_set_ratio( ctx, PHT_PT_CMD_RATIO_2048, PHT_PT_CMD_RATIO_2048);
 
-    if ( (ctx->data_prom[0] == 0) && (ctx->data_prom[1] == 0) && (ctx->data_prom[2] == 0) &&
-         (ctx->data_prom[3] == 0) && (ctx->data_prom[4] == 0) && (ctx->data_prom[5] == 0)
+    if ( (ctx->data_prom[0] == ctx->data_prom[1]) &&
+         (ctx->data_prom[1] == ctx->data_prom[2]) && 
+         (ctx->data_prom[2] == ctx->data_prom[3]) &&
+         (ctx->data_prom[3] == ctx->data_prom[4]) && 
+         (ctx->data_prom[4] == ctx->data_prom[5])
        )
     {
         return PHT_ERROR;

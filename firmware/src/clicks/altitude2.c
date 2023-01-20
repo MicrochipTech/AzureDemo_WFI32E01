@@ -51,8 +51,11 @@ ALTITUDE2_RETVAL ALTITUDE2_init ( ALTITUDE2_Data *ctx )
     altitude2_reset( ctx );
     altitude2_set_ratio ( ctx, ALTITUDE2_RATIO_2048, ALTITUDE2_RATIO_2048 );
 
-    if ( (ctx->data_prom[0] == 0) && (ctx->data_prom[1] == 0) && (ctx->data_prom[2] == 0) &&
-         (ctx->data_prom[3] == 0) && (ctx->data_prom[4] == 0) && (ctx->data_prom[5] == 0)
+    if ( (ctx->data_prom[0] == ctx->data_prom[1]) &&
+         (ctx->data_prom[1] == ctx->data_prom[2]) && 
+         (ctx->data_prom[2] == ctx->data_prom[3]) &&
+         (ctx->data_prom[3] == ctx->data_prom[4]) && 
+         (ctx->data_prom[4] == ctx->data_prom[5])
        )
     {
         return ALTITUDE2_INIT_ERROR;
