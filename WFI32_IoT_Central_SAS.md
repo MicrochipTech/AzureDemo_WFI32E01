@@ -329,6 +329,8 @@ If you have connected at least one of the optional MikroElektronika Click boards
 
 To create additional tiles for your IoT Central dashboard, refer to [Configure the IoT Central application dashboard](https://docs.microsoft.com/en-us/azure/iot-central/core/howto-add-tiles-to-your-dashboard). The below screen captures show additional possibilities of dashboard components that can highlight the telemetry data and properties facilitated by the `Plug and Play` interface.  Note that multiple devices can be selected for each tile to allow groups of devices to be visualized within a single tile. 
 
+<img src=".//media/HVAC_Dashboard.png" />
+
 <img src=".//media/image95.png" />
 
 <img src=".//media/image96.png" />

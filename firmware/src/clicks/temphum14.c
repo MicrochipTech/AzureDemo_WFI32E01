@@ -37,7 +37,7 @@ uint32_t TEMPHUM14_init ( uint8_t addr )
     tx_thread_sleep(5);
     for (int index = 0; index < TEMPHUM14_SERIAL_NUMBER_BYTES; index++)
     {
-        APP_SENSORS_data.i2c.rxBuffBytes[0] = 0;
+        APP_SENSORS_data.i2c.rxBuffBytes[index] = 0;
     }   
     return (TEMPHUM14_getSerialNumber( addr ));
 }
