@@ -26,9 +26,9 @@
 // *****************************************************************************
 // *****************************************************************************
 #ifdef WFI32_IoT_BOARD
-#define WFI32IOT_SENSORS
+    #define WFI32IOT_SENSORS
 #else
-#define WFI32CURIOSITY_SENSORS
+    #define WFI32CURIOSITY_SENSORS
 #endif
 
 #define CLICK_ALTITUDE2

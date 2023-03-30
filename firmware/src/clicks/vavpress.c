@@ -124,25 +124,26 @@ vavpress_return_value_t VAVPRESS_setDefaultSensorParams(vavpress_sensor_param_da
     return error_flag;
 }
 
-vavpress_return_value_t VAVPRESS_getSensorReadings(vavpress_sensor_param_data_t *param_data, float *diff_press, float *temperature)
+vavpress_return_value_t VAVPRESS_getSensorReadings(vavpress_sensor_param_data_t *param_data, float *diff_press, float *temperatureC)
 {
-    int16_t press_data;
-    int16_t temp_data;
+    int16_t word_data, pressure, tempC;
     float tmp;
 
     APP_SENSORS_justRead(VAVPRESS_I2CADDR_0, EXTENDED_READOUT_NUMBYTES);
 
-    press_data = VAVPRESS_2sCompToDecimal((int16_t)APP_SENSORS_data.i2c.rxBuffBytes[0]);
-    tmp = ( float ) press_data;
+    word_data = ( (APP_SENSORS_data.i2c.rxBuffBytes[1] << 8) | APP_SENSORS_data.i2c.rxBuffBytes[0] );
+    pressure = VAVPRESS_2sCompToDecimal(word_data);
+    tmp = ( float ) pressure;
     tmp /= ( float ) param_data->scale_factor_press;
     *diff_press = tmp;
   
-    temp_data = VAVPRESS_2sCompToDecimal((int16_t)APP_SENSORS_data.i2c.rxBuffBytes[1]);
-    tmp = ( float ) temp_data;
+    word_data = ( (APP_SENSORS_data.i2c.rxBuffBytes[3] << 8) | APP_SENSORS_data.i2c.rxBuffBytes[2] );
+    tempC = VAVPRESS_2sCompToDecimal(word_data);
+    tmp = ( float ) tempC;
     tmp -= ( float ) param_data->readout_at_known_temperature;
     tmp /= ( float ) param_data->scale_factor_temp;
     tmp += param_data->known_temperature_c; 
-    *temperature = tmp;
+    *temperatureC = tmp;
 
     return VAVPRESS_OK;
 }

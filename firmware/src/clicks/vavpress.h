@@ -172,7 +172,7 @@ vavpress_return_value_t VAVPRESS_setDefaultSensorParams(vavpress_sensor_param_da
  * @endcode
  */
 
-vavpress_return_value_t VAVPRESS_getSensorReadings(vavpress_sensor_param_data_t *param_data, float *diff_press, float *temperature);
+vavpress_return_value_t VAVPRESS_getSensorReadings(vavpress_sensor_param_data_t *param_data, float *diff_press, float *temperatureC);
 
 /**
  * @brief VAV Press retrieve electronic signature function.

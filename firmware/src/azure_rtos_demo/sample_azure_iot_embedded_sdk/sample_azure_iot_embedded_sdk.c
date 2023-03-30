@@ -1025,13 +1025,14 @@ void sample_telemetry_thread_entry(ULONG parameter)
                 "{\"WFI32IoT_temperature\": %u, \"WFI32IoT_light\": %u}",
                 APP_SENSORS_readTemperature(), APP_SENSORS_readLight() );
         send_telemetry_message(parameter, (UCHAR *)buffer, buffer_length);
-#else
+#endif /* WFI32IOT_SENSORS */
+#ifdef WFI32CURIOSITY_SENSORS
         //printf("\r\n<WFI32-IoT> Reading temperature & light sensors...\r\n");
         buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
                 "{\"WFI32Curiosity_temperature\": %f}",
                 APP_SENSORS_readTemperature());
         send_telemetry_message(parameter, (UCHAR *)buffer, buffer_length);
-#endif /* WFI32IOT_SENSORS */
+#endif /* WFI32CURIOSITY_SENSORS */
 #ifdef CLICK_ALTITUDE2
         if (ALTITUDE2_status == ALTITUDE2_OK)
         {
@@ -1106,9 +1107,9 @@ void sample_telemetry_thread_entry(ULONG parameter)
                         //APP_SENSORS_data.i2c.rxBuffBytes[0], VAVPRESS_2sCompToDecimal(APP_SENSORS_data.i2c.rxBuffBytes[0]),
                         //APP_SENSORS_data.i2c.rxBuffBytes[1], VAVPRESS_2sCompToDecimal(APP_SENSORS_data.i2c.rxBuffBytes[1])
                       //);
-                //tx_thread_sleep(500);
+                //tx_thread_sleep(500);               
                 buffer_length = (UINT)snprintf(buffer, sizeof(buffer),
-                        "{\"VAV_temperature\": %.2f, \"VAV_pressure\": %.2f}",
+                        "{\"VAV_temperature\": %.2f, \"VAV_pressure\": %.4f}",
                         VAV_temperature, VAV_pressure);              
                 send_telemetry_message(parameter, (UCHAR *)buffer, buffer_length);
                 if (VAV_pressure > ALARM_PRESSURE_PA)
