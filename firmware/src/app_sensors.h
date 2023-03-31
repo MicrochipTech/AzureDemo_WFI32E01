@@ -92,7 +92,7 @@ typedef struct
 typedef struct
 {
     bool IsShutdown;
-    int16_t temperature;
+    float temperature;
     uint16_t deviceID;
 } APP_SENSORS_MCP9808;
 
@@ -123,7 +123,7 @@ void APP_SENSORS_justRead(uint8_t addr, uint8_t size);
 void APP_SENSORS_writeReadBytes(uint8_t addr, uint16_t reg, uint8_t size);
 void APP_SENSORS_writeReadWords(uint8_t addr, uint16_t reg, uint8_t size);
 #ifdef WFI32_IoT_BOARD  
-int16_t APP_SENSORS_readTemperature(void);
+float APP_SENSORS_readTemperature(void);
 #else
 float APP_SENSORS_readTemperature(void);
 #endif

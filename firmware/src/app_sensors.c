@@ -93,7 +93,7 @@ void APP_SENSORS_process(uint8_t addr, uint8_t reg)
                 if ((upperByte & 0x10) == 0x10)
                 {   // Ta < 0 degC
                     upperByte = upperByte & 0x0F;       // Clear sign bit
-                    APP_SENSORS_data.mcp9808.temperature = 256 - ((upperByte * 16) + lowerByte/16);
+                    APP_SENSORS_data.mcp9808.temperature = 256.0 - ((upperByte * 16.0) + lowerByte/16.0);
                 }
                 else
                 {
@@ -157,7 +157,7 @@ void APP_SENSORS_init(void)
 }
 
 #ifdef WFI32_IoT_BOARD  
-int16_t APP_SENSORS_readTemperature(void)
+float APP_SENSORS_readTemperature(void)
 {
     APP_SENSORS_writeReadWords(MCP9808_I2C_ADDRESS, MCP9808_REG_TAMBIENT, 2);
     APP_SENSORS_process(MCP9808_I2C_ADDRESS, MCP9808_REG_TAMBIENT);

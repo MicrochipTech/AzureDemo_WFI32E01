@@ -83,7 +83,7 @@ As a solution builder, you can use IoT Central to develop a cloud-hosted IoT sol
 
 11. Set up a Command Line Interface (CLI) to the board - choose one of the following based on the development board being used:
 
-- If using the [PIC32 WFI32E Curiosity](https://www.microchip.com/en-us/development-tool/EV12F11A) board, a [USB-to-UART converter](https://www.newark.com/c/cable-wire-cable-assemblies/cable-assemblies/usb-adapter-cables?conversion-type=usb-to-uart-converter) needs to be connected to the U1RX & U1TX pins of the GPIO Header (J207). Next, set the jumper on `J302` so that the `VBUS` pins are shorted. Then, disconnect the USB cable from the `USB DEBUG` port and connect it to the other USB port labeled `USB POWER` port. Open a serial terminal (e.g. PuTTY, TeraTerm, etc.) and connect to the COM port corresponding to the USB-to-UART converter at `115200 baud`.
+- If using the [PIC32 WFI32E Curiosity](https://www.microchip.com/en-us/development-tool/EV12F11A) board, a [USB-to-UART converter](https://www.newark.com/c/cable-wire-cable-assemblies/cable-assemblies/usb-adapter-cables?conversion-type=usb-to-uart-converter) needs to be connected to the U1RX & U1TX pins of the GPIO Header (J207). Next, set the jumper on `J302` so that the `VBUS` pins are shorted. Then, disconnect the USB cable from the `USB DEBUG` port and connect it to the other USB port labeled `USB POWER` port. Open a serial terminal (e.g. PuTTY, TeraTerm, etc.) and connect to the COM port corresponding to the USB-to-UART converter at `115200 baud`. Press the `MCLR` button on the board.
 
     <img src=".//media/WFI32-Curiosity_J207.png"/>
 
