@@ -79,9 +79,19 @@ As a solution builder, you can use IoT Central to develop a cloud-hosted IoT sol
 
 9. After the `BUILD SUCCESSFUL` message appears in the Output window, the application HEX file will be programmed onto the development board. Once programming has finished, the board will automatically reset and start running its application code. The Mass Storage Device will reinitialize and take on the name of `WFI32-IOT`
 
-10. Quit the MPLAB X IDE by selecting `MPLAB X IDE` &gt; `Quit MPLAB X IDE` from the main toolbar. Please confirm the application has actually been closed before proceeding
+10. Once the `WFI32-IOT` Mass Storage Device appears on the Desktop or in a File Explorer window, open the drive and confirm that the `CLOUD.CFG` file exists. Open the file and confirm that the contents contain the following structure fields:
 
-11. Set up a Command Line Interface (CLI) to the board - choose one of the following based on the development board being used:
+        {
+	        "ID_SCOPE":	"0ne008AC844",
+	        "REGISTRATION_ID":	"PIC32MZW1",
+	        "PRIMARY_KEY":	"mujHRQMx8dUsZETtlWxSonGZ24++L69c8KjIvZDT+5M="
+        }
+
+    If the structure contains different fields, copy the `CLOUD.CFG` file from this [folder](./WFI32-IOT%20MSD/) and overwrite the file in the `WFI32-IOT` MSD (or just copy and paste the above and save changes).
+
+11. Quit the MPLAB X IDE by selecting `MPLAB X IDE` &gt; `Quit MPLAB X IDE` from the main toolbar. Please confirm the application has actually been closed before proceeding
+
+12. Set up a Command Line Interface (CLI) to the board - choose one of the following based on the development board being used:
 
 - If using the [PIC32 WFI32E Curiosity](https://www.microchip.com/en-us/development-tool/EV12F11A) board, a [USB-to-UART converter](https://www.newark.com/c/cable-wire-cable-assemblies/cable-assemblies/usb-adapter-cables?conversion-type=usb-to-uart-converter) needs to be connected to the U1RX & U1TX pins of the GPIO Header (J207). Next, set the jumper on `J302` so that the `VBUS` pins are shorted. Then, disconnect the USB cable from the `USB DEBUG` port and connect it to the other USB port labeled `USB POWER` port. Open a serial terminal (e.g. PuTTY, TeraTerm, etc.) and connect to the COM port corresponding to the USB-to-UART converter at `115200 baud`. Press the `MCLR` button on the board.
 
@@ -91,15 +101,15 @@ As a solution builder, you can use IoT Central to develop a cloud-hosted IoT sol
 
     <img src=".//media/image43.png"/>
 
-12. Before typing anything in the terminal emulator window, **disable** the local echo feature in the terminal settings for best results.  In the terminal window, hit `[RETURN]` to bring up the Command Line Interface prompt (which is simply the `>` character). Type `help` and then hit `[RETURN]` to get the list of available commands for the CLI.  The Command Line Interface allows you to send simple ASCII-string commands to set or get the user-configurable operating parameters of the application while it is running
+13. Before typing anything in the terminal emulator window, **disable** the local echo feature in the terminal settings for best results.  In the terminal window, hit `[RETURN]` to bring up the Command Line Interface prompt (which is simply the `>` character). Type `help` and then hit `[RETURN]` to get the list of available commands for the CLI.  The Command Line Interface allows you to send simple ASCII-string commands to set or get the user-configurable operating parameters of the application while it is running
 
     <img src=".//media/image44.png" width=200 />
 
-13. Enter in the `wifi` command on the CLI. You should see that the WFI32 Development Board replies with a message that it is *not* currently connected to Wi-Fi
+14. Enter in the `wifi` command on the CLI. You should see that the WFI32 Development Board replies with a message that it is *not* currently connected to Wi-Fi
 
     <img src=".//media/image45.png" width=200 />
 
-14. Configure the WFI32 Development Board's device settings with your wireless router’s SSID and password. To be on the safe side, there should be no spaces used in the SSID and password for your network, and the Wi-Fi Access Point should be operating in the 2.4 GHz frequency band.
+15. Configure the WFI32 Development Board's device settings with your wireless router’s SSID and password. To be on the safe side, there should be no spaces used in the SSID and password for your network, and the Wi-Fi Access Point should be operating in the 2.4 GHz frequency band.
 
     The easiest way to configure the device's Wi-Fi settings is to open the `WFI32-IOT` Mass Storage Device and double-click on the `clickme.html` file - then follow the steps shown on the resulting web page
 
@@ -126,7 +136,7 @@ As a solution builder, you can use IoT Central to develop a cloud-hosted IoT sol
         CMD:SEND_UART=wifi MY_SSID,MY_PSWD,4
         ```
 
-15. [WFI32-IoT only - WFI32 Curiosity users can skip this step] Type the `reset` command on the serial terminal CLI. Within a few seconds, you should see the Blue LED on the WFI32-IoT Development Board stay constantly on - signifying that the board has successfuly connected to your Wi-Fi network using the settings stored in the `WIFI.CFG` file
+16. [WFI32-IoT only - WFI32 Curiosity users can skip this step] Type the `reset` command on the serial terminal CLI. Within a few seconds, you should see the Blue LED on the WFI32-IoT Development Board stay constantly on - signifying that the board has successfuly connected to your Wi-Fi network using the settings stored in the `WIFI.CFG` file
 
     NOTE: Do not proceed until the WFI32 Development Board has established a successful connection to your Wi-Fi network - the Blue LED needs to be always on!
 
